@@ -1,0 +1,132 @@
+{% include 'base.html' %}
+{% load socialaccount %}
+{% load static %}
+
+
+{% block extralink %}
+	<link rel="stylesheet" href="{% static 'css/tail.select-light-feather.css' %}">
+	<link rel="stylesheet" href="{% static 'css/signin1.css' %}">
+{% endblock extralink %}
+
+{% block title %}
+	<title>জান্নাতের সঙ্গী - লগইন / সাইনআপ</title>
+{% endblock title %}
+
+{% block body %}
+
+
+<div class="main-content" id="main-content">
+	<div class="left">
+	<h1 class="text-center title">Signin</h1>
+	<img class="signup-svg" src="{% static 'img/signin.svg' %}" alt="">
+		<div class="d-flex flex-column signin-section">
+			<div class="d-flex flex-fill signin-form justify-content-center">
+				<form method="post">
+				{% csrf_token %}
+					<div class="mb-3">
+						<select id="gender" name="gender">
+							<option selected value="male">male</option>
+							<option value="female">female</option>
+						</select>
+					</div>
+					<div class="d-flex">
+						<i class="fa fa-envelope fa-fw" aria-hidden="true"></i>
+						<input class="form-control mb-3 email" type="email" name="email" placeholder="Email">
+					</div>
+					<div class="d-flex">
+						<i class="fa fa-lock fa-fw" aria-hidden="true"></i>
+						<input class="form-control mb-3 email" type="password" name="password" placeholder="Password">
+					</div>
+					<button class="btn custom-btn w-100" type="submit">Register</button>
+					<p class="mt-3 mb-3 text-center">
+						<span>Already have an account?</span><b onclick="toggle()" class="pointer" class="pointer"> Signin</b>
+					</p>
+				</form>
+			</div>
+			<p class="mt-3 mb-3 p-0 text-center">Or continue with</p>
+			<div class="d-flex flex-fill social-section justify-content-center">
+				<div class="d-flex social-icon justify-content-center">
+					<a class="text-center" href="{% provider_login_url "facebook" method="oauth2" %}"><i class="fa fa-facebook fa-lg"></i>Facebook</a>
+					<a class="text-center" href="{% provider_login_url "google" method="oauth2" %}"><i class="fa fa-google fa-lg"></i>Google</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="right">
+	<img class="signin-svg" src="{% static 'img/signup.svg' %}" alt="">
+	<h1 class="text-center title1">Registration</h1>
+		<div class="d-flex flex-column signin-section">
+			<div class="d-flex flex-fill signin-form justify-content-center">
+				<form method="post">
+				{% csrf_token %}
+					{% if messages %}
+						{% for message in messages %}
+							<p{% if message.tags %} class="{{ message.tags }} text-center"{% endif %}>{{ message }}</p>
+						{% endfor %}
+					{% endif %}
+					<div class="d-flex">
+						<i class="fa fa-envelope fa-fw" aria-hidden="true"></i>
+						<input class="form-control mb-3 email" name="email" type="email" placeholder="Email">
+					</div>
+					<div class="d-flex">
+						<i class="fa fa-lock fa-fw" aria-hidden="true"></i>
+						<input class="form-control mb-3 email" name="password" type="password" placeholder="Password">
+					</div>
+					<p class="mb-2 mt-0 p-0 text-end">
+						<span type="button" class="" data-bs-toggle="modal" data-bs-target="#forgotPass">Forgot Password?</span>
+					</p>
+					<button class="btn custom-btn w-100 mb-2" type="submit">Signin</button>
+					<p class="m-0 p-0 text-center">
+						<span>Dont have any account?</span><b onclick="toggle()" class="pointer" class="pointer"> Signup</b>
+					</p>
+				</form>
+			</div>
+			<p class="mt-3 mb-3 p-0 text-center">Or continue with</p>
+			<div class="d-flex flex-fill social-section justify-content-center">
+				<div class="d-flex social-icon justify-content-center">
+					<a class="text-center" href="{% provider_login_url "facebook" method="oauth2" %}"><i class="fa fa-facebook fa-lg"></i>Facebook</a>
+					<a class="text-center" href="{% provider_login_url "google" method="oauth2" %}"><i class="fa fa-google fa-lg"></i>Google</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="response"></div>
+</div>
+
+
+
+
+<div class="modal fade" id="forgotPass" aria-hidden="true" aria-labelledby="forgotPassLabel" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header m-0 py-1 px-2">
+        <h6 class="modal-title" id="forgotPassLabel">Recover Password</h6>
+        <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+	  	<form method="post">
+		  	{% csrf_token %}
+			<label for="email">Enter email</label>
+			<input class="form-control mt-1" type="email" name="recover-email" id='email' placeholder="email">
+			<div class="text-center">
+				<button type="submit" class="btn btn-success btn-sm mt-4">Recover</button>
+			</div>
+		</form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock body %}
+
+{% block extrascript %}
+	<script src="{% static 'js/tail.select-full.js' %}"></script>
+	<script src="{% static 'js/signin.js' %}"></script>
+	<script>
+		function myFunction(){
+			alert("Click");
+		}
+	</script>
+{% endblock extrascript %}

@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extralink %}
+    <link rel="stylesheet" href="{% static 'css/qa.css' %}">
+    <link rel="stylesheet" href="{% static 'accordion/accordion.css' %}">
+{% endblock extralink %}
+
+{% block title %}
+    <title>{{title}} - জান্নাতের সঙ্গী</title>
+{% endblock title %}
+
+
+{% block body %}
+<div class="container p-0 mt-5">
+	<h5>সাধারণ প্রশ্ন ও উত্তর</h5>
+<div class="accordion" id="accordionExample">
+	{% for qa in qa %}
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingOne">
+      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ forloop.counter }}" aria-expanded="true" aria-controls="collapseOne">
+        {{qa.question}}
+      </button>
+    </h2>
+    <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        {{qa.answer|safe}}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock body %}
+
+
+{% block extrascript %}
+	<script src="{% static 'js/qa.js' %}"></script>
+	<script src="{% static 'accordion/accordion.js' %}"></script>
+{% endblock extrascript %}

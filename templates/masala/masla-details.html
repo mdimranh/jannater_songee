@@ -1,0 +1,75 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extralink %}
+    <link rel="stylesheet" href="{% static 'css/masla-details.css' %}">
+{% endblock extralink %}
+
+{% block title %}
+    {% for masala in masala %}
+        <title>{{masala.question}}</title>
+    {% endfor %}
+{% endblock title %}
+
+
+{% block body %}
+{% for masala in masala %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="d-flex flex-column q-section">
+                <p class="question mb-2">{{masala.question}}</p>
+                <div class="d-flex flex-fill justify-content-between">
+                    <small>{{masala.writter}}</small>
+                    <div class="d-flex align-items-center">
+                        <div class="d-flex align-items-center tag">
+                            <i class="fa fa-tag pe-1"></i>
+                            <small class="pe-3">{{masala.catagory.title}}</small>
+                        </div>
+                        <i class="fa fa-share-alt pe-1 share" type="button" id="sharebtn" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                        <div class="dropdown-menu dropdown-menu-right mt-1 share-menu" aria-labelledby="sharebtn">
+                            <div id="share"></div>
+                        </div>
+                        <small class="pe-2 share">30</small>
+                        <i class="fa fa-bookmark-o ps-2"></i>
+                    </div>
+                </div>
+            </div>
+            {% comment %} <div class="answer">{{masala.answer|safe}}</div> {% endcomment %}
+            <div class="mt-5">{{masala.answer|safe}}</div>
+            {% comment %} <p class="reference">সুত্রঃ <a href="#">islamhouse.com</a></p> {% endcomment %}
+        </div>
+        <div class="col-lg-4 ps-0 ps-lg-5 mt-5 related-article">
+            <h5>এ সম্পর্কিত আরো পড়ুন</h5>
+            <hr>
+            {% for masala in rmasala %}
+                <div class="d-flex">
+                    <a href="/masala/{{masala.id}}" style="text-decoration: none; color: black;"><p>{{masala.question}}</p></a>
+                </div>
+            {% endfor %}
+            {% for masala in exmasala %}
+                <div class="d-flex">
+                    <a href="/masala/{{masala.id}}" style="text-decoration: none; color: black;"><p>{{masala.question}}</p></a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock body %}
+
+{% block extrascript %}
+    <script src="{% static 'js/masla-details.js' %}"></script>
+    <script src="{% static 'js/masla.js' %}"></script>
+    <script src="{% static 'js/jquery.c-share.js' %}"></script>
+    <script>
+        $('#share').cShare({
+            showButtons: [
+                'fb',
+                'twitter',
+                'email'
+            ]
+        });
+    </script>
+{% endblock extrascript %}

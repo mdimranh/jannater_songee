@@ -1,0 +1,493 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_tags %}
+
+{% block extralink %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link rel="stylesheet" href="{% static 'css/tail.select-light-feather-orange.css' %}">
+    <style>
+        .card {
+            background-image: url("{% static 'img/cardbg.png' %}");
+        }
+        
+        #particles-js{
+            background-image: url("{% static 'img/bg.png' %}");
+        }
+    </style>
+{% endblock extralink %}
+{% block title %}
+    <title>{{title}} - জান্নাতের সঙ্গী</title>
+{% endblock title %}
+
+{% block body %}
+    <div id="particles-js">
+        <div class="d-flex align-items-center" id="filter-form">
+            <form method="post" class="d-flex flex-fill flex-wrap align-items-center justify-content-around">
+            {% csrf_token %}
+                <div class="form-section d-flex flex-wrap justify-content-around">
+                    <div class="m-1">
+                        <select id="biodatatype" name="bio_type">
+                            <option selected value="all">সকল বায়োডাটা</option>
+                            <option value="male">পাত্রের বায়োডাটা</option>
+                            <option value="female">পাত্রীর বায়োডাটা</option>
+                        </select>
+                    </div>
+                    <div class="m-1">
+                        <select multiple id="district" name="district">
+                            {% for x, y in dis %}
+                                <optgroup label = "{{x}}">
+                                    {% for z in y %}
+                                        <option value="{{z}}">{{z}}</option>
+                                    {% endfor %}
+                                </optgroup>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="m-1">
+                        <select multiple id="color" name="color">
+                            <option selected value="উজ্জ্বল ফর্সা">উজ্জ্বল ফর্সা</option>
+                            <option value="ফর্সা">ফর্সা</option>
+                            <option value="উজ্জ্বল শ্যামলা">উজ্জ্বল শ্যামলা</option>
+                            <option value="শ্যামলা">শ্যামলা</option>
+                            <option value="কালো">কালো</option>
+                        </select>
+                    </div>
+                    <div class="m-1">
+                        <select id="educationtype" name="edu_type">
+                            <option selected value="মাদ্রাসা">মাদ্রাসা</option>
+                            <option value="জেনারেল">জেনারেল</option>
+                            <option value="any">যেকোনো</option>
+                        </select>
+                    </div>
+                    <div class="m-1">
+                        <div class="dropdown">
+                            <button class="btn age-select dropdown-toggle" type="button" id="agebtn" data-bs-toggle="dropdown" aria-expanded="false">
+                                বয়স (১৫ থেকে ২০)
+                                <i class="fa fa-caret-down"></i>
+                            </button>
+                            <div class="dropdown-menu age-option" aria-labelledby="agebtn">
+                                <div class="p-2">
+                                    <div class="input-group m-0 p-0">
+                                    <input type="text" class="form-control" name="age1" id="age1" placeholder="15" value="15" aria-label="Username">
+                                    <span class="input-group-text">থেকে</span>
+                                    <input type="text" class="form-control" name="age2" id="age2" placeholder="20" value="20" aria-label="Server">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-1">
+                        <div class="dropdown">
+                            <button class="btn age-select dropdown-toggle" type="button" id="heightbtn" data-bs-toggle="dropdown" aria-expanded="false">
+                                উচ্চতা (৪.০ থেকে ৬.০)
+                                <i class="fa fa-caret-down"></i>
+                            </button>
+                            <div class="dropdown-menu age-option" aria-labelledby="heightbtn">
+                                <div class="p-2">
+                                    <div class="input-group m-0 p-0">
+                                    <input type="text" class="form-control" name="height1" id="height1" placeholder="4.0" value="4.0" aria-label="Username">
+                                    <span class="input-group-text">থেকে</span>
+                                    <input type="text" class="form-control" name="height2" id="height2" placeholder="6.0" value="6.0" aria-label="Server">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn search-btn mt-2 mx-5 mb-2 no-wrap">
+                        <i class="fa fa-search-plus"></i>
+                        <button class="ms-1" type="submit">বায়োডাটা খুঁজুন</button>
+                    </div>
+                </div>
+                <div class="carousel" style="width: 500px;">
+                    {% for hd in h|random_hadith %}
+                        <p class="m-0 text-center">
+                            <i class="fa fa-quote-left fa-lg"></i>
+                            {{hd.hadith}}
+                            <i class="fa fa-quote-right fa-lg"></i>
+                            <br>
+                            <i class="fa fa-book"></i>
+                            <span>{{hd.reference}}</span>
+                        </p>
+                    {% endfor %}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    {% comment %} <div class="text-center h4 mt-2">আজকের নামাজের সময়সূচী</div>
+    <div class="prayer-times" id="pt"></div> {% endcomment %}
+    {% if home %}
+    {% else %}
+    {% if biodata %}
+        <p class="my-3 text-center h3" style="color: gray;">{{title}}</p>
+    {% else %}
+        <p class="my-4 text-center h3" style="color: gray;">দুঃখিত কোন বায়োডাটা পাওয়া যাইনি।</p>
+    {% endif %}
+    {% endif %}
+    {% for cuser in cuser %}
+        <p>{{cuser}}</p>
+    {% endfor %}
+    <div class="main-content container mb-3 p-0">
+    <div class="row row-cols-auto justify-content-center">
+        {% if id != 'suggest' and id != 'send' and id != 'get' %}
+        {% for biodata in biodata %}
+        <div class="card mx-4 my-4 p-0" style="height: 275px; width: 250px;">
+            <div class="d-flex card-head">
+                {% if biodata.owner.first_name == 'female' %}
+                    <img class="cardImage ms-2" src="{% static 'img/patri.png' %}" alt="" style="margin-bottom: -50px;">
+                {% else %}
+                    <img class="cardImage ms-2" src="{% static 'img/patro.png' %}" alt="" style="margin-bottom: -50px;">
+                {% endif %}
+                <div class="d-flex flex-column mx-2">
+                    <p class="biodataNo">{{biodata.id}}</p>
+                    <p class="occapasion">{{biodata.what_do|list_to_string_home:biodata}}</p> 
+                </div>
+            </div>
+            <div class="container-fluid card-body p-0">
+                <div class="row">
+                    <div class="col-6 d-flex flex-column mt-3 mb-2 details">
+                        <div class="d-flex ms-3 mt-1 me-3 align-items-center">
+                            <img class="married pt-0" src="{% static 'img/married.png' %}" alt="" style="width: 18px; height: 20px">
+                            <p class="my-0 ms-3">{{biodata.marital_status}}</p>
+                        </div>
+                        <div class="d-flex ms-3 mt-1 align-items-center">
+                            <i class="fa fa-calendar fa-lg"></i>
+                            <p class="my-0 ms-3">{{biodata.birth_year|eng_bn}}</p>
+                        </div>
+                        <div class="d-flex ms-3 mt-1 align-items-center">
+                            <i class="fa fa-sort-amount-asc"></i>
+                            <p class="my-0 ms-3">{{biodata.height|eng_bn}}"</p>
+                        </div>
+                        <div class="d-flex ms-3 mt-1 align-items-center">
+                            <i class="fa fa-home fa-x2"></i>
+                            <p class="my-0 ms-3">{{biodata.present_address}}</p>
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex flex-column mt-3 mb-2">
+                        <div class="d-flex mt-1 me-3 align-items-center">
+                            <img class="married pt-0" src="{% static 'img/skin.png' %}" alt="" style="width: 18px; height: 20px">
+                            <p class="my-0 ms-3">{{biodata.color}}</p>
+                        </div>
+                        <div class="d-flex mt-1 align-items-center">
+                            <i class="fa fa-balance-scale fa-lg"></i>
+                            <p class="my-0 ms-3">{{biodata.weight|eng_bn}} কেজি</p>
+                        </div>
+                        <div class="d-flex mt-1 align-items-center">
+                            <img class="married pt-0" src="{% static 'img/blood.png' %}" alt="" style="width: 18px; height: 20px">
+                            <p class="my-0 ms-3">{{biodata.blood_group}}</p>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <img class="married pt-0" src="{% static 'img/quran.png' %}" alt="" style="width: 22px; height: 25px">
+                            <p class="my-0 ms-3">{{biodata.quran_correctly}}</p>
+                        </div>
+                    </div>
+                    <button class="learn-more">
+                        <span class="circle" aria-hidden="true">
+                        <span class="icon arrow"></span>
+                        </span>
+                        <a class="button-text" href="/b_{{biodata.id}}">বিস্তারিত</a>
+                        <!--<span class="button-text">বিস্তারিত</span>-->
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% elif id == 'send'%}
+        {% for biodata in biodata %}
+        <div class="card mx-4 my-4 p-0" style="height: 275px; width: 250px;">
+            <div class="d-flex card-head">
+                {% if biodata.user.first_name == 'female' %}
+                    <img class="cardImage ms-2" src="{% static 'img/patri.png' %}" alt="" style="margin-bottom: -50px;">
+                {% else %}
+                    <img class="cardImage ms-2" src="{% static 'img/patro.png' %}" alt="" style="margin-bottom: -50px;">
+                {% endif %}
+                <div class="d-flex flex-column mx-2">
+                    <p class="biodataNo">{{biodata.user_biodata.id}}</p>
+                    <p class="occapasion">{{biodata.user_biodata.what_do|list_to_string_home:biodata.user_biodata}}</p> 
+                </div>
+            </div>
+            <div class="container-fluid card-body p-0">
+                <div class="row">
+                    <div class="col-6 d-flex flex-column mt-3 mb-2 details">
+                        <div class="d-flex ms-3 mt-1 me-3 align-items-center">
+                            <img class="married pt-0" src="{% static 'img/married.png' %}" alt="" style="width: 18px; height: 20px">
+                            <p class="my-0 ms-3">{{biodata.user_biodata.marital_status}}</p>
+                        </div>
+                        <div class="d-flex ms-3 mt-1 align-items-center">
+                            <i class="fa fa-calendar fa-lg"></i>
+                            <p class="my-0 ms-3">{{biodata.user_biodata.birth_year|eng_bn}}</p>
+                        </div>
+                        <div class="d-flex ms-3 mt-1 align-items-center">
+                            <i class="fa fa-sort-amount-asc"></i>
+                            <p class="my-0 ms-3">{{biodata.user_biodata.height|eng_bn}}"</p>
+                        </div>
+                        <div class="d-flex ms-3 mt-1 align-items-center">
+                            <i class="fa fa-home fa-x2"></i>
+                            <p class="my-0 ms-3">{{biodata.user_biodata.present_address}}</p>
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex flex-column mt-3 mb-2">
+                        <div class="d-flex mt-1 me-3 align-items-center">
+                            <img class="married pt-0" src="{% static 'img/skin.png' %}" alt="" style="width: 18px; height: 20px">
+                            <p class="my-0 ms-3">{{biodata.user_biodata.color}}</p>
+                        </div>
+                        <div class="d-flex mt-1 align-items-center">
+                            <i class="fa fa-balance-scale fa-lg"></i>
+                            <p class="my-0 ms-3">{{biodata.user_biodata.weight|eng_bn}} কেজি</p>
+                        </div>
+                        <div class="d-flex mt-1 align-items-center">
+                            <img class="married pt-0" src="{% static 'img/blood.png' %}" alt="" style="width: 18px; height: 20px">
+                            <p class="my-0 ms-3">{{biodata.user_biodata.blood_group}}</p>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <img class="married pt-0" src="{% static 'img/quran.png' %}" alt="" style="width: 22px; height: 25px">
+                            <p class="my-0 ms-3">{{biodata.user_biodata.quran_correctly}}</p>
+                        </div>
+                    </div>
+                    <button class="learn-more">
+                        <span class="circle" aria-hidden="true">
+                        <span class="icon arrow"></span>
+                        </span>
+                        <a class="button-text" href="/b_{{biodata.user_biodata.id}}">বিস্তারিত</a>
+                        <!--<span class="button-text">বিস্তারিত</span>-->
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% elif id == 'get'%}
+        {% for biodata in biodata %}
+        <div class="card mx-4 my-4 p-0" style="height: 275px; width: 250px;">
+            <div class="d-flex card-head">
+                {% if biodata.request_user.first_name == 'female' %}
+                    <img class="cardImage ms-2" src="{% static 'img/patri.png' %}" alt="" style="margin-bottom: -50px;">
+                {% else %}
+                    <img class="cardImage ms-2" src="{% static 'img/patro.png' %}" alt="" style="margin-bottom: -50px;">
+                {% endif %}
+                <div class="d-flex flex-column mx-2">
+                    <p class="biodataNo">{{biodata.request_biodata.id}}</p>
+                    <p class="occapasion">{{biodata.request_biodata.what_do|list_to_string_home:biodata.request_biodata}}</p> 
+                </div>
+            </div>
+            <div class="container-fluid card-body p-0">
+                <div class="row">
+                    <div class="col-6 d-flex flex-column mt-3 mb-2 details">
+                        <div class="d-flex ms-3 mt-1 me-3 align-items-center">
+                            <img class="married pt-0" src="{% static 'img/married.png' %}" alt="" style="width: 18px; height: 20px">
+                            <p class="my-0 ms-3">{{biodata.request_biodata.marital_status}}</p>
+                        </div>
+                        <div class="d-flex ms-3 mt-1 align-items-center">
+                            <i class="fa fa-calendar fa-lg"></i>
+                            <p class="my-0 ms-3">{{biodata.request_biodata.birth_year|eng_bn}}</p>
+                        </div>
+                        <div class="d-flex ms-3 mt-1 align-items-center">
+                            <i class="fa fa-sort-amount-asc"></i>
+                            <p class="my-0 ms-3">{{biodata.request_biodata.height|eng_bn}}"</p>
+                        </div>
+                        <div class="d-flex ms-3 mt-1 align-items-center">
+                            <i class="fa fa-home fa-x2"></i>
+                            <p class="my-0 ms-3">{{biodata.request_biodata.present_address}}</p>
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex flex-column mt-3 mb-2">
+                        <div class="d-flex mt-1 me-3 align-items-center">
+                            <img class="married pt-0" src="{% static 'img/skin.png' %}" alt="" style="width: 18px; height: 20px">
+                            <p class="my-0 ms-3">{{biodata.request_biodata.color}}</p>
+                        </div>
+                        <div class="d-flex mt-1 align-items-center">
+                            <i class="fa fa-balance-scale fa-lg"></i>
+                            <p class="my-0 ms-3">{{biodata.request_biodata.weight|eng_bn}} কেজি</p>
+                        </div>
+                        <div class="d-flex mt-1 align-items-center">
+                            <img class="married pt-0" src="{% static 'img/blood.png' %}" alt="" style="width: 18px; height: 20px">
+                            <p class="my-0 ms-3">{{biodata.request_biodata.blood_group}}</p>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <img class="married pt-0" src="{% static 'img/quran.png' %}" alt="" style="width: 22px; height: 25px">
+                            <p class="my-0 ms-3">{{biodata.request_biodata.quran_correctly}}</p>
+                        </div>
+                    </div>
+                    <button class="learn-more">
+                        <span class="circle" aria-hidden="true">
+                        <span class="icon arrow"></span>
+                        </span>
+                        <a class="button-text" href="/b_{{biodata.request_biodata.id}}">বিস্তারিত</a>
+                        <!--<span class="button-text">বিস্তারিত</span>-->
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        {% for biodata in biodata %}
+        <div class="card mx-4 my-4 p-0" style="height: 275px; width: 250px;">
+            <div class="d-flex card-head">
+                {% if biodata.suggested.owner.first_name == 'female' %}
+                    <img class="cardImage ms-2" src="{% static 'img/patri.png' %}" alt="" style="margin-bottom: -50px;">
+                {% else %}
+                    <img class="cardImage ms-2" src="{% static 'img/patro.png' %}" alt="" style="margin-bottom: -50px;">
+                {% endif %}
+                <div class="d-flex flex-column mx-2">
+                    <p class="biodataNo">{{biodata.suggested.id}}</p>
+                    <p class="occapasion">{{biodata.suggested.what_do|list_to_string_home:biodata.suggested}}</p> 
+                </div>
+            </div>
+            <div class="container-fluid card-body p-0">
+                <div class="row">
+                    <div class="col-6 d-flex flex-column mt-3 mb-2 details">
+                        <div class="d-flex ms-3 mt-1 me-3 align-items-center">
+                            <img class="married pt-0" src="{% static 'img/married.png' %}" alt="" style="width: 18px; height: 20px">
+                            <p class="my-0 ms-3">{{biodata.suggested.marital_status}}</p>
+                        </div>
+                        <div class="d-flex ms-3 mt-1 align-items-center">
+                            <i class="fa fa-calendar fa-lg"></i>
+                            <p class="my-0 ms-3">{{biodata.suggested.birth_year|eng_bn}}</p>
+                        </div>
+                        <div class="d-flex ms-3 mt-1 align-items-center">
+                            <i class="fa fa-sort-amount-asc"></i>
+                            <p class="my-0 ms-3">{{biodata.suggested.height|eng_bn}}"</p>
+                        </div>
+                        <div class="d-flex ms-3 mt-1 align-items-center">
+                            <i class="fa fa-home fa-x2"></i>
+                            <p class="my-0 ms-3">{{biodata.suggested.present_address}}</p>
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex flex-column mt-3 mb-2">
+                        <div class="d-flex mt-1 me-3 align-items-center">
+                            <img class="married pt-0" src="{% static 'img/skin.png' %}" alt="" style="width: 18px; height: 20px">
+                            <p class="my-0 ms-3">{{biodata.suggested.color}}</p>
+                        </div>
+                        <div class="d-flex mt-1 align-items-center">
+                            <i class="fa fa-balance-scale fa-lg"></i>
+                            <p class="my-0 ms-3">{{biodata.suggested.weight|eng_bn}} কেজি</p>
+                        </div>
+                        <div class="d-flex mt-1 align-items-center">
+                            <img class="married pt-0" src="{% static 'img/blood.png' %}" alt="" style="width: 18px; height: 20px">
+                            <p class="my-0 ms-3">{{biodata.suggested.blood_group}}</p>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <img class="married pt-0" src="{% static 'img/quran.png' %}" alt="" style="width: 22px; height: 25px">
+                            <p class="my-0 ms-3">{{biodata.suggested.quran_correctly}}</p>
+                        </div>
+                    </div>
+                    <button class="learn-more">
+                        <span class="circle" aria-hidden="true">
+                        <span class="icon arrow"></span>
+                        </span>
+                        <a class="button-text" href="/b_{{biodata.suggested.id}}">বিস্তারিত</a>
+                        <!--<span class="button-text">বিস্তারিত</span>-->
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+        </div>
+        {% if biodata.paginator.num_pages > 1 %}
+        <div class="d-flex justify-content-center">
+            <div class="pagination">
+                {% if biodata.has_previous %}
+                    <a class="text-center" href="?page={{ biodata.previous_page_number }}"><i class="fa fa-long-arrow-left fa-lg"></i></a>
+                    <a class="text-center" href="?page=1">1</a>
+                {% endif %}
+                {% if biodata.number|add:-2 > 1 %}
+                    <p class="dot">...</p>
+                {% endif %}
+                {% if biodata.number|add:-1 > 1 %}
+                    <a class="text-center" href="?page={{ biodata.number|add:-1 }}">{{ biodata.number|add:-1 }}</a>
+                {% endif %}
+                <div class="current text-center">{{ biodata.number }}</div>
+                {% if biodata.number|add:1 < biodata.paginator.num_pages %}
+                    <a class="text-center" href="?page={{ biodata.number|add:1 }}">{{ biodata.number|add:1 }}</a>
+                {% endif %}
+                {% if biodata.number|add:2 < biodata.paginator.num_pages %}
+                    <p class="dot">...</p>
+                {% endif %}
+                {% if biodata.has_next %}
+                    <a class="text-center" href="?page={{ biodata.paginator.num_pages }}">{{ biodata.paginator.num_pages }}</a>
+                    <a class="text-center" href="?page={{ biodata.next_page_number }}"><i class="fa fa-long-arrow-right fa-lg"></i></a>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    {% for quotes in quotes %}
+    <div class="container mb-5">
+        <p class="qtstitle h4 text-center px-3">{{quotes.title}}</p>
+        <p>{{quotes.description | safe}}</p>
+    </div>
+    {% endfor %}
+
+    
+
+<!-- Modal -->
+<div class="modal" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content w-auto">
+      <form method="post">
+      {% csrf_token %}
+      <div class="modal-body">
+        <p class="m-0 pb-2">Select gender</p>
+        <select id="gender" name="gender">
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+        </select>
+        <div class="d-flex flex-fill justify-content-center">
+            <button type="submit" class="btn btn-primary btn-sm mt-3">Save</button>
+        </div>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock body %}
+
+
+{% block extrascript %}
+    {% comment %} <script src="js/particles.min.js"></script> {% endcomment %}
+    <script src="{% static 'js/virtual-select.min.js' %}"></script>
+    <script src="{% static 'js/tail.select-full.js' %}"></script>
+    <script src="{% static 'js/home.js' %}"></script>
+    <script>
+        act("{{id}}");
+    </script>
+    <script>
+        {% if user.is_authenticated %}
+            {% if user.first_name != 'male' and user.first_name != 'female' %}
+                $(function(){
+                    mdl();
+                });
+            {% endif %}
+        {% endif %}
+    </script>
+
+    <script>
+        function search(event){
+            event.preventDefault();
+
+            var formData = new FormData();
+            formData.append("bio_type", document.getElementById("biodatatype").value);
+            formData.append("district", $('#district').val());
+            formData.append("color", $('#color').val());
+            formData.append("edu_type", document.getElementById("educationtype").value);
+            formData.append("age1", document.getElementById("age1").value);
+            formData.append("age2", document.getElementById("age2").value);
+            formData.append("height1", document.getElementById("height1").value);
+            formData.append("height2", document.getElementById("height2").value);
+            
+            console.log(formData);
+
+            var xhr=new XMLHttpRequest();
+            xhr.open("POST", "http://localhost:8000/get_biodata", true);
+            xhr.addEventListener('load', (event) =>{
+                alert("get biodata");
+            });
+            xhr.send(formData);
+        }
+    </script>
+
+{% endblock extrascript %}

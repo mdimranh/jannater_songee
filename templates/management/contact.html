@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extralink %}
+    <link rel="stylesheet" href="{% static 'css/tail.select-light-feather-white.css' %}">
+    <style>
+        .form-control{
+            border: 1px solid rgb(253, 113, 63);
+        }
+        .form-control:focus{
+            border: 1px solid rgb(245, 76, 14);
+        }
+        .form-control:hover{
+            border: 1px solid rgb(245, 76, 14);
+        }
+        form{
+            background-color: rgb(255, 180, 153);
+            padding: 20px;
+        }
+        form .btn{
+            background-color: orangered;
+            color: white;
+        }
+        form .btn:hover{
+            background-color: rgb(202, 54, 0);
+            color: white;
+        }
+        .lnk{
+            background: orangered;
+        }
+        .lnk i{
+            color: white;
+        }
+    </style>
+{% endblock extralink %}
+
+{% block title %}
+    <title>Contact with us</title>
+{% endblock title %}
+
+{% block body %}
+
+<div class="position-fixed top-3 start-3 p-3" style="z-index: 11">
+  <div id="liveToast" class="toast bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-body text-white">
+        আলহামদুলিল্লাহ মেসেজ পৌঁছে গেছে। জাজাকাল্লাহ খাইরান
+    </div>
+  </div>
+</div>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6">
+            <form id="send-message" method="post" onsubmit="sendMessage(event)">
+                <h3 class="mb-3">আমাদের লিখুন</h3>
+                <input class="form-control mb-2" type="text" name="name" id="name" placeholder="আপনার নাম">
+                <input class="form-control mb-2" type="text" id="subject" placeholder="মেসেজের বিষয়">
+                <textarea class="form-control mt-2" name="message" id="message" rows="7" placeholder="মেসেজ লিখুন..."></textarea>
+                <div class="d-flex flex-fill justify-content-center mt-3">
+                    <button type="submit" id="sendbtn" class="btn" disabled>মেসেজ পাঠান</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-6">
+            <iframe src="https://www.google.com/maps/d/embed?mid=1GljLmLbomAbZ50xs6jZbamzXL3EjXiGc&hl=en" width="100%" height="417" style="border:1px solid gray;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-4 lnk">
+    <div class="row">
+        <div class="col-4">
+            <div class="d-flex flex-column align-items-center m-3">
+                <i class="fa fa-phone-square fa-3x"></i>
+                <a href="tel:01942504420" style="color: white; text-decoration: none;">কল করুন</a>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="d-flex flex-column align-items-center m-3">
+                <i class="fa fa-envelope-square fa-3x"></i>
+                <a href="mailto:mdimranh750@gmail.com" style="color: white; text-decoration: none;">ইমেইল করুন</a>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="d-flex flex-column align-items-center m-3">
+                <i class="fa fa-facebook-square fa-3x"></i>
+                <a href="mailto:mdimranh750@gmail.com" style="color: white; text-decoration: none;">আমাদের গ্রুপে যুক্ত হন</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}
+
+{% block extrascript %}
+    <script src="{% static 'js/tail.select-full.js' %}"></script>
+    <script>
+        tail.select('#color',{
+        });
+    </script>
+    <script>
+        $("#message").on("change keyup paste", function(){
+            name = $("#name").val();
+            subject = $("#subject").val();
+            message = $("#message").val();
+            if(name.length === 0 | subject.length === 0 | message.length === 0){
+                document.getElementById('sendbtn').removeAttribute('disabled');
+                document.getElementById('sendbtn').disabled = true;
+            }
+            else{
+                document.getElementById('sendbtn').removeAttribute('disabled');
+            }
+        })
+    </script>
+    <script>
+        function sendMessage(event){
+            event.preventDefault();
+
+            var formData = new FormData();
+            var name = document.getElementById("name").value;
+            var subject = document.getElementById("subject").value;
+            var message = document.getElementById("message").value;
+            formData.append("name", name);
+            formData.append("subject", subject);
+            formData.append("message", message);
+            
+            console.log(formData);
+
+            var xhr=new XMLHttpRequest();
+            xhr.open("POST", "http://127.0.0.1:8000/message", true);
+            xhr.addEventListener('load', (event) =>{
+                alert("Success");
+                $('#send-message').trigger("reset");
+                new bootstrap.Toast(document.querySelector('#liveToast')).show();
+            });
+            xhr.send(formData);
+        }
+    </script>
+{% endblock extrascript %}

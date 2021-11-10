@@ -1,0 +1,5 @@
+{% if messages %}
+    {% for message in messages %}
+        <div id="msg" {% if message.tags %} class="text-center py-3 {{message.tags}}" {% endif %} style='display: none;'>{{message}}</div>
+    {% endfor %}
+{% endif %}

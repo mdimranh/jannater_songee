@@ -1,0 +1,693 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_tags %}
+
+{% block extralink %}
+    <link rel="stylesheet" href="{% static 'css/biodata.css' %}" />
+{% endblock extralink %}
+
+{% block title %}
+    <title>biodata</title>
+{% endblock title %}
+
+{% block body %}
+  <div class="d-flex flex-fill justify-content-center">
+    <div class="container p-0 mt-3 main" id="getdetails">
+    {% comment %} {% for bio in biodata %} {% endcomment %}
+      <div class="d-flex">
+        <div class="d-flex flex-column main-profile pb-3 align-items-center">
+          {% comment %} <div class="heart animate"></div> {% endcomment %}
+          {% if bio.owner.first_name == 'male' %}
+          <img class="bio-profile" src="{% static 'img/patro.png' %}" alt="" />
+          {% else %}
+          <img class="bio-profile" src="{% static 'img/patri.png' %}" alt="" />
+          {% endif %}
+          <p class="mx-0 my-2">বায়োডাটা নংঃ {{bio.id}}</p>
+          {% if bio.owner.id != user.id %}
+          <div class="d-flex mt-2">
+            <div>
+              {% if request %}
+                {% for request in request %}
+                  {% if request.user == user %}
+                    {% if request.accept %}
+                    <form method='post'>
+                      {% csrf_token %}
+                      <input type="hidden" name="reject_request" value='{{bio.id}}'>
+                      <input type="hidden" name="biodata" value='{{bio.id}}'>
+                      <button type='submit' role="button" class="btn btn-secondary px-1 py-0 mx-2">প্রস্তাব প্রত্যাখ্যান করুন</button>
+                    </form>
+                    {% else %}
+                      <div class="d-flex align-items-center justify-content-center">
+                        <div>
+                        <form method='post'>
+                        {% csrf_token %}
+                          <input type="hidden" name="accept_request" value='{{bio.id}}'>
+                          <input type="hidden" name="biodata" value='{{bio.id}}'>
+                          <button type='submit' role="button" class="btn btn-success px-1 py-0 mx-2"><i class="fa fa-check-circle me-1"></i>গ্রহন</button>
+                        </form>
+                        </div>
+                        <div>
+                        <form method='post'>
+                        {% csrf_token %}
+                          <input type="hidden" name="reject_request" value='{{bio.id}}'>
+                          <input type="hidden" name="biodata" value='{{bio.id}}'>
+                          <button type='submit' role="button" class="btn btn-danger px-1 py-0 mx-2"><i class="fa fa-times-circle me-1"></i>প্রত্যাখ্যান</button>
+                        </form>
+                        </div>
+                      </div>
+                    {% endif %}
+                  {% else %}
+                  <form method='post' class="d-flex flex-column align-items-center">
+                  {% csrf_token %}
+                    {% if request.seen %}
+                      {% if request.accept %}
+                        <small class="m-0 pt-0 pb-1 text-center h6">গ্রহণ করেছে</small>
+                      {% else %}
+                        <p class="m-0 pt-0 pb-1 text-center h6">গ্রহণ করেনি</p>
+                      {% endif %}
+                    {% else %}
+                      <p class="m-0 pt-0 pb-1 text-center h6">দেখেনি</p>
+                    {% endif %}
+                    <input type="hidden" name="cancel_request" value='{{bio.id}}'>
+                    <input type="hidden" name="biodata" value='{{bio.id}}'>
+                    <button type='submit' role="button" class="btn btn-danger px-1 pt-1 pb-0 mx-2"><i class="fa fa-times-circle me-1"></i>বাতিল</button>
+                  </form>
+                  {% endif %}
+                {% endfor %}
+              {% else %}
+                {% if user.first_name != bio.owner.first_name %}
+                <form method='post'>
+                {% csrf_token %}
+                  <input type="hidden" name="send_request" value='{{bio.id}}'>
+                  <input type="hidden" name="biodata" value='{{bio.id}}'>
+                  <button type='submit' role='button' class="btn btn-danger px-1 py-0 mx-2"><i class="fa fa-send me-2"></i>প্রস্তাব দিন</button>
+                </form>
+                {% endif %}
+              {% endif %}
+            </div>
+          </div>
+          {% endif %}
+          <div class="nav nav-pills flex-nowrap d-flex flex-column w-100 mx-4 mt-5 menu overflow-auto" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+            <div class="ms-5 nav-link 1 active" serial="1" id="v-pills-general-tab" data-bs-toggle="pill" data-bs-target="#v-pills-general" role="tab" aria-controls="v-pills-general"><p class="my-0 py-2 text-center">সাধারণ তথ্য</p></div>
+            <div class="ms-5 nav-link 2" serial="2" id="v-pills-education-tab" data-bs-toggle="pill" data-bs-target="#v-pills-education" role="tab" aria-controls="v-pills-education"><p class="my-0 py-2 text-center">শিক্ষাগত যোগ্যতা</p></div>
+            <div class="ms-5 nav-link 3" serial="3" id="v-pills-din-tab" data-bs-toggle="pill" data-bs-target="#v-pills-din" role="tab" aria-controls="v-pills-din"><p class="my-0 py-2 text-center">দ্বীনি কার্যাবলী</p></div>
+            <div class="ms-5 nav-link 4" serial="4" id="v-pills-dress-tab" data-bs-toggle="pill" data-bs-target="#v-pills-dress" role="tab" aria-controls="v-pills-dress"><p class="my-0 py-2 text-center">পোশাক পরিচ্ছদ</p></div>
+            <div class="ms-5 nav-link 5" serial="5" id="v-pills-family-tab" data-bs-toggle="pill" data-bs-target="#v-pills-family" role="tab" aria-controls="v-pills-family"><p class="my-0 py-2 text-center">পারিবারিক তথ্য</p></div>
+            <div class="ms-5 nav-link 6" serial="6" id="v-pills-personal-tab" data-bs-toggle="pill" data-bs-target="#v-pills-personal" role="tab" aria-controls="v-pills-personal"><p class="my-0 py-2 text-center">ব্যক্তিগত তথ্য</p></div>
+            <div class="ms-5 nav-link 7" serial="7" id="v-pills-marriage-tab" data-bs-toggle="pill" data-bs-target="#v-pills-marriage" role="tab" aria-controls="v-pills-marriage"><p class="my-0 py-2 text-center">বিয়ে সংক্রান্ত তথ্য</p></div>
+            <div class="ms-5 nav-link 8" serial="8" id="v-pills-lifepartner-tab" data-bs-toggle="pill" data-bs-target="#v-pills-lifepartner" role="tab" aria-controls="v-pills-linepartner"><p class="my-0 py-2 text-center">জীবনসঙ্গী সম্পর্কে</p></div>
+            <div class="ms-5 nav-link 9" serial="9" id="v-pills-authority-tab" data-bs-toggle="pill" data-bs-target="#v-pills-authority" role="tab" aria-controls="v-pills-authority"><p class="my-0 py-2 text-center">কর্তৃপক্ষের জিজ্ঞাসা</p></div>
+            <div class="ms-5 nav-link 10" serial="10" id="v-pills-communication-tab" data-bs-toggle="pill" data-bs-target="#v-pills-communication" role="tab" aria-controls="v-pills-communication"><p class="my-0 py-2 text-center">যোগাযোগ</p></div>
+          </div>
+        </div>
+        <div class="get-details">
+          <div class="d-flex justify-content-end top-btn py-1 pe-1">
+            {% if bio.owner.id == user.id %}
+              <a href="/b_{{bio.id}}/edit"><i class="fa fa-edit px-4"></i></a>
+              <i class="fa fa-facebook-official pe-4"></i>
+            {% else %}
+              <div class="d-flex align-items-center">
+                <div>
+                  {% if request %}
+                    {% for request in request %}
+                      {% if request.user == user %}
+                        {% if request.accept %}
+                        <form method='post'>
+                          {% csrf_token %}
+                          <input type="hidden" name="reject_request" value='{{bio.id}}'>
+                          <input type="hidden" name="biodata" value='{{bio.id}}'>
+                          <button type='submit' role="button" class="btn btn-secondary px-1 py-0 mx-2">প্রস্তাব প্রত্যাখ্যান করুন</button>
+                        </form>
+                        {% else %}
+                          <div class="d-flex align-items-center justify-content-center">
+                            <div>
+                            <form method='post'>
+                            {% csrf_token %}
+                              <input type="hidden" name="accept_request" value='{{bio.id}}'>
+                              <input type="hidden" name="biodata" value='{{bio.id}}'>
+                              <button type='submit' role="button" class="btn btn-success px-1 py-0 mx-2"><i class="fa fa-check-circle me-1"></i>গ্রহন</button>
+                            </form>
+                            </div>
+                            <div>
+                            <form method='post'>
+                            {% csrf_token %}
+                              <input type="hidden" name="reject_request" value='{{bio.id}}'>
+                              <input type="hidden" name="biodata" value='{{bio.id}}'>
+                              <button type='submit' role="button" class="btn btn-danger px-1 py-0 mx-2"><i class="fa fa-times-circle me-1"></i>প্রত্যাখ্যান</button>
+                            </form>
+                            </div>
+                          </div>
+                        {% endif %}
+                      {% else %}
+                      <form method='post' class="d-flex align-items-center">
+                      {% csrf_token %}
+                        {% if request.seen %}
+                          {% if request.accept %}
+                            <small class="m-0 pt-1 pb-1 text-center text-white h6">গ্রহণ করেছে</small>
+                          {% else %}
+                            <p class="m-0 pt-1 pb-1 text-center text-white h6">গ্রহণ করেনি</p>
+                          {% endif %}
+                        {% else %}
+                          <p class="m-0 pt-1 pb-1 text-center text-white h6">দেখেনি</p>
+                        {% endif %}
+                        <input type="hidden" name="cancel_request" value='{{bio.id}}'>
+                        <input type="hidden" name="biodata" value='{{bio.id}}'>
+                        <button type='submit' role="button" class="btn btn-danger px-1 p-0 mx-2"><i class="fa fa-times-circle me-1" style="margin-top: -2px; color: white;"></i>বাতিল</button>
+                      </form>
+                      {% endif %}
+                    {% endfor %}
+                  {% else %}
+                    {% if user.first_name != bio.owner.first_name %}
+                    <form method='post'>
+                    {% csrf_token %}
+                      <input type="hidden" name="send_request" value='{{bio.id}}'>
+                      <input type="hidden" name="biodata" value='{{bio.id}}'>
+                      <button type='submit' role='button' class="btn btn-danger px-1 py-0 mx-2"><i class="fa fa-send me-2"></i>প্রস্তাব দিন</button>
+                    </form>
+                    {% endif %}
+                  {% endif %}
+                </div>
+              </div>
+            {% if user.is_authenticated %}
+              <i class="fa fa-facebook-official px-1"></i>
+            {% else %}
+              <i class="fa fa-facebook-official me-2"></i>
+            {% endif %}
+            {% for pro in profile %}
+              {% if bio in pro.favourite.all %}
+                <div class="heart animate"></div>
+              {% else %}
+                <div class="heart"></div>
+              {% endif %}
+            {% endfor %}
+            {% endif %}
+          </div>
+          <div class="nav nav-pills topmenu d-flex flex-nowrap overflow-auto sticky-top" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+            <div class="nav-link 1 active" serial="1" id="v-pills-general-tab" data-bs-toggle="pill" data-bs-target="#v-pills-general" role="tab" aria-controls="v-pills-general"><p class="my-0 text-center">সাধারণ তথ্য</p></div>
+            <div class="nav-link 2" serial="2" id="v-pills-education-tab" data-bs-toggle="pill" data-bs-target="#v-pills-education" role="tab" aria-controls="v-pills-education"><p class="my-0 text-center">শিক্ষাগত যোগ্যতা</p></div>
+            <div class="nav-link 3" serial="3" id="v-pills-din-tab" data-bs-toggle="pill" data-bs-target="#v-pills-din" role="tab" aria-controls="v-pills-din"><p class="my-0 text-center">দ্বীনি কার্যাবলী</p></div>
+            <div class="nav-link 4" serial="4" id="v-pills-dress-tab" data-bs-toggle="pill" data-bs-target="#v-pills-dress" role="tab" aria-controls="v-pills-dress"><p class="my-0 text-center">পোশাক পরিচ্ছদ</p></div>
+            <div class="nav-link 5" serial="5" id="v-pills-family-tab" data-bs-toggle="pill" data-bs-target="#v-pills-family" role="tab" aria-controls="v-pills-family"><p class="my-0 text-center">পারিবারিক তথ্য</p></div>
+            <div class="nav-link 6" serial="6" id="v-pills-personal-tab" data-bs-toggle="pill" data-bs-target="#v-pills-personal" role="tab" aria-controls="v-pills-personal"><p class="my-0 text-center">ব্যক্তিগত তথ্য</p></div>
+            <div class="nav-link 7" serial="7" id="v-pills-marriage-tab" data-bs-toggle="pill" data-bs-target="#v-pills-marriage" role="tab" aria-controls="v-pills-marriage"><p class="my-0 text-center">বিয়ে সংক্রান্ত তথ্য</p></div>
+            <div class="nav-link 8" serial="8" id="v-pills-lifepartner-tab" data-bs-toggle="pill" data-bs-target="#v-pills-lifepartner" role="tab" aria-controls="v-pills-linepartner"><p class="my-0 text-center">জীবনসঙ্গী সম্পর্কে</p></div>
+            <div class="nav-link 9" serial="9" id="v-pills-authority-tab" data-bs-toggle="pill" data-bs-target="#v-pills-authority" role="tab" aria-controls="v-pills-authority"><p class="my-0 text-center">কর্তৃপক্ষের জিজ্ঞাসা</p></div>
+            <div class="nav-link 10" serial="10" id="v-pills-communication-tab" data-bs-toggle="pill" data-bs-target="#v-pills-communication" role="tab" aria-controls="v-pills-communication"><p class="my-0 text-center">যোগাযোগ</p></div>
+          </div>
+          <div class="tab-content">
+            <div class="tab-pane fade show active" id="v-pills-general" role="tabpanel" aria-labelledby="v-pills-general-tab">
+              <p class="h4 headline mb-3 text-center">সাধারণ তথ্য</p>
+              <div class="container-fluid">
+                <div class="row py-1">
+                  <div class="col-md-5 col-5 question">বৈবাহিক অবস্থা</div>
+                  <div class="col-md-7 col-7 answer">{{bio.marital_status}}</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 col-5 question">স্থায়ী ঠিকানা</div>
+                  <div class="col-md-7 col-7 answer">{{bio.permanent_address}}</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 col-5 question">বর্তমান ঠিকানা</div>
+                  <div class="col-md-7 col-7 answer">{{bio.present_address}}</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 col-5 question">গাত্রবর্ণ</div>
+                  <div class="col-md-7 col-7 answer">{{bio.color}}</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 col-5 question">জন্মসাল</div>
+                  <div class="col-md-7 col-7 answer">{{bio.birth_year|eng_bn}}</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 col-5 question">রক্তের গ্রুপ</div>
+                  <div class="col-md-7 col-7 answer">{{bio.blood_group}}</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 col-5 question">উচ্চতা</div>
+                  <div class="col-md-7 col-7 answer">{{bio.height|eng_bn}}"</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 col-5 question">ওজন</div>
+                  <div class="col-md-7 col-7 answer">{{bio.weight|eng_bn}} কেজি</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 col-5 question">বর্তমানে কি করছেন?</div>
+                  <div class="col-md-7 col-7 answer">{{bio.what_do|list_to_string}}</div>
+                </div>
+                {% if 'চাকরি করতেছি' in bio.what_do%}
+                  <div class="row py-1">
+                    <div class="col-md-5 col-5 question">চাকরি সংক্ষিপ্ত বিবরণ</div>
+                    <div class="col-md-7 col-7 answer">{{bio.job_details}}</div>
+                  </div>
+                  <div class="row py-1">
+                    <div class="col-md-5 col-5 question">মাসিক আয়</div>
+                    <div class="col-md-7 col-7 answer">{{bio.monthly_income}}</div>
+                  </div>
+                {% endif %}
+                {% if 'ব্যবসা করতেছি' in bio.what_do %}
+                  <div class="row py-1">
+                    <div class="col-md-5 col-5 question">ব্যবসার সংক্ষিপ্ত বিবরণ</div>
+                    <div class="col-md-7 col-7 answer">{{bio.business_details}}</div>
+                  </div>
+                  <div class="row py-1">
+                    <div class="col-md-5 col-5 question">মাসিক আয়</div>
+                    <div class="col-md-7 col-7 answer">{{bio.monthly_income}}</div>
+                  </div>
+                {% endif %}
+              </div>
+              {% comment %} <div class="d-flex">
+                <div class="d-flex flex-column">
+                  <div class="number text-center">১</div>
+                  <div class="qans">
+                    <p class="question">বৈবাহিক অবস্থা ?</p>
+                    <p class="answer">{{bio.marital_status}}</p>
+                  </div>
+                </div>
+              </div>
+              </div> {% endcomment %}
+            </div>
+            <div class="tab-pane fade" id="v-pills-education" role="tabpanel" aria-labelledby="v-pills-general-tab">
+              <p class="h4 headline mb-3 text-center sticky-top">শিক্ষাগত যোগ্যতা</p>
+              <div class="container-fluid">
+                <div class="row py-1">
+                  <div class="col-md-5 question">কোন মাধ্যমে লেখাপড়া করছেন ?</div>
+                  <div class="col-md-7 answer">{{bio.education_category}}</div>
+                </div>
+                {% if bio.education_category == 'লেখাপড়া করিনাই' %}
+                  <div class="row py-1">
+                    <div class="col-md-5 question">কোন ক্লাসে পড়েন?</div>
+                    <div class="col-md-7 answer">{{bio.class}}</div>
+                  </div>
+                {% else %}
+                {% if bio.ssc == 'না' %}
+                  <div class="row py-1">
+                    <div class="col-md-5 question">কোন মাধ্যমে লেখাপড়া করছেন ?</div>
+                    <div class="col-md-7 answer">{{bio.education_category}}</div>
+                  </div>
+                {% else %}
+                <div class="row py-1">
+                  <div class="col-md-5 col-5 question">এস.এস.সি / সমমান</div>
+                  <div class="col-md-7 col-7 d-flex flex-column">
+                    <div class="answer"><strong>বিভাগঃ</strong> {{bio.ssc_department}}</div>
+                    <div class="answer"><strong>ফলাফলঃ</strong> {{bio.ssc_result}}</div>
+                    <div class="answer"><strong>পাসের সনঃ</strong> {{bio.ssc_pass_year}}</div>
+                  </div>
+                </div>
+                {% endif %}
+                {% if bio.hsc == 'হ্যাঁ' %}
+                <div class="row py-1">
+                  <div class="col-md-5 col-5 question">এইস.এস.সি / সমমান</div>
+                  <div class="col-md-7 col-7 d-flex flex-column">
+                    <div class="answer"><strong>বিভাগঃ</strong> {{bio.hsc_department}}</div>
+                    <div class="answer"><strong>ফলাফলঃ</strong> {{bio.hsc_result}}</div>
+                    <div class="answer"><strong>পাসের সনঃ</strong> {{bio.hsc_pass_year}}</div>
+                  </div>
+                </div>
+                {% endif %}
+                {% if bio.graduate == "হ্যাঁ পড়তেছি" %}{% endif %}
+                <div class="row py-1">
+                  <div class="col-md-5 col-5 question">স্নাতক / স্নাতক (সম্মান) / সমমান</div>
+                  <div class="col-md-7 col-7 d-flex flex-column">
+                    {% if bio.graduate == 'pass' %}
+                      <div class="answer"><strong>প্রতিষ্ঠানঃ </strong> {{bio.varsity}}</div>
+                      <div class="answer"><strong>পাসের সনঃ</strong> {{bio.graduate_pass_year}}</div>
+                    {% else %}
+                      <div class="answer">হ্যাঁ, পড়তেছি</div>
+                      <div class="answer"><strong>প্রতিষ্ঠানঃ </strong> {{bio.varsity}}</div>
+                    {% endif %}
+                  </div>
+                </div>
+                {% endif %}
+                <div class="row py-1">
+                  <div class="col-md-5 col-5 question">আপনি কি হাফেজ?</div>
+                  <div class="col-md-7 col-7 answer">{{bio.hafez}}</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 question">সর্বোচ্চ শিক্ষাগত যোগ্যতা</div>
+                  <div class="col-md-7 answer">{{bio.highest_education|safe}}</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 question">অন্যান্য শিক্ষাগত যোগ্যতা</div>
+                  <div class="col-md-7 answer">{{bio.others_education|safe}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="v-pills-din" role="tabpanel" aria-labelledby="v-pills-general-tab">
+              <p class="h4 headline mb-3 text-center sticky-top">দ্বীনি কার্যাবলী</p>
+              <div class="container-fluid">
+                <div class="row py-1">
+                  <div class="col-md-5 question">৫ ওয়াক্ত সালাত আদায় করেন?</div>
+                  <div class="col-md-7 answer">{{bio.salat}}</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 question">৫ ওয়াক্ত সালাত কত সময় যাবত আদায় করছেন?</div>
+                  <div class="col-md-7 answer">{{bio.salat_duration}}</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 question">শুদ্ধভাবে কুরআন তিলওয়াত করতে পারেন?</div>
+                  <div class="col-md-7 answer">{{bio.quran_correctly}}</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 question">নিয়মিত কুরআন তিলওয়াত করেন?</div>
+                  <div class="col-md-7 answer">{{bio.quran_regularly}}</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 question">আপনার সুন্নতি দাড়ি আছে?</div>
+                  <div class="col-md-7 answer">{{bio.dari}}</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 question">শিরক সম্পর্কে আপনার স্পষ্ট ধারণা আছে?</div>
+                  <div class="col-md-7 answer">{{bio.shirk}}</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 question">বিদআত সম্পর্কে আপনার স্পষ্ট ধারণা আছে?</div>
+                  <div class="col-md-7 answer">{{bio.bidat}}</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 question">কোন আকিদা/মাঝহাব অনুসরণ করেন?</div>
+                  <div class="col-md-7 answer">{{bio.aqida}}</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 question">নাটক/সিনেমা/সিরিয়াল/গান এসব দেখেন বা শুনেন ?</div>
+                  <div class="col-md-7 answer">{{bio.tv}}</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 question">আপনি কি কোনো পীরের মুরিদ বা অনুসারী?</div>
+                  <div class="col-md-7 answer">{{bio.murid}}</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 question">মাজার সম্পর্কে আপনার ধারণা বা বিশ্বাস কি?</div>
+                  <div class="col-md-7 answer">{{bio.majar}}</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 question">আপনার পছন্দের অন্তত ৩ টি ইসলামী বই এর নাম লিখুন</div>
+                  <div class="col-md-7 answer">{{bio.books|safe}}</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 question">আপনার পছন্দের অন্তত ৩ জন আলেমের নাম লিখুন</div>
+                  <div class="col-md-7 answer">{{bio.sheiks|safe}}</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 question">বিশেষ দ্বীনি যোগ্যতা (যদি থাকে)</div>
+                  <div class="col-md-7 answer">{{bio.dini_qualification|safe}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="v-pills-dress" role="tabpanel" aria-labelledby="v-pills-general-tab">
+              <p class="h4 headline mb-3 text-center sticky-top">পোশাক পরিচ্ছদ</p>
+              <div class="container-fluid">
+              {% if bio.owner.first_name == 'male' %}
+                <div class="row py-1">
+                  <div class="col-md-5 question">পায়ের টাখনুর উপরে কাপড় পরেন ?</div>
+                  <div class="col-md-7 answer">{{bio.pant}}</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 question">ঘরের বাহিরে সাধারণত কী ধরণের পোশাক পরেন ?</div>
+                  <div class="col-md-7 answer">{{bio.out_dress}}</div>
+                </div>
+                {% else %}
+                <div class="row py-1">
+                  <div class="col-md-5 question">বাসার বাইরে বোরকা ও নিকাব পরেন?</div>
+                  <div class="col-md-7 answer">{{bio.borka}}</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 question">হাত পা মোজা পরেন?</div>
+                  <div class="col-md-7 answer">{{bio.muja}}</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 question">বাহিরে পরিপূর্ণ গায়রে মাহরাম মেনে চলেন?</div>
+                  <div class="col-md-7 answer">{{bio.mahram}}</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 question">পর্দা সম্পর্কে আরো কিছু বলতে চান ?</div>
+                  <div class="col-md-7 answer">{{bio.porda|safe}}</div>
+                </div>
+                {% endif %}
+              </div>
+            </div>
+            <div class="tab-pane fade" id="v-pills-family" role="tabpanel" aria-labelledby="v-pills-general-tab">
+              <p class="h4 headline mb-3 text-center sticky-top">পারিবারিক তথ্য</p>
+              <div class="container-fluid">
+                <div class="row py-1">
+                  <div class="col-md-5 question">পিতার পেশা</div>
+                  <div class="col-md-7 answer">{{bio.father_occupation}}</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 question">মাতার পেশা</div>
+                  <div class="col-md-7 answer">{{bio.mother_occupation}}</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 question">ভাই কয়জন?</div>
+                  <div class="col-md-7 answer">{{bio.brother}}</div>
+                </div>
+              {% if bio.brother != 'নাই' %}
+                <div class="row py-1">
+                  <div class="col-md-5 question">ভাইদের সম্পর্কে লিখুন</div>
+                  <div class="col-md-7 answer">{{bio.about_brother|safe}}</div>
+                </div>
+              {% endif %}
+                <div class="row py-1">
+                  <div class="col-md-5 question">বোন কয়জন?</div>
+                  <div class="col-md-7 answer">{{bio.sister}}</div>
+                </div>
+              {% if bio.sister != 'নাই' %}
+                <div class="row py-1">
+                  <div class="col-md-5 question">বোনদের সম্পর্কে লিখুন</div>
+                  <div class="col-md-7 answer">{{bio.about_sister|safe}}</div>
+                </div>
+              {% endif %}
+                <div class="row py-1">
+                  <div class="col-md-5 question">পরিবারের আর্থিক অবস্থা?</div>
+                  <div class="col-md-7 answer">{{bio.financial_status}}</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 question">পরিবারের সামাজিক অবস্থা?</div>
+                  <div class="col-md-7 answer">{{bio.social_status}}</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 question">পরিবারের সম্পর্কে আরো কিছু বলতে চান ?</div>
+                  <div class="col-md-7 answer">{{bio.family|safe}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="v-pills-personal" role="tabpanel" aria-labelledby="v-pills-general-tab">
+              <p class="h4 headline mb-3 text-center sticky-top">ব্যক্তিগত তথ্য</p>
+              <div class="container-fluid">
+              {% if bio.marital_status == 'ডিভোর্সড' %}
+                <div class="row py-1">
+                  <div class="col-md-5 question">ডিভোর্সের কারণ কী?</div>
+                  <div class="col-md-7 answer">{{bio.Divorce}}</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 question">আপনার সন্তান আছে কয়জন ?</div>
+                  <div class="col-md-7 answer">{{bio.children}}</div>
+                </div>
+              {% if bio.owner.first_name == 'female' and bio.children != 'নাই' %}
+                <div class="row py-1">
+                  <div class="col-md-5 question">আপনার সন্তানেরা কি আপনার কাছেই থাকে?</div>
+                  <div class="col-md-7 answer">{{bio.children_address}}</div>
+                </div>
+              {% endif %}
+              {% endif %}
+                <div class="row py-1">
+                  <div class="col-md-5 question">মানসিক বা শারীরিক কোনো রোগ আছে কি?</div>
+                  <div class="col-md-7 answer">{{bio.weakness}}</div>
+                </div>
+              {% if bio.weakness == 'হ্যাঁ' %}
+                <div class="row py-1">
+                  <div class="col-md-5 question">রোগ সম্পর্কে লিখুন</div>
+                  <div class="col-md-7 answer">{{bio.about_weakness}}</div>
+                </div>
+              {% endif %}
+                <div class="row py-1">
+                  <div class="col-md-5 question">দ্বীনের কোন বিশেষ মেহনতে যুক্ত আছেন?</div>
+                  <div class="col-md-7 answer">{{bio.mehnot}}</div>
+                </div>
+              {% if bio.mehnot == 'হ্যাঁ' %}
+                <div class="row py-1">
+                  <div class="col-md-5 question">মেহনত সম্পর্কে লিখুন</div>
+                  <div class="col-md-7 answer">{{bio.about_mehnot|safe}}</div>
+                </div>
+              {% endif %}
+                <div class="row py-1">
+                  <div class="col-md-5 question">নিজের সম্পর্কে লিখুন</div>
+                  <div class="col-md-7 answer">{{bio.about_owner|safe}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="v-pills-marriage" role="tabpanel" aria-labelledby="v-pills-general-tab">
+              <p class="h4 headline mb-3 text-center sticky-top">বিয়ে সংক্রান্ত তথ্য</p>
+              <div class="container-fluid">
+                <div class="row py-1">
+                  <div class="col-md-5 question">অভিভাবক আপনার বিয়েতে রাজি কি না?</div>
+                  <div class="col-md-7 answer">{{bio.family_permission}}</div>
+                </div>
+              {% if bio.owner.first_name == 'female' %}
+                <div class="row py-1">
+                  <div class="col-md-5 question">বিয়ের পর পড়াশোনা চালিয়ে যেতে চান ?</div>
+                  <div class="col-md-7 answer">{{bio.education_after_married}}</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 question">আপনি কি বিয়ের পর চাকরি করতে ইচ্ছুক?</div>
+                  <div class="col-md-7 answer">{{bio.job_after_married}}</div>
+                </div>
+              {% endif %}
+                <div class="row py-1">
+                  <div class="col-md-5 question">বিয়ের পর স্ত্রীকে কোথায় রাখবেন?</div>
+                  <div class="col-md-7 answer">{{bio.address_of_wife}}</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 question">বিয়ে কেন করছেন? বিয়ে সম্পর্কে আপনার ধারণা কী?</div>
+                  <div class="col-md-7 answer">{{bio.about_married|safe}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="v-pills-lifepartner" role="tabpanel" aria-labelledby="v-pills-general-tab">
+              <p class="h4 headline mb-3 text-center sticky-top">জীবনসঙ্গী সম্পর্কে</p>
+              <div class="container-fluid">
+                <div class="row py-1">
+                  <div class="col-md-5 question">বৈবাহিক অবস্থা</div>
+                  <div class="col-md-7 answer">{{bio.partner_marital_status}}</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 question">বয়স</div>
+                  <div class="col-md-7 answer">{{bio.partner_age1}} থেকে {{bio.partner_age2}}</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 question">গাত্রবর্ণ</div>
+                  <div class="col-md-7 answer">{{bio.partner_color}}</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 question">উচ্চতা</div>
+                  <div class="col-md-7 answer">{{bio.partner_height1}} থেকে {{bio.partner_height2}}</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 question">শিক্ষা</div>
+                  <div class="col-md-7 answer">{{bio.partner_education}}</div>
+                </div>
+              {% if bio.owner.first_name == 'female' %}
+                <div class="row py-1">
+                  <div class="col-md-5 question">পাত্র ছাত্র হলে? (কোন শর্ত যদি থাকে)</div>
+                  <div class="col-md-7 answer">{{bio.student_partner}}</div>
+                </div>
+              {% endif %}
+                <div class="row py-1">
+                  <div class="col-md-5 question">জেলা</div>
+                  <div class="col-md-7 answer">{{bio.partner_district|district}}</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 question">আকিদা/মাঝহাব</div>
+                  <div class="col-md-7 answer">{{bio.partner_aqida}}</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 question">পারিবারিক/আর্থিক অবস্থা</div>
+                  <div class="col-md-7 answer">{{bio.partner_financial_status}}</div>
+                </div>
+              {% if bio.owner.forst_name == 'female' %}
+                <div class="row py-1">
+                  <div class="col-md-5 question">ডিভোর্স/বউ মারা গেছে এমন কাওকে বিয়ে করতে আগ্রহী আছেন?</div>
+                  <div class="col-md-7 answer">{{bio.divorced_houseband}}</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 question">প্রবাসী/সিটিজেন পাত্র বিয়ে করতে আগ্রহী আছেন কি?</div>
+                  <div class="col-md-7 answer">{{bio.foreign_houseband}}</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 question">আমার সমস্যা নাই</div>
+                  <div class="col-md-7 answer">{{bio.masna}}</div>
+                </div>
+              {% endif %}
+                <div class="row py-1">
+                  <div class="col-md-5 question">আরও কিছু জানাতে চান?</div>
+                  <div class="col-md-7 answer">{{bio.more_about_partner|safe}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="v-pills-authority" role="tabpanel" aria-labelledby="v-pills-general-tab">
+              <p class="h4 headline mb-3 text-center sticky-top">কর্তৃপক্ষের জিজ্ঞাসা</p>
+              <div class="container-fluid">
+                <div class="row py-1">
+                  <div class="col-md-5 question">JannaterSongee.com ওয়েবসাইটে বায়োডাটা জমা দিচ্ছেন তা অভিভাবক জানেন?</div>
+                  <div class="col-md-7 answer">{{bio.know_family}}</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 question">আল্লাহ'র শপথ করে সাক্ষ্য দিন, যে তথ্যগুলো দিচ্ছেন সব সত্য?</div>
+                  <div class="col-md-7 answer">{{bio.right}}</div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-md-5 question">কোনো মিথ্যা তথ্য দিয়ে থাকলে তার দুনিয়াবী ও আখিরাতের দায়ভার ওয়েবসাইট কর্তৃপক্ষ নিবে না। আপনি কি রাজি?</div>
+                  <div class="col-md-7 answer">{{bio.wrong}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="v-pills-communication" role="tabpanel" aria-labelledby="v-pills-communication-tab">
+              <p class="h4 headline mb-3 text-center sticky-top">যোগাযোগ</p>
+              {% if request %}
+                {% for request in request %}
+                  {% if request.accept %}
+                  <div class="container-fluid">
+                    <div class="row py-1">
+                      <div class="col-md-5 question">ফোন নাম্বার</div>
+                      <div class="col-md-7 answer">{{bio.phone}}</div>
+                    </div>
+                    <div class="row py-1">
+                      <div class="col-md-5 question">ইমেইল</div>
+                      <div class="col-md-7 answer">{{bio.email}}</div>
+                    </div>
+                    <div class="row py-1">
+                      <div class="col-md-5 question">সম্পূর্ণ ঠিকানা</div>
+                      <div class="col-md-7 answer">{{bio.address|safe}}</div>
+                    </div>
+                  </div>
+                  {% else %}
+                  <div class="d-flex justify-content-center mx-5 text-center">
+                    যোগাযোগের তথ্য পাওয়ার জন্য প্রস্তাব গ্রহণ করুন
+                  </div>
+                  {% endif %}
+                {% endfor %}
+              {% else %}
+                <div class="d-flex justify-content-center mx-5 text-center">
+                  যোগাযোগ করার জন্য আপনাকে আগে 'প্রস্তাব দিন' বাটনে ক্লিক করে প্রস্তাব দিতে হবে। প্রস্তাব পাওয়ার পর আপনার প্রস্তাবকে যদি গ্রহণ করেন তাহলে আপনি যোগাযোগের সকল তথ্য পেয়ে যাবেন।
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    {% comment %} {% endfor %} {% endcomment %}
+    </div>
+  </div>
+  <input type="hidden" name="user" id="user" value="{{user.id}}">
+{% endblock body %}
+
+{% block extrascript %}
+    <script src="{% static 'js/biodata.js' %}"></script>
+    <script>
+      $(function() {
+      $(".heart").click(function() {
+        event.preventDefault();
+        var formData = new FormData();
+        formData.append("biodata", {{bio.id}});
+        formData.append("user_id", document.getElementById('user').value);
+        
+        console.log(formData);
+
+        var xhr=new XMLHttpRequest();
+        xhr.open("POST", "http://localhost:8000/profile/favourite", true);
+        xhr.send(formData);
+        $(this).toggleClass("animate");
+      });
+    });
+    </script>
+{% endblock extrascript %}
+    {% comment %} <script>
+        particlesJS.load('getdetails', '../assets/json/details.json', function(){
+        });
+    </script>
+    <script>
+      $(function() {
+      $(".heart").click(function() {
+        $(this).toggleClass("animate");
+      });
+    });
+    </script> {% endcomment %}

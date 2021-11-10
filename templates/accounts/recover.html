@@ -1,0 +1,8 @@
+{% autoescape off %}
+আসসালামু আলাইকুম,
+
+JannaterSongee.com এ আপনাকে মুবারকবাদ
+নিচের লিংকে ক্লিক করে আপনার পাসওয়ার্ড ঠিক করুন
+
+http://{{ domain }}{% url 'password_recover' activation_key=activation_key %}
+{% endautoescape %}

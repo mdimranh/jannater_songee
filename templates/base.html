@@ -1,0 +1,279 @@
+{% load socialaccount %}
+{% load static %}
+{% load custom_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{% static 'img/favicon.png' %}" type="image/gif" sizes="16x16"> 
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'animations/ripple-effect.css' %}" />
+    <link rel="stylesheet" href="{% static 'tippyjs/dist/tippy.css' %}" />
+    <link rel="stylesheet" href="{% static 'tippyjs/themes/light.css' %}" />
+    <link rel="stylesheet" href="{% static 'tippyjs/animations/scale-extreme.css' %}" />
+    <link rel="stylesheet" href="{% static 'icon/font-awesome/css/font-awesome.min.css' %}">
+    <link href="https://fonts.maateen.me/adorsho-lipi/font.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/css/splide.min.css">
+    {% block extralink %}{% endblock extralink %}
+    {% block title %}{% endblock title %}
+
+</head>
+<body id="body">
+    
+    <div class="d-flex bg-light shadow-sm align-items-center justify-content-between nav base-nav sticky-top py-2">
+        <div class="d-flex align-items-center menu">
+            <i class="fa fa-bars fa-lg ps-2 pe-4" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBackdrop" aria-controls="offcanvasWithBackdrop"></i>
+            <a href="{% url 'home' %}"><img class="logo" src="{% static 'img/logo.png' %}" alt=""></a>
+        </div>
+        <div class="list m-0 p-0">
+            <div class="px-2 ico" id="all"><a href="{% url 'all' %}"><img src="{% static 'img/couple1.png' %}" alt="" style="height: 40px; width: 40px;"></a></div>
+            <div class="px-2 ico" id="male"><a href="{% url 'male' %}"><img src="{% static 'img/male.png' %}" alt="" style="height: 40px; width: 40px;"></a></div>
+            <div class="px-2 ico" id="female"><a href="{% url 'female' %}"><img src="{% static 'img/female.png' %}" alt="" style="height: 40px; width: 40px;"></a></div>
+            <div class="px-2 ico" id="couple"><a href="{% url 'success' %}"><img src="{% static 'img/bibaho.png' %}" alt="" style="height: 40px; width: 70px; margin-left: -10px;"></a></div>
+            {% if user.is_authenticated %}
+            <div class="px-2 ico" id="suggest"><a href="{% url 'suggest' %}"><img src="{% static 'img/suggest.png' %}" alt="" style="height: 33px; margin-bottom: -15px; margin-left: -15px;"></a></div>
+            <div class="px-0 ico" id="love"><a href="{% url 'love' %}"><img class="nav-img 7" serial="7" src="{% static 'img/love1.png' %}" alt="" style="height: 32px; width: 32px;margin-bottom: -12px; margin-left: 5px;"></a></div>
+            <div class="px-2 ico" id="masala"><a href="{% url 'masala'  %}"><img src="{% static 'img/masala.png' %}" alt="" style="height: 35px; width: 50px; margin-left: -5px;"></a></div>
+            {% else %}
+            <div class="px-2 ico" id="masala"><a href="{% url 'masala'  %}"><img src="{% static 'img/masala.png' %}" alt="" style="height: 35px; width: 50px; margin-left: -22px;"></a></div>
+            {% endif %}
+            <div class="px-0 ico" id="aboutus">
+                 <div class="dropdown">
+                    <div class="dropbtn"><img src="{% static 'img/aboutus.png' %}" alt="" style="height: 35px; width: 35px; margin-bottom: -12px; margin-left: -8px;"></div>
+                    <div class="dropdown-content">
+                        <a href="{% url 'home' %}">আমাদের সম্পর্কে</a>
+                        <a href="{% url 'contact' %}">যোগাযোগ করুন</a>
+                        <a href="{% url 'qa' %}">প্রশ্ন ও উত্তর</a>
+                        <a href="{% url 'home' %}">টিউটোরিয়াল</a>
+                        <a href="{% url 'home' %}">সাদকা করুণ</a>
+                    </div>
+                </div> 
+            </div>
+        </div>
+        <div class="d-flex align-items-center">
+        {% if user.is_authenticated %}
+            <div class="d-flex align-items-center" type="button" id="notificationbtn" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa fa-bell fa-lg pe-3"></i>
+                {% if user.id|no_notification > 0 %}
+                    <p class="badge" id="badge">{{user.id|no_notification}}</p>
+                {% else %}
+                    <p class="badge" id="badge" style="visibility: hidden;">0</p>
+                {% endif %}
+            </div>
+            <div class="dropdown-menu mt-2 notification-menu" aria-labelledby="notificationbtn">
+                <ul class="p-0 m-0" id="n-show" style="list-style: none;">
+                    {% if user.id|get_notification %}
+                    {% for nof in user.id|get_notification %}
+                        <a href="/b_{{nof.sender.id}}" class="d-flex align-items-center py-1 px-2 {% if nof.new %}today{% endif %}">
+                            {% if nof.sender.owner.first_name == 'male' %}
+                            <img src="{% static 'img/patro.png' %}" class="profile">
+                            {% else %}
+                            <img src="{% static 'img/patri.png' %}" class="profile">
+                            {% endif %}
+                            <div class="d-flex flex-column">
+                                <p class="ps-2 m-0">বায়োডাটা: {{nof.sender.id}} {{nof.details}}</p>
+                                <small class="time">{{nof.created_at|timesince}} ago</small>
+                            </div>
+                        </a>
+                    {% endfor %}
+                    {% else %}
+                        <p class="text-center px-2 mt-3">কোন নোটিফিকেশান পাওয়া যাইনি</p>
+                    {% endif %}
+                </ul>
+            </div>
+            {% if user.first_name == 'male' %}
+                <img src="{% static 'img/patro.png' %}" class="profile" type="button" id="usermenubtn" data-bs-toggle="dropdown" aria-expanded="false">
+            {% elif user.first_name == 'female' %}
+                <img src="{% static 'img/patri.png' %}" class="profile" type="button" id="usermenubtn" data-bs-toggle="dropdown" aria-expanded="false">
+            {% else %}
+                <img src="{% static 'img/user.png' %}" class="profile" type="button" id="usermenubtn" data-bs-toggle="dropdown" aria-expanded="false">
+            {% endif %}
+        {% else %}
+            <img src="{% static 'img/user.png' %}" class="profile" type="button" id="usermenubtn" data-bs-toggle="dropdown" aria-expanded="false">
+        {% endif %}
+            <div class="dropdown-menu mt-2 user-menu" aria-labelledby="usermenubtn">
+                <div class="d-flex flex-column">
+                    {% if user.is_authenticated %}
+                        {% if user|has_biodata %}
+                            <a class="d-flex align-items-center px-2" href="/b_{{user|my_biodata_id}}"><i class="fa fa-qrcode me-2 py-2"></i><p class="m-0">আমার বায়োডাটা</p></a>
+                            <a class="d-flex align-items-center px-2" href="/b_{{user|my_biodata_id}}/send"><i class="fa fa-arrow-circle-up me-2 py-2"></i><p class="m-0">প্রেরিত প্রস্তাব</p></a>
+                            <a class="d-flex align-items-center px-2" href="/b_{{user|my_biodata_id}}/get"><i class="fa fa-arrow-circle-down me-2 py-2"></i><p class="m-0">প্রাপ্ত প্রস্তাব</p></a>
+                            <a class="d-flex align-items-center px-2" href="{% url 'settings' %}"><i class="fa fa-gear me-2 py-2"></i><p class="m-0">সেটিংস</p></a>
+                        {% else %}
+                            <a class="d-flex align-items-center px-2" href="/create_biodata"><i class="fa fa-qrcode me-2 py-2"></i><p class="m-0">বায়োডাটা তৈরি করুণ</p></a>
+                        {% endif %}
+                        <a class="d-flex align-items-center px-2" href="{% url 'logout' %}"><i class="fa fa-sign-out me-2 py-2"></i><p class="m-0">লগআউট</p></a>
+                    {% else %}
+                        <a class="d-flex align-items-center px-2" href="{% url 'create_account' %}"><i class="fa fa-sign-in me-2 py-2"></i><p class="m-0">লগইন / রেজিস্ট্রেশান</p></a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="offcanvas offcanvas-start" data-bs-backdrop="true" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBackdrop" aria-labelledby="offcanvasWithBackdropLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasWithBackdropLabel">Menu</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body d-flex flex-column">
+            <div class="py-2 d-flex align-items-center"><img class="mx-2" src="{% static 'img/couple1.png' %}" alt="" style="height: 35px; width: 35px;"><p class="m-0 p-0" style="font-weight: bolder;">সকল বায়োডাটা</p></div>
+            <div class="py-2 d-flex align-items-center"><img class="mx-2" src="{% static 'img/couple1.png' %}" alt="" style="height: 35px; width: 35px;"><p class="m-0 p-0" style="font-weight: bolder;">পাত্রের বায়োডাটা</p></div>
+            <div class="py-2 d-flex align-items-center"><img class="mx-2" src="{% static 'img/couple1.png' %}" alt="" style="height: 35px; width: 35px;"><p class="m-0 p-0" style="font-weight: bolder;">পাত্রীর বায়োডাটা</p></div>
+            <div class="py-2 d-flex align-items-center"><img class="mx-2" src="{% static 'img/couple1.png' %}" alt="" style="height: 35px; width: 35px;"><p class="m-0 p-0" style="font-weight: bolder;">সফল বিবাহ</p></div>
+            <div class="py-2 d-flex align-items-center"><img class="mx-2" src="{% static 'img/couple1.png' %}" alt="" style="height: 35px; width: 35px;"><p class="m-0 p-0" style="font-weight: bolder;">মাসালা-মাসায়েল</p></div>
+        </div>
+    </div>
+
+
+    {% block body %}{% endblock body %}
+
+
+
+    <div class="position-fixed bottom-0 start-0" style="z-index: 200">
+        <div id="emailtoast" class="toast show emailtoast">
+            <div class="toast-body emailtoast-body">
+                <i class="fa fa-envelope"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="position-fixed bottom-0 end-0" style="z-index: 200">
+        <div id="arrowtoast" class="toast show arrowtoast">
+        <div class="toast-body emailtoast-body">
+            <i class="fa fa-angle-double-up" id="arrow"></i>
+        </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("emailtoast").addEventListener("click", function() {
+            $("#exampleModal1").modal("show")
+        });
+    </script>
+
+
+
+    <div class="modal fade" id="exampleModal1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="position: absolute; left: 10px; bottom: 45px; width: 300px;" >
+        <div class="modal-content">
+        <div class='d-flex justify-content-between ps-3 pe-2 py-1'>
+            <h4 class="modal-title m-0 p-0" id="exampleModalLabel">মেসেজ পাঠান</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form>
+            <div class="mb-3">
+                <input type="text" class="form-control" id="recipient-name" placeholder="আপনার নাম">
+            </div>
+            <div class="mb-3">
+                <textarea class="form-control" id="message-text" placeholder="এখানে মেসেজ লিখুন..." rows="4"></textarea>
+            </div>
+            <button type="button" class="btn w-100">মেসেজ পাঠান</button>
+            </form>
+        </div>
+        </div>
+    </div>
+    </div>
+
+
+
+    
+
+
+    <!-- Modal -->
+    {% comment %} <div class="modal loginmodal fade" id="loginmodal" tabindex="-1" aria-labelledby="loginmodalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title" id="exampleModalLabel">Authentication</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                {% include 'message.html' %}
+                <div class="lds-roller" id="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                <div class="module form-module">
+                    <div class="toggle d-flex">
+                        <div class="signup-toggle" id="signup-toggle">Signup</div>
+                        <div class="login-toggle" id="login-toggle">Login</div>
+                    </div>
+                    <div class="form" id="form1">
+                        <h2>Login to your account</h2>
+                        <form>
+                        <input type="text" placeholder="Username"/>
+                        <input type="password" placeholder="Password"/>
+                        <button>Login</button>
+                        <div class="cta"><a href="http://andytran.me">Forgot your password?</a></div>
+                        </form>
+                    </div>
+                    <div class="form" id="form2">
+                        <h2>Create an account</h2>
+                        <form id="registration" method="post" onsubmit="onRegistration(event)">
+                            <select class="form-control mb-3" id="gender">
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                            <input id="email" type="email" placeholder="Email Address"/>
+                            <input id="password" type="password" placeholder="Password"/>
+                            <button type="submit">Register</button>
+                        </form>
+                    </div>
+                    <p class="text-center my-2">or continue with</p>
+                    <div class="d-flex justify-content-center m-3">
+                        <a class="btn btn-sm me-1" href="{% provider_login_url "facebook" method="oauth2" %}">Facebook</a>
+                        <a class="btn btn-sm ms-1" href="{% provider_login_url "google" method="oauth2" %}">Google</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> {% endcomment %}
+
+
+   
+
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    {% comment %} <script src="js/particles.min.js"></script> {% endcomment %}
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v12.0&appId=1648696025461402&autoLogAppEvents=1" nonce="tCUY8T7b"></script>
+    <script src="{% static 'js/base.js' %}"></script>
+    <script>
+        let id = {{user.id}};
+        function onRegistration(event){
+            event.preventDefault();
+
+            document.getElementById('lds-roller').style.display = 'block';
+            document.getElementById('form1').style.opacity = '0.3';
+            document.getElementById('form2').style.opacity = '0.3';
+
+            var formData = new FormData();
+            var e = document.getElementById("gender");
+			var gender = e.options[e.selectedIndex].value;
+            formData.append("gender", gender);
+            formData.append("email", document.getElementById("email").value);
+            formData.append("password", document.getElementById("password").value);
+            
+            console.log(formData);
+
+            var xhr=new XMLHttpRequest();
+            xhr.open("POST", "http://127.0.0.1:8000/account/registration", true);
+            xhr.addEventListener('load', (event) =>{
+                document.getElementById('lds-roller').style.display = 'none';
+                document.getElementById('form1').style.opacity = '1';  
+                document.getElementById('form2').style.opacity = '1';
+                document.getElementById("msg").style.display = "block";
+                
+            });
+            xhr.send(formData);
+        }
+    </script>
+
+    <script src="{% static 'tippyjs/dist/popper.min.js' %}"></script>
+    <script src="{% static 'tippyjs/dist/tippy-bundle.umd.min.js' %}"></script>
+    <script src="{% static 'tippyjs/custom.js' %}"></script>
+    <script src="{% static 'js/notification.js' %}"></script>
+    {% block extrascript %}{% endblock extrascript %}
+</body>
+</html> 

@@ -1,0 +1,1072 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_tags %}
+
+{% block extralink %}
+    <link rel="stylesheet" href="{% static 'css/create_biodata.css' %}">
+    <link rel="stylesheet" href="{% static 'css/smart_wizard_all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/tail.select-light-feather.css' %}">
+    <link rel="stylesheet" href="{% static 'css/rangeslider-customize.css' %}">
+    {% comment %} <link rel="stylesheet" href="{% static 'ckeditor/styles.css' %}"> {% endcomment %}
+    <link href="https://cdn.rawgit.com/mdehoog/Semantic-UI/6e6d051d47b598ebab05857545f242caf2b4b48c/dist/semantic.min.css" rel="stylesheet" type="text/css" />
+{% endblock extralink %}
+{% block title %}
+    <title>Create biodata</title>
+{% endblock title %}
+
+{% block body %}
+<div class=".body pt-5">
+<div class="d-flex flex-fill justify-content-center">
+    <div class="container p-0 mt-3 main-content" id="getdetails">
+      <div class="d-flex">
+        <div class="d-flex flex-column main-profile pb-3 align-items-center">
+         {% if user.first_name == 'male' %}
+            <img class="user-profile" src="{% static 'img/patro.png' %}" alt="" />
+         {% else %}
+            <img class="user-profile" src="{% static 'img/patri.png' %}" alt="" />
+         {% endif %}
+         {% for bio in biodata %}
+          <p class="mx-0 my-2">বায়োডাটা নংঃ {{bio.id|eng_bn}}</p>
+          {% comment %} <div class="d-flex mt-2">
+            <div class="btn request-btn btn-sm mx-1">প্রস্তাব দিন</div>
+          </div> {% endcomment %}
+          <div class="flex-nowrap d-flex flex-column w-100 mx-4 mt-5 short-data overflow-auto align-items-center">
+             <div class="d-flex align-items-center">
+               <i class="fa fa-heartbeat icons me-3"></i>
+               <p class="my-0 status marital-status">{{bio.marital_status}}</p>
+             </div>
+             <div class="d-flex align-items-center">
+               <i class="fa fa-map-signs icons me-3"></i>
+               <p class="my-0 status district">{{bio.permanent_address}}</p>
+             </div>
+             <div class="d-flex align-items-center">
+               <i class="far fa-calendar-check icons me-3"></i>
+               <p class="my-0 status birth">{{bio.birth_year|eng_bn}}</p>
+             </div>
+             <div class="d-flex align-items-center">
+               <i class="fa fa-adjust icons me-3"></i>
+               <p class="my-0 status color">{{bio.color}}</p>
+             </div>
+             <div class="d-flex align-items-center">
+               <i class="fas fa-sort-amount-up icons me-3"></i>
+               <p class="my-0 status height">{{bio.height|eng_bn}}"</p>
+             </div>
+             <div class="d-flex align-items-center">
+               <i class="fa fa-balance-scale icons me-3"></i>
+               <p class="my-0 status weight">{{bio.weight|eng_bn}} কেজি</p>
+             </div>
+             <div class="d-flex align-items-center">
+               <i class="fa fa-tint icons me-3"></i>
+               <p class="my-0 status blood">{{bio.blood_group}}</p>
+             </div>
+             <div class="d-flex align-items-center">
+               <i class="fa fa-user-md icons me-3"></i>
+               <p class="my-0 status work">{{bio.what_do|list_to_string}}</p>
+             </div>
+             {% comment %} <div class="align-items-center" id="work-type">
+               <i class="fa fa-graduation-cap icons me-3"></i>
+               <p class="my-0 status work-type">{{bio.education_category}}</p>
+             </div> {% endcomment %}
+             {% endfor %}
+         </div>
+        </div>
+        <div class="get-details" id="getdetails">
+          <div id="smartwizard">
+            <ul class="nav sticky-top">
+               <li>
+                  <a class="nav-link" href="#general">
+                        সাধারণ তথ্য
+                  </a>
+               </li>
+               <li>
+                  <a class="nav-link" href="#educationQ">
+                     শিক্ষাগত যোগ্যতা
+                  </a>
+               </li>
+               <li>
+                  <a class="nav-link" href="#din">
+                     দ্বীনি কার্যাবলী
+                  </a>
+               </li>
+               <li>
+                  <a class="nav-link" href="#dress">
+                     পোশাক পরিচ্ছদ
+                  </a>
+               </li>
+               <li>
+                  <a class="nav-link" href="#family">
+                     পারিবারিক তথ্য
+                  </a>
+               </li>
+               <li>
+                  <a class="nav-link" href="#personal">
+                     ব্যক্তিগত তথ্য
+                  </a>
+               </li>
+               <li>
+                  <a class="nav-link" href="#marriage">
+                     বিয়ে সংক্রান্ত তথ্য
+                  </a>
+               </li>
+               <li>
+                  <a class="nav-link" href="#partner">
+                     জীবনসঙ্গী সম্পর্কে
+                  </a>
+               </li>
+               <li>
+                  <a class="nav-link" href="#authorityQ">
+                     কর্তৃপক্ষের জিজ্ঞাসা
+                  </a>
+               </li>
+               <li>
+                  <a class="nav-link" href="#communication">
+                     যোগাযোগ
+                  </a>
+               </li>
+            </ul>
+         <form method="post">
+         {% csrf_token %}
+         {% for bio in biodata %}
+            <div class="tab-content d-flex justify-content-center h-auto">
+
+            <!-- সাধারণ তথ্য -->
+
+               <div id="general" class="tab-pane container" role="tabpanel">
+                  <div class="row mt-3">
+                     <div class="mb-3 col-md-6">
+                        <label class="form-label">নাম</label>
+                        <input name="name" class="form-control" type="text" value="{{bio.name}}">
+                     </div>
+                     <div class="mb-3 col-md-6">
+                        <label for="marital-status" class="form-label">বৈবাহিক অবস্থা</label>
+                        <select id="marital-status" name="marital-status">
+                            <option value="অবিবাহিত" {% if bio.marital_status == 'অবিবাহিত' %}selected{% endif %}>অবিবাহিত</option>
+                            {% if user.first_name == 'male' %}
+                            <option value="বিবাহিত" {% if bio.marital_status == 'বিবাহিত' %}selected{% endif %}>বিবাহিত</option>
+                            {% endif %}
+                            <option value="ডিভোর্সড" {% if bio.marital_status == 'ডিভোর্সড' %}selected{% endif %}>ডিভোর্সড</option>
+                            {% if user.first_name == 'male' %}
+                            <option value="বিপত্নীক" {% if bio.marital_status == 'বিপত্নীক' %}selected{% endif %}>বিপত্নীক</option>
+                            {% else %}
+                            <option value="বিধবা" {% if bio.marital_status == 'বিধবা' %}selected{% endif %}>বিধবা</option>
+                            {% endif %}
+                        </select>
+                     </div>
+                     <div class="mb-3 col-md-6">
+                        <label for="paddress" class="form-label">স্থায়ী ঠিকানা</label>
+                        <select id="paddress" name="permanent-address">
+                            {% for x, y in dis %}
+                                <optgroup label = "{{x}}">
+                                    {% for z in y %}
+                                        <option value="{{z}}" {% if z == bio.permanent_address %}selected{% endif %} >{{z}}</option>
+                                    {% endfor %}
+                                </optgroup>
+                            {% endfor %}
+                        </select>
+                     </div>
+                     {% comment %} <div class="mb-3 col-md-6">
+                        <label for="division" class="form-label">বিভাগ</label>
+                        <select id="division">
+                            <option value="dhaka">ঢাকা</option>
+                            <option value="chottogram">চট্টগ্রাম</option>
+                            <option value="rajshahi">রাজশাহী</option>
+                            <option value="khulna">খুলনা</option>
+                            <option value="borishal">বরিশাল</option>
+                            <option value="sylhet">সিলেট</option>
+                            <option value="rangpur">রংপুর</option>
+                            <option value="mymensingh">ময়মনসিংহ</option>
+                        </select>
+                     </div> {% endcomment %}
+                     <div class="mb-3 col-md-6">
+                        <label for="presentaddress" class="form-label">বর্তমান ঠিকানা</label>
+                        <select id="presentaddress" name="present-address">
+                            {% for x, y in dis %}
+                                <optgroup label = "{{x}}">
+                                    {% for z in y %}
+                                        <option value="{{z}}" {% if z == bio.present_address %}selected{% endif %}>{{z}}</option>
+                                    {% endfor %}
+                                </optgroup>
+                            {% endfor %}
+                        </select>
+                     </div>
+                     <div class="mb-3 col-md-6">
+                        <label for="color" class="form-label">গাত্রবর্ণ</label>
+                        <select id="color" name="color">
+                            <option value="উজ্জ্বল ফর্সা" {% if bio.color == 'উজ্জ্বল ফর্সা' %}selected{% endif %}>উজ্জ্বল ফর্সা</option>
+                            <option value="ফর্সা" {% if bio.color == 'ফর্সা' %}selected{% endif %}>ফর্সা</option>
+                            <option value="উজ্জ্বল শ্যামলা" {% if bio.color == 'উজ্জ্বল শ্যামলা' %}selected{% endif %}>উজ্জ্বল শ্যামলা</option>
+                            <option value="শ্যামলা" {% if bio.color == 'শ্যামলা' %}selected{% endif %}>শ্যামলা</option>
+                            <option value="কালো" {% if bio.color == 'কালো' %}selected{% endif %}>কালো</option>
+                        </select>
+                     </div>
+                     <div class="col-md-6 mb-3" id="birthyear">
+                        <label for="yearpick" class="form-label">জন্মসাল</label>
+                        <div class="ui input left icon w-100" id="yearpick">
+                           <i class="fa fa-clock-o time icon"></i>
+                           <input id="brthyear" name="birth-year" class="birthyear" type="text" placeholder="জন্মসাল" class="year-form" autocomplete="off" value="{{bio.birth_year}}">
+                        </div>
+                     </div>
+                     <div class="mb-3 col-md-6">
+                        <label for="blood-group" class="form-label">রক্তের গ্রুপ</label>
+                        <select id="blood-group" name="blood-group">
+                           <option value="A+" {% if bio.blood_group == 'A+' %}selected{% endif %} >A+</option>
+                           <option value="A-" {% if bio.blood_group == 'A-' %}selected{% endif %}>A-</option>
+                           <option value="B+" {% if bio.blood_group == 'B+' %}selected{% endif %}>B+</option>
+                           <option value="B-" {% if bio.blood_group == 'B-' %}selected{% endif %}>B-</option>
+                           <option value="AB+" {% if bio.blood_group == 'AB+' %}selected{% endif %}>AB+</option>
+                           <option value="AB-" {% if bio.blood_group == 'AB-' %}selected{% endif %}>AB-</option>
+                           <option value="O+" {% if bio.blood_group == 'O+' %}selected{% endif %}>O+</option>
+                           <option value="O-" {% if bio.blood_group == 'O-' %}selected{% endif %}>O-</option>
+                           <option value="জানা নেই" {% if bio.blood_group == 'জানা নেই' %}selected{% endif %}>জানা নেই</option>
+                        </select>
+                     </div>
+                     <div class="mb-3 col-md-6">
+                        <label for="what-do" class="form-label">বর্তমানে কি করছেন ? (কোণটা না হলে এড়িয়ে যেতে পারেন)</label>
+                        <select multiple id="what-do" name="what-do">
+                            <option value="লেখাপড়া করতেছি" {% if 'লেখাপড়া করতেছি' in bio.what_do %}selected{% endif %}>লেখাপড়া</option>
+                            <option value="চাকরি করতেছি" {% if 'চাকরি করতেছি' in bio.what_do %}selected{% endif %}>চাকরি</option>
+                            <option value="চাকরি খুঁজছি" {% if 'চাকরি খুঁজছি' in bio.what_do %}selected{% endif %}>চাকরি খুঁজছি</option>
+                            <option value="ব্যবসা করতেছি" {% if 'ব্যবসা করতেছি' in bio.what_do %}selected{% endif %}>ব্যবসা</option>
+                        </select>
+                     </div>
+                     <div class="mb-3" id="salary" style="display: none;">
+                        <label class="form-label">মাসিক আয়</label>
+                        <input id="monthly-income" name="monthly-income" class="form-control" type="number">
+                     </div>
+                     <div class="mb-3" id="job" style="display: none;">
+                        <label class="form-label">চাকরির সংক্ষিপ্ত বিবরণ</label>
+                        <textarea id="about-job" name="about-job"></textarea>
+                     </div>
+                     <div class="mb-3" id="business" style="display: none;">
+                        <label class="form-label">ব্যবসার সংক্ষিপ্ত বিবরণ</label>
+                        <textarea id="about-business" name="about-business"></textarea>
+                     </div>
+                     <div class="mb-3 col-md-6">
+                        <label for="color" class="form-label">আপনি কি কোনভাবে সূদ বা হারাম ইনকামের সাথে জড়িত?</label>
+                        <select id="color" name="haram_income">
+                            <option value="না">না</option>
+                            <option value="হা">হ্যাঁ</option>
+                        </select>
+                     </div>
+                     <div class="mb-5">
+                        <label for="slider" class="form-label">উচ্চতা</label>
+                        <div class="rangeslider-wrap">
+                           <input type="range" name="height" min="48" max="75" step="1" value="{{bio.height}}" labels="৪, , , , , , ৪.৬, , , , , , ৫, , , , , , ৫.৬, , , , , , ৬, , , ৬.৩">
+                        </div>
+                     </div>
+                     <div class="mb-5">
+                        <label for="slider" class="form-label">ওজন</label>
+                        <div class="rangeslider-wrap">
+                           <input type="range1" name="weight" min="31" max="120" step="1" value="{{bio.weight}}" labels="৩০, ৪০, ৫০, ৬০, ৭০, ৮০, ৯০, ১০০, ১১০, ১২০">
+                        </div>
+                     </div>
+                  </div>
+               </div>
+
+
+               <!-- শিক্ষাগত যোগ্যতা  -->
+
+
+               <div id="educationQ" class="tab-pane container" role="tabpanel">
+                  <div class="row mt-3">
+                     <div class="mb-3 col-md-6" id="study">
+                        <label for="education" class="form-label">কোন মাধ্যমে লেখাপড়া করছেন ?</label>
+                        <select id="education" name="education_type">
+                            <option value="জেনারেল">জেনারেল</option>
+                            <option value="মাদ্রাসা">মাদ্রাসা</option>
+                            <option value="আগে মাদ্রাসা এখন জেনারেল">আগে মাদ্রাসা এখন জেনারেল</option>
+                            <option value="আগে জেনারেল এখন মাদ্রাসা">আগে জেনারেল এখন মাদ্রাসা</option>
+                            <option value="জেনারেল এবং মাদ্রাসা উভয়ই">জেনারেল এবং মাদ্রাসা উভয়ই</option>
+                            <option value="লেখাপড়া করিনাই">লেখাপড়া করিনাই</option>
+                        </select>
+                     </div>
+                     <div class="mb-3 col-md-6 ed">
+                        <label for="ssc" class="form-label">মাধ্যমিক (SSC) / সমমান পাশ করেছেন?</label>
+                        <select id="ssc" name="ssc">
+                           <option value="হ্যাঁ">হ্যাঁ</option>
+                           <option value="হ্যাঁ">হ্যাঁ</option>
+                           <option value="পড়তেছি">পড়তেছি</option>
+                        </select>
+                     </div>
+                     <div class="mb-3 col-md-6" id="class" style="display: none;">
+                        <label class="form-label">কোন ক্লাসে পড়েন ?</label>
+                        <input class="form-control" name='class' type="text">
+                     </div>
+                     <div class="mb-3 col-md-6 ed sp">
+                        <label for="ssc-department" class="form-label">মাধ্যমিক (SSC) / সমমান বিভাগ</label>
+                        <select id="ssc-department" name="ssc-department">
+                           <option value="বিজ্ঞান">বিজ্ঞান</option>
+                           <option value="মানবিক">মানবিক</option>
+                           <option value="ব্যবসা">ব্যবসা</option>
+                           <option value="কারিগরি / ভোকেশনাল">কারিগরি / ভোকেশনাল</option>
+                        </select>
+                     </div>
+                     <div class="col-md-6 mb-3 ed sp" id="sscyear">
+                        <label for="yearpick" class="form-label">মাধ্যমিক (SSC) / সমমান পাসের সন</label>
+                        <div class="ui input left icon w-100" id="yearpick">
+                           <i class="fa fa-clock-o time icon"></i>
+                           <input id="year" name="sscyear" class="sscyear" type="text" placeholder="পাসের সন" class="year-form" autocomplete="off">
+                        </div>
+                     </div>
+                     <div class="mb-3 col-md-6 ed sp">
+                        <label for="sscresult" class="form-label">মাধ্যমিক (SSC) / সমমান পাসের ফলাফল</label>
+                        <select id="sscresult" name="sscresult">
+                           <option value="গোল্ডেন A+">গোল্ডেন A+</option>
+                           <option value="A+">A+</option>
+                           <option value="A">A</option>
+                           <option value="A-">A-</option>
+                           <option value="B">B</option>
+                           <option value="C">C</option>
+                           <option value="D">D</option>
+                        </select>
+                     </div>
+                     <div class="mb-3 col-md-6 ed sp">
+                        <label for="hsc" class="form-label">উচ্চ মাধ্যমিক (HSC) / সমমান পাশ করেছেন?</label>
+                        <select id="hsc" name="hsc">
+                           <option value="হ্যাঁ">হ্যাঁ</option>
+                           <option value="না">না</option>
+                           <option value="পড়তেছি">পড়তেছি</option>
+                        </select>
+                     </div>
+                     <div class="mb-3 col-md-6 ed sp hp">
+                        <label for="ssc-department" class="form-label">উচ্চ মাধ্যমিক (HSC) / সমমান বিভাগ</label>
+                        <select id="ssc-department" name="hsc-department">
+                           <option value="বিজ্ঞান">বিজ্ঞান</option>
+                           <option value="মানবিক">মানবিক</option>
+                           <option value="ব্যবসা">ব্যবসা</option>
+                        </select>
+                     </div>
+                     <div class="col-md-6 mb-3 sp ed hp" id="hscyear">
+                        <label for="yearpick" class="form-label">উচ্চ মাধ্যমিক (HSC) / সমমান পাসের সন</label>
+                        <div class="ui input left icon w-100" id="yearpick">
+                           <i class="fa fa-clock-o time icon"></i>
+                           <input id="year" name="hscyear" class="hscyear" type="text" placeholder="পাসের সন" class="year-form" autocomplete="off">
+                        </div>
+                     </div>
+                     <div class="mb-3 col-md-6 ed sp hp">
+                        <label for="hscresult" class="form-label">উচ্চ মাধ্যমিক (HSC) / সমমান পাসের ফলাফল</label>
+                        <select id="hscresult" name="hscresult">
+                           <option value="গোল্ডেন A+">গোল্ডেন A+</option>
+                           <option value="A+">A+</option>
+                           <option value="A">A</option>
+                           <option value="A-">A-</option>
+                           <option value="B">B</option>
+                           <option value="C">C</option>
+                           <option value="D">D</option>
+                        </select>
+                     </div>
+                     <div class="mb-3 col-md-6 ed sp hp">
+                        <label for="graduate" class="form-label">স্নাতক / স্নাতক (সম্মান) / সমমান শিক্ষাগত যোগ্যতা</label>
+                        <select id="graduate" name="graduate">
+                           <option value="হ্যাঁ পড়তেছি">হ্যাঁ পড়তেছি</option>
+                           <option value="হ্যাঁ পড়েছি">হ্যাঁ পড়েছি</option>
+                           <option value="না পড়িনাই">না পড়িনাই</option>
+                           <option value="পড়ব ইনশাআল্লাহ">পড়ব ইনশাআল্লাহ</option>
+                        </select>
+                     </div>
+                     <div class="mb-3 col-md-6 ed sp hp gp">
+                        <label for="marital-status" class="form-label">শিক্ষাপ্রতিষ্ঠানের নাম</label>
+                        <input id="university" name="university" class="form-control" type="text">
+                     </div>
+                     <div class="mb-3 col-md-6 ed sp hp gp" id="graduateyear">
+                        <label for="yearpick" class="form-label">স্নাতক / স্নাতক (সম্মান) / সমমান পাশের সন</label>
+                        <div class="ui input left icon w-100" id="yearpick">
+                           <i class="fa fa-clock-o time icon"></i>
+                           <input id="year" name="graduateyear" class="graduateyear" type="text" placeholder="পাসের সন" class="year-form" autocomplete="off">
+                        </div>
+                     </div>
+                     <div class="mb-3 col-md-6">
+                        <label for="hafez" class="form-label">আপনি কি হাফেজ ?</label>
+                        <select id="hafez" name="hafez">
+                           <option value="হ্যাঁ আলহামদুলিল্লাহ">হ্যাঁ আলহামদুলিল্লাহ</option>
+                           <option value="হিফয করতেছি">হিফয করতেছি</option>
+                           <option value="না, করবো ইনশাআল্লাহ">না, করবো ইনশাআল্লাহ</option>
+                           <option value="না">না</option>
+                        </select>
+                     </div>
+                     <div class="mb-3 col-md-6" id="para" style="display: none;">
+                        <label class="form-label">কয় পারা করেছেন ?</label>
+                        <input class="form-control" id="para" name="para" type="number" min="1" max="30">
+                     </div>
+                     <div class="mb-3 col-md-6 ed sp hp mad" style="display: none;">
+                        <label for="daora-hadith" class="form-label">দাওরায়ে হাদীস পাশ করেছেন ?</label>
+                        <select id="daora-hadith" name="daora-hadith">
+                           <option value="হ্যাঁ">হ্যাঁ</option>
+                           <option value="পড়তেছি">পড়তেছি</option>
+                           <option value="না">না</option>
+                        </select>
+                     </div>
+                     <div class="col-md-6 mb-3 ed sp hp mad dh" id="daorayehadith" style="display: none;">
+                        <label for="yearpick" class="form-label">দাওরায়ে হাদীস পাসের সন</label>
+                        <div class="ui input left icon w-100" id="yearpick">
+                           <i class="fa fa-clock-o time icon"></i>
+                           <input id="year" name="daora-hadith-year" type="text" placeholder="পাসের সন" class="year-form" autocomplete="off">
+                        </div>
+                     </div>
+                     <div class="mb-3 col-md-6 ed sp hp mad dh" style="display: none;">
+                        <label for="color" class="form-label">দাওরায়ে হাদীসের নতিজা কি ?</label>
+                        <select id="color" name="natiza">
+                           <option value="মুমতায">মুমতায</option>
+                           <option value="জায়্যিদ জিদ্দান">জায়্যিদ জিদ্দান</option>
+                           <option value="জায়্যিদ">জায়্যিদ</option>
+                           <option value="মকবূল">মকবূল</option>
+                        </select>
+                     </div>
+                     <div class="mb-3 col-md-6 ed sp hp mad dh" style="display: none;">
+                        <label for="takhassur" class="form-label">আপনি কি তাখাস্সুস পড়েছেন ?</label>
+                        <select id="takhassur" name="takhassur">
+                           <option value="হ্যাঁ">হ্যাঁ</option>
+                           <option value="পড়তেছি">পড়তেছি</option>
+                           <option value="না">না</option>
+                        </select>
+                     </div>
+                     <div class="mb-3 col-md-6 ed sp hp mad dh tak" style="display: none;">
+                        <label for="takhacchor" class="form-label">কোন বিষয়ে তাখাস্সুস পড়েছেন?</label>
+                        <input id="takhacchor" name="takhacchor_sub" class="form-control" type="text">
+                     </div>
+                     <div class="mb-3 ed">
+                        <label for="marital-status" class="form-label">সর্বোচ্চ শিক্ষাগত যোগ্যতা</label>
+                        <textarea class="form-control" rows="3" id="textarea1" name="highest_education"></textarea>
+                     </div>
+                     <div class="mb-3 ed">
+                        <label for="marital-status" class="form-label">অন্যান্য শিক্ষাগত যোগ্যতা</label>
+                        <textarea class="others-education" id="others-education" name="others-education">{{bio.others_education}}</textarea>
+                     </div>
+                     <div class="mb-3" id="yed" style="display: none;">
+                        <label for="marital-status" class="form-label">লেখাপড়া করেননি কেন?</label>
+                        <textarea class="form-control" rows="3" id="textarea2" name="not_education"></textarea>
+                     </div>
+                  </div>
+               </div>
+
+               <!-- দ্বীনী কার্যাবলী -->
+
+               <div id="din" class="tab-pane container" role="tabpanel">
+                  <div class="row mt-3">
+                     <div class="mb-3 col-md-6">
+                        <label for="color" class="form-label">৫ ওয়াক্ত সালাত আদায় করেন?</label>
+                        <select id="color" name="salat">
+                           <option value="হ্যাঁ আলহামদুলিল্লাহ">হ্যাঁ আলহামদুলিল্লাহ</option>
+                           <option value="মাঝেমাঝে অনিচ্ছাকৃতভাবে ২/১ ওয়াক্ত ক্বাযা হয়">মাঝেমাঝে অনিচ্ছাকৃতভাবে ২/১ ওয়াক্ত ক্বাযা হয়</option>
+                           <option value="মাঝেমাঝে পড়ি">মাঝেমাঝে পড়ি</option>
+                        </select>
+                     </div>
+                     <div class="mb-3 col-md-6">
+                        <label for="color" class="form-label">৫ ওয়াক্ত সালাত কত সময় যাবত আদায় করছেন ?</label>
+                        <input class="form-control" name="salat_duration" type="text" placeholder="২ বছর">
+                     </div>
+                     <div class="mb-3 col-md-6">
+                        <label for="color" class="form-label">শুদ্ধভাবে কুরআন তিলওয়াত করতে পারেন ?</label>
+                        <select id="color" name="quran_correctly">
+                           <option value="হ্যাঁ">হ্যাঁ আলহামদুলিল্লাহ</option>
+                           <option value="না, শিখছি">না, শিখছি</option>
+                           <option value="না, শিখবো">না, শিখবো ইনশাআল্লাহ</option>
+                           <option value="না">না</option>
+                        </select>
+                     </div>
+                     <div class="mb-3 col-md-6">
+                        <label for="color" class="form-label">নিয়মিত কুরআন তিলওয়াত করেন ?</label>
+                        <select id="color" name="quran_regularly">
+                           <option value="হ্যাঁ আলহামদুলিল্লাহ">হ্যাঁ আলহামদুলিল্লাহ</option>
+                           <option value="প্রায়ই করি">প্রায়ই করি</option>
+                           <option value="মাঝে-মাঝে করি">মাঝে-মাঝে করি</option>
+                           <option value="না">না</option>
+                        </select>
+                     </div>
+                     {% if user.first_name == 'male' %}
+                     <div class="mb-3 col-md-6">
+                        <label for="color" class="form-label">আপনার সুন্নতি দাড়ি আছে?</label>
+                        <select id="color" name="dari">
+                           <option value="হ্যাঁ আলহামদুলিল্লাহ">হ্যাঁ আলহামদুলিল্লাহ</option>
+                           <option value="রাখব ইনশাআল্লাহ">রাখব ইনশাআল্লাহ</option>
+                           <option value="না">না</option>
+                        </select>
+                     </div>
+                     {% endif %}
+                     <div class="mb-3 col-md-6">
+                        <label for="color" class="form-label">শিরক সম্পর্কে আপনার স্পষ্ট ধারণা আছে?</label>
+                        <select id="color" name="shirk">
+                           <option value="হ্যাঁ আলহামদুলিল্লাহ">হ্যাঁ আলহামদুলিল্লাহ</option>
+                           <option value="মোটামোটি">মোটামোটি ভালোই</option>
+                           <option value="অল্প">অল্প</option>
+                           <option value="না">না</option>
+                        </select>
+                     </div>
+                     <div class="mb-3 col-md-6">
+                        <label for="color" class="form-label">বিদআত সম্পর্কে আপনার স্পষ্ট ধারণা আছে?</label>
+                        <select id="color" name="bidat">
+                           <option value="হ্যাঁ আলহামদুলিল্লাহ">হ্যাঁ আলহামদুলিল্লাহ</option>
+                           <option value="মোটামোটি">মোটামোটি ভালোই</option>
+                           <option value="অল্প">অল্প</option>
+                           <option value="না">না</option>
+                        </select>
+                     </div>
+                     <div class="mb-3 col-md-6">
+                        <label for="color" class="form-label">কোন আকিদা/মাঝহাব অনুসরণ করেন ?</label>
+                        <select id="color" name="aqida">
+                           <option value="সালাফি">সালাফি</option>
+                           <option value="হানাফি">হানাফি</option>
+                           <option value="শাফেয়ী">শাফেয়ী</option>
+                           <option value="মালেকি">মালেকি</option>
+                           <option value="হাম্বলি">হাম্বলি</option>
+                           <option value="শিয়া">শিয়া</option>
+                           <option value="কাদিয়ানী">কাদিয়ানী</option>
+                        </select>
+                        <small>!'আহলুস সুন্নাহ ওয়াল জামায়াত' না দেয়ার কারন হল, সবায় দাবী করে যে, সে 'আহলুস সুন্নাহ ওয়াল জামায়াত' এর আকিদার অনুসারী</small>
+                     </div>
+                     <div class="mb-3 col-md-6">
+                        <label for="color" class="form-label">নাটক/সিনেমা/সিরিয়াল/গান এসব দেখেন বা শুনেন ?</label>
+                        <select id="color" name="tv">
+                           <option value="না আলহামদুলিল্লাহ">না আলহামদুলিল্লাহ</option>
+                           <option value="হ্যাঁ, মাঝে-মাঝে">হ্যাঁ, মাঝে-মাঝে</option>
+                           <option value="হ্যাঁ">হ্যাঁ</option>
+                        </select>
+                     </div>
+                     <div class="mb-3 col-md-6">
+                        <label for="color" class="form-label">আপনি কি কোনো পীরের মুরিদ বা অনুসারী ?</label>
+                        <select id="color" name="murid">
+                           <option value="হ্যাঁ">হ্যাঁ</option>
+                           <option value="না">না</option>
+                           <option value="হবো">হবো</option>
+                           <option value="পীরে বিশ্বাসী নই">পীরে বিশ্বাসী নই</option>
+                        </select>
+                     </div>
+                     <div class="mb-3">
+                        <label for="color" class="form-label">মাজার সম্পর্কে আপনার ধারণা বা বিশ্বাস কি?</label>
+                        <select id="color" name="majar">
+                           <option value="সিজদাহ এবং মানত উভয়ই শিরক">সিজদাহ এবং মানত উভয়ই শিরক</option>
+                           <option value="সিজদাহ করা শিরক / মানত করা জায়েজ">সিজদাহ করা শিরক / মানত করা জায়েজ</option>
+                           <option value="সিজদাহ এবং মানত উভয়ই জায়েজ">সিজদাহ এবং মানত উভয়ই জায়েজ</option>
+                           <option value="যিয়ারত করা যায়">যিয়ারত করা জায়েজ</option>
+                           <option value="ধারণা নেই">ধারণা নেই</option>
+                        </select>
+                     </div>
+                     <div class="mb-3 col-md-6">
+                        <label for="color" class="form-label">আপনার পছন্দের অন্তত ৩ টি ইসলামী বই এর নাম লিখুন</label>
+                        <textarea class="book" name="book"></textarea>
+                     </div>
+                     <div class="mb-3 col-md-6">
+                        <label for="color" class="form-label">আপনার পছন্দের অন্তত ৩ জন আলেমের নাম লিখুন</label>
+                        <textarea class="alem" name="alem"></textarea>
+                     </div>
+                     <div class="mb-3">
+                        <label for="color" class="form-label">বিশেষ দ্বীনি যোগ্যতা (যদি থাকে)</label>
+                        <textarea class="dini-qualification" name="dini-qualification"></textarea>
+                     </div>
+                  </div>
+               </div>
+
+
+               <!-- পোশাক পরিচ্ছদ -->
+
+
+               <div id="dress" class="tab-pane container" role="tabpanel">
+                  <div class="row mt-3">
+                  {% if user.first_name == 'male' %}
+                     <div class="mb-3">
+                        <label for="color" class="form-label">পায়ের টাখনুর উপরে কাপড় পরেন ?</label>
+                        <select id="color" name="taknu">
+                           <option value="হ্যাঁ আলহামদুলিল্লাহ">হ্যাঁ আলহামদুলিল্লাহ</option>
+                           <option value="না">না</option>
+                        </select>
+                     </div>
+                     <div class="mb-3">
+                        <label for="color" class="form-label">ঘরের বাহিরে সাধারণত কী ধরণের পোশাক পরেন ?</label>
+                        <textarea class="form-control" name="out_dress"></textarea>
+                     </div>
+                     {% else %}
+                     <div class="mb-3 col-md-6">
+                        <label for="color" class="form-label">বাসার বাইরে বোরকা ও নিকাব পরেন?</label>
+                        <select id="color" name="niqab">
+                           <option value="হ্যাঁ আলহামদুলিল্লাহ">হ্যাঁ আলহামদুলিল্লাহ</option>
+                           <option value="নিকাব পরিনা, হিজাব পরি">নিকাব পরিনা, হিজাব পরি</option>
+                           <option value="না">না</option>
+                        </select>
+                     </div>
+                     <div class="mb-3 col-md-6">
+                        <label for="color" class="form-label">হাত পা মোজা পরেন?</label>
+                        <select id="color" name="muja">
+                           <option value="হ্যাঁ আলহামদুলিল্লাহ">হ্যাঁ আলহামদুলিল্লাহ</option>
+                           <option value="না">না</option>
+                        </select>
+                     </div>
+                     <div class="mb-3">
+                        <label for="color" class="form-label">বাহিরে পরিপূর্ণ গায়রে মাহরাম মেনে চলেন?</label>
+                        <select id="color" name="mahram">
+                           <option value="হ্যাঁ আলহামদুলিল্লাহ">হ্যাঁ আলহামদুলিল্লাহ</option>
+                           <option value="চেষ্টা করি">চেষ্টা করি</option>
+                           <option value="না">না</option>
+                        </select>
+                     </div>
+                     <div class="mb-3">
+                        <label for="color" class="form-label">পর্দা সম্পর্কে আরো কিছু বলতে চান ?</label>
+                        <textarea class="porda" name='pora'></textarea>
+                     </div>
+                     {% endif %}
+                  </div>
+               </div>
+
+
+               <!-- পারিবারিক তথ্য -->
+
+
+               <div id="family" class="tab-pane container" role="tabpanel">
+                  <div class="row mt-3">
+                     <div class="mb-3 col-md-6">
+                        <label for="color" class="form-label">পিতার নাম</label>
+                        <input class="form-control" type="text" name="fathers_name"></input>
+                        <small class="ps-2">গোপন রাখা হবে</small>
+                     </div>
+                     <div class="mb-3 col-md-6">
+                        <label for="color" class="form-label">পিতার পেশা</label>
+                        <textarea class="form-control" rows="3" id="textarea3" name="fathers_occupation"></textarea>
+                     </div>
+                     <div class="mb-3 col-md-6">
+                        <label for="color" class="form-label">মাতার পেশা</label>
+                        <textarea class="form-control" rows="3" id="textarea3" name="mothers_occupation"></textarea>
+                     </div>
+                     <div class="mb-3 col-md-6">
+                        <label for="brother" class="form-label">ভাই কয়জন?</label>
+                        <select id="brother" name="brother">
+                           <option value="নাই">নাই</option>
+                           <option value="১">১</option>
+                           <option value="২">২</option>
+                           <option value="৩">৩</option>
+                           <option value="৪">৪</option>
+                           <option value="৫">৫</option>
+                           <option value="৬">৬</option>
+                           <option value="৭">৭</option>
+                           <option value="৮">৮</option>
+                           <option value="৯">৯</option>
+                           <option value="১০">১০</option>
+                           <option value="১১">১১</option>
+                           <option value="১২">১২</option>
+                        </select>
+                     </div>
+                     <div class="mb-3" id="no-brother" style="display: none;">
+                        <label for="color" class="form-label">ভাইদের সম্পর্কে লিখুন</label>
+                        <textarea class="about-brothers" name="brother_info"></textarea>
+                     </div>
+                     <div class="mb-3">
+                        <label for="sister" class="form-label">বোন কয়জন?</label>
+                        <select id="sister" name="sister">
+                           <option value="নাই">নাই</option>
+                           <option value="১">১</option>
+                           <option value="২">২</option>
+                           <option value="৩">৩</option>
+                           <option value="৪">৪</option>
+                           <option value="৫">৫</option>
+                           <option value="৬">৬</option>
+                           <option value="৭">৭</option>
+                           <option value="৮">৮</option>
+                           <option value="৯">৯</option>
+                           <option value="১০">১০</option>
+                           <option value="১১">১১</option>
+                           <option value="১২">১২</option>
+                        </select>
+                     </div>
+                     <div class="mb-3" id="no-sister" style="display: none;">
+                        <label for="color" class="form-label">বোনদের সম্পর্কে লিখুন</label>
+                        <textarea class="about-sisters" name="sister_info"></textarea>
+                     </div>
+                     <div class="mb-3 col-md-6">
+                        <label for="color" class="form-label">পরিবারের আর্থিক অবস্থা?</label>
+                        <select id="color" name="family_financial_status">
+                           <option value="উচ্চবিত্ত">উচ্চবিত্ত</option>
+                           <option value="উচ্চমধ্যবিত্ত">উচ্চমধ্যবিত্ত</option>
+                           <option value="মধ্যবিত্ত">মধ্যবিত্ত</option>
+                           <option value="নিন্মমধ্যবিত্ত আলহামদুলিল্লাহ">নিন্মমধ্যবিত্ত আলহামদুলিল্লাহ</option>
+                           <option value="নিন্মবিত্ত আলহামদুলিল্লাহ">নিন্মবিত্ত আলহামদুলিল্লাহ</option>
+                        </select>
+                     </div>
+                     <div class="mb-3 col-md-6">
+                        <label for="color" class="form-label">পরিবারের কি কোন ভাবে সূদ বা হারাম ইনকামের সাথে জরিত?</label>
+                        <select id="color" name="family_haram_income">
+                           <option value="হ্যাঁ">হ্যাঁ</option>
+                           <option value="না">না</option>
+                        </select>
+                     </div>
+                     <div class="mb-3 col-md-6">
+                        <label for="color" class="form-label">পরিবারের সামাজিক অবস্থা?</label>
+                        <input class="form-control" type="text" name="family_social_status">
+                     </div>
+                     <div class="mb-3">
+                        <label for="color" class="form-label">পরিবারের সম্পর্কে আরো কিছু বলতে চান ?</label>
+                        <textarea class="family" name="family_details"></textarea>
+                     </div>
+                  </div>
+               </div>
+
+               
+                <!-- ব্যক্তিগত তথ্য -->
+
+
+               <div id="personal" class="tab-pane container" role="tabpanel">
+                  <div class="row mt-3">
+                     <div class="mb-3" id="why-divorced" {% if bio.marital_status != 'ডিভোর্সড' %}style="display:none;"{% endif %}>
+                        <label class="form-label">ডিভোর্সের কারণ কী?</label>
+                        <textarea name='why_divorced'></textarea>
+                     </div>
+                     <div class="mb-3" id="cldren" style="display:none;">
+                        <label for="children" class="form-label">আপনার সন্তান আছে কয়জন ?</label>
+                        <select id="children" name="children">
+                           <option value="নাই" {% if bio.children != 'নাই' %}selected{% endif %}>নাই</option>
+                           <option value="১" {% if bio.children != '১' %}selected{% endif %}>১</option>
+                           <option value="২" {% if bio.children != '২' %}selected{% endif %}>২</option>
+                           <option value="৩" {% if bio.children != '৩' %}selected{% endif %}>৩</option>
+                           <option value="৪" {% if bio.children != '৪' %}selected{% endif %}>৪</option>
+                           <option value="৫" {% if bio.children != '৫' %}selected{% endif %}>৫</option>
+                           <option value="৬" {% if bio.children != '৬' %}selected{% endif %}>৬</option>
+                           <option value="৭" {% if bio.children != '৭' %}selected{% endif %}>৭</option>
+                           <option value="৮" {% if bio.children != '৮' %}selected{% endif %}>৮</option>
+                           <option value="৯" {% if bio.children != '৯' %}selected{% endif %}>৯</option>
+                           <option value="১০" {% if bio.children != '১০' %}selected{% endif %}>১০</option>
+                        </select>
+                     </div>
+                     {% if user.first_name == 'female' %}
+                     <div class="mb-3" id="c-address" style="display: none;">
+                        <label for="children-address" class="form-label">আপনার সন্তানেরা কি আপনার কাছেই থাকে?</label>
+                        <select id="children-address" name="children_address">
+                           <option value="হ্যাঁ">হ্যাঁ</option>
+                           <option value="না, বাবার পরিবারে">না, বাবার পরিবারে</option>
+                        </select>
+                     </div>
+                     {% endif %}
+                     <div class="mb-3">
+                        <label for="weakness" class="form-label">মানসিক বা শারীরিক কোনো রোগ আছে কি?</label>
+                        <select id="weakness" name="weakness">
+                           <option value="না">না</option>
+                           <option value="হ্যাঁ">হ্যাঁ</option>
+                        </select>
+                     </div>
+                     <div class="mb-3" id="about-weak" style="display:none;">
+                        <label for="color" class="form-label">রোগ সম্পর্কে লিখুন</label>
+                        <textarea name="about_weakness"></textarea>
+                     </div>
+                     <div class="mb-3">
+                        <label for="mehnot" class="form-label">দ্বীনের কোন বিশেষ মেহনতে যুক্ত আছেন?</label>
+                        <select id="mehnot" name="mehnot">
+                           <option value="হ্যাঁ">হ্যাঁ</option>
+                           <option value="না">না</option>
+                        </select>
+                     </div>
+                     <div class="mb-3" id="about-mehnot">
+                        <label for="color" class="form-label">মেহনত সম্পর্কে লিখুন</label>
+                        <textarea class="mehnot" name="about_mehnot"></textarea>
+                     </div>
+                     <div class="mb-3">
+                        <label for="color" class="form-label">নিজের সম্পর্কে লিখুন</label>
+                        <textarea class="aboutme" name="aboutme"></textarea>
+                     </div>
+                  </div>
+               </div>
+
+               <!-- বিয়ে সংক্রান্ত তথ্য -->
+
+               <div id="marriage" class="tab-pane container" role="tabpanel">
+                  <div class="row mt-3">
+                     <div class="mb-3 col-md-6">
+                        <label for="color" class="form-label">অভিভাবক আপনার বিয়েতে রাজি কি না?</label>
+                        <select id="color" name="family_permission">
+                           <option value="হ্যাঁ">হ্যাঁ</option>
+                           {% if user.first_name == 'male' %}
+                           <option value="পাত্রী ভালো হলে রাজি করতে পারব">পাত্রী ভালো হলে রাজি করতে পারব</option>
+                           {% else %}
+                           <option value="পাত্র ভালো হলে রাজি করতে পারব">পাত্র ভালো হলে রাজি করতে পারব</option>
+                           {% endif %}
+                           <option value="না">না</option>
+                        </select>
+                     </div>
+                     {% if user.first_name == 'female' %}
+                     <div class="mb-3 col-md-6">
+                        <label for="color" class="form-label">বিয়ের পর পড়াশোনা চালিয়ে যেতে চান ?</label>
+                        <select id="color" name="stydy_after_marriage">
+                           <option value="হ্যাঁ, অবশ্যয়">হ্যাঁ, অবশ্যয়</option>
+                           <option value="যদি স্বামী অনুমতি দেন">যদি স্বামী অনুমতি দেন</option>
+                           <option value="না">না</option>
+                        </select>
+                     </div>
+                     <div class="mb-3">
+                        <label for="color" class="form-label">আপনি কি বিয়ের পর চাকরি করতে ইচ্ছুক?</label>
+                        <select id="color" name="job_after_marriage">
+                           <option value="হ্যাঁ, অবশ্যয়">হ্যাঁ, অবশ্যয়</option>
+                           <option value="যদি স্বামী অনুমতি দেন">যদি স্বামী অনুমতি দেন</option>
+                           <option value="না">না</option>
+                        </select>
+                     </div>
+                     {% else %}
+                     <div class="mb-3 col-md-6">
+                        <label for="color" class="form-label">বিয়ের পর স্ত্রীর পর্দার ব্যবস্থা রাখতে পারবেন?</label>
+                        <select id="color" name="takecare_porda">
+                           <option value="হ্যাঁ, অবশ্যয়">হ্যাঁ, অবশ্যয়</option>
+                           <option value="না">না</option>
+                        </select>
+                     </div>
+                     <div class="mb-3 col-md-6">
+                        <label for="color" class="form-label">বিয়ের পর স্ত্রীকে পড়াশোনা করার অনুমতি দিবেন?</label>
+                        <select id="color" name="study_permission">
+                           <option value="হ্যাঁ, অবশ্যয়">হ্যাঁ, অবশ্যয়</option>
+                           <option value="না">না</option>
+                        </select>
+                     </div>
+                     <div class="mb-3 col-md-6">
+                        <label for="color" class="form-label">বিয়ের পর স্ত্রীকে চাকরি করার অনুমতি দিবেন?</label>
+                        <select id="color" name="job_permission">
+                           <option value="না">না</option>
+                           <option value="হ্যাঁ, অবশ্যয়">হ্যাঁ, অবশ্যয়</option>
+                        </select>
+                     </div>
+                     <div class="mb-3 col-md-6">
+                        <label for="color" class="form-label">বিয়ের পর স্ত্রীকে কোথায় রাখবেন?</label>
+                        <textarea class="form-control" name="wife_address"></textarea>
+                     </div>
+                     <div class="mb-3 col-md-6">
+                        <label for="color" class="form-label">বিয়ে উপলক্ষে আপনি বা আপনার পরিবার পাত্রীপক্ষের কাছে যৌতুক বা উপহার বা অর্থ আশা করবেন?</label>
+                        <select id="color" name="joutuk">
+                           <option value="না">না</option>
+                           <option value="হ্যাঁ">হ্যাঁ</option>
+                        </select>
+                     </div>
+                     {% endif %}
+                     <div class="mb-3">
+                        <label for="color" class="form-label">বিয়ে কেন করছেন? বিয়ে সম্পর্কে আপনার ধারণা কী?</label>
+                        <textarea class="about-married" name="about_married"></textarea>
+                     </div>
+                  </div>
+               </div>
+
+
+               <!-- জীবনসঙ্গী সম্পর্কে -->
+
+
+               <div id="partner" class="tab-pane container" role="tabpanel">
+                  <div class="row mt-3">
+                  <div class="mb-3 col-md-6">
+                        <label for="partner-marital-status" class="form-label">বৈবাহিক অবস্থা</label>
+                        <select multiple id="partner-marital-status" name="partner-marital-status">
+                            <option value="অবিবাহিত">অবিবাহিত</option>
+                            <option value="বিবাহিত">বিবাহিত</option>
+                            <option value="ডিভোর্সড">ডিভোর্সড</option>
+                            {% if user.first_name == 'male' %}
+                            <option value="বিধবা">বিধবা</option>
+                            {% else %}
+                            <option value="বিপত্নীক">বিপত্নীক</option>
+                            {% endif %}
+                        </select>
+                     </div>
+                     <div class="mb-3 col-md-6">
+                     <label for="age-select-option" class="form-label">বয়স</label>
+                        <div class="dropdown d-flex flex-fill" id="age-select-option">
+                            <button class="btn age-select dropdown-toggle" type="button" id="agebtn" data-bs-toggle="dropdown" aria-expanded="false">
+                                বয়স (0 থেকে 25)
+                                <i class="fa fa-caret-down"></i>
+                            </button>
+                            <div class="dropdown-menu age-option" aria-labelledby="agebtn">
+                                <div class="p-2">
+                                    <div class="input-group m-0 p-0">
+                                    <input type="text" class="form-control" id="age1" name="age1" placeholder="0" value="0" aria-label="Username">
+                                    <span class="input-group-text">থেকে</span>
+                                    <input type="text" class="form-control" id="age2" name="age2" placeholder="25" value="25" aria-label="Server">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="mb-3 col-md-6">
+                        <label for="partner-color" class="form-label">গাত্রবর্ণ</label>
+                        <select multiple id="partner-color" name="partner_color">
+                            <option value="উজ্জ্বল ফর্সা">উজ্জ্বল ফর্সা</option>
+                            <option value="ফর্সা">ফর্সা</option>
+                            <option value="উজ্জ্বল শ্যামলা">উজ্জ্বল শ্যামলা</option>
+                            <option value="শ্যামলা">শ্যামলা</option>
+                            <option value="কালো">কালো</option>
+                        </select>
+                     </div>
+                     <div class="mb-3 col-md-6">
+                     <label for="height-select-option" class="form-label">উচ্চতা</label>
+                        <div class="dropdown d-flex flex-fill" id="height-select-option">
+                            <button class="btn height-select dropdown-toggle" type="button" id="heightbtn" data-bs-toggle="dropdown" aria-expanded="false">
+                                উচ্চতা (4.0 থেকে 5.2)
+                                <i class="fa fa-caret-down"></i>
+                            </button>
+                            <div class="dropdown-menu age-option" aria-labelledby="heightbtn">
+                                <div class="p-2">
+                                    <div class="input-group m-0 p-0">
+                                    <input type="text" class="form-control" id="height1" name="height1" placeholder="4.0" value="4.0" aria-label="Username">
+                                    <span class="input-group-text">থেকে</span>
+                                    <input type="text" class="form-control" id="height2" name="height2" placeholder="5.2" value="5.2" aria-label="Server">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="mb-3 col-md-6">
+                        <label for="color" class="form-label">শিক্ষা</label>
+                        <select id="color" name="partner_education">
+                           <option value="যেকোন">যেকোন</option>
+                           <option value="সর্বনিম্ন SSC / সমমান">সর্বনিম্ন SSC / সমমান</option>
+                           <option value="সর্বনিম্ন HSC / সমমান">সর্বনিম্ন HSC / সমমান</option>
+                           <option value="সর্বনিম্ন স্নাতক / সমমান">সর্বনিম্ন স্নাতক / সমমান</option>
+                        </select>
+                     </div>
+                     {% if user.first_name == 'female' %}
+                        <div class="mb-3 col-md-6">
+                           <label for="color" class="form-label">পাত্র ছাত্র হলে? (কোন শর্ত যদি থাকে)</label>
+                           <textarea class="form-control" name="student_partner"></textarea>
+                        </div>
+                     {% endif %}
+                     <div class="mb-3 col-md-6">
+                        <label for="partner-district" class="form-label">জেলা</label>
+                        <select multiple id="partner-district" name="partner_district">
+                            {% for x, y in dis %}
+                                <optgroup label = "{{x}}">
+                                    {% for z in y %}
+                                        <option value="{{z}}" {% if z in district %}selected{% endif %} >{{z}}</option>
+                                    {% endfor %}
+                                </optgroup>
+                            {% endfor %}
+                        </select>
+                     </div>
+                     {% comment %} <div class="mb-3 col-md-6">
+                        <label for="color" class="form-label">জেলা</label>
+                        <select id="color">
+                           <option value="1">হ্যাঁ</option>
+                           <option value="2">পাত্র ভালো হলে রাজি করতে পারব</option>
+                           <option value="3">না</option>
+                        </select>
+                     </div> {% endcomment %}
+                     <div class="mb-3 col-md-6">
+                        <label for="color" class="form-label">আকিদা/মাঝহাব</label>
+                        <select id="color" name="partner_aqida">
+                           <option value="সালাফি">সালাফি</option>
+                           <option value="হানাফি">হানাফি</option>
+                           <option value="শাফেয়ী">শাফেয়ী</option>
+                           <option value="মালেকি">মালেকি</option>
+                           <option value="হাম্বলি">হাম্বলি</option>
+                           <option value="শিয়া">শিয়া</option>
+                           <option value="কাদিয়ানী">কাদিয়ানী</option>
+                        </select>
+                        <small>!'আহলুস সুন্নাহ ওয়াল জামায়াত' না দেয়ার কারন হল, সবায় দাবী করে যে, সে 'আহলুস সুন্নাহ ওয়াল জামায়াত' এর আকিদার অনুসারী</small>
+                     </div>
+                     <div class="mb-3 col-md-6">
+                        <label for="color" class="form-label">পারিবারিক/আর্থিক অবস্থা</label>
+                        <select id="color" name="partner_financial_status">
+                           <option value="উচ্চবিত্ত">উচ্চবিত্ত</option>
+                           <option value="উচ্চমধ্যবিত্ত">উচ্চমধ্যবিত্ত</option>
+                           <option value="মধ্যবিত্ত">মধ্যবিত্ত</option>
+                           <option value="নিন্মমধ্যবিত্ত আলহামদুলিল্লাহ">নিন্মমধ্যবিত্ত আলহামদুলিল্লাহ</option>
+                           <option value="নিন্মবিত্ত আলহামদুলিল্লাহ">নিন্মবিত্ত আলহামদুলিল্লাহ</option>
+                        </select>
+                     </div>
+                     {% if user.first_name == 'female' %}
+                     <div class="mb-3 col-md-6">
+                        <label for="color" class="form-label">ডিভোর্স/বউ মারা গেছে এমন কাওকে বিয়ে করতে আগ্রহী আছেন?</label>
+                        <select id="color" name="divorced_partner">
+                           <option value="হ্যাঁ">হ্যাঁ</option>
+                           <option value="পাত্র ভালো হলে বিবেচনা করা হবে">পাত্র ভালো হলে বিবেচনা করা হবে</option>
+                           <option value="না">না</option>
+                        </select>
+                     </div>
+                     <div class="mb-3 col-md-6">
+                        <label for="color" class="form-label">প্রবাসী/সিটিজেন পাত্র বিয়ে করতে আগ্রহী আছেন কি?</label>
+                        <select id="color" name="foreign_partner">
+                           <option value="হ্যাঁ">হ্যাঁ</option>
+                           <option value="পাত্র ভালো হলে বিবেচনা করা হবে">পাত্র ভালো হলে বিবেচনা করা হবে</option>
+                           <option value="না">না</option>
+                        </select>
+                     </div>
+                     <div class="mb-3 col-md-6" id="masna" style="display: none;">
+                        <label for="color" class="form-label">আমার সমস্যা নাই</label>
+                        <select id="color" name="married_partner">
+                           <option value="মাসনা (দ্বিতীয় স্ত্রী) হতে">মাসনা (দ্বিতীয় স্ত্রী) হতে</option>
+                           <option value="সুলাসা (তৃতীয় স্ত্রী) হতে">সুলাসা (তৃতীয় স্ত্রী) হতে</option>
+                           <option value="রুবাআ (চতুর্থ স্ত্রী) হতে">রুবাআ (চতুর্থ স্ত্রী) হতে</option>
+                        </select>
+                     </div>
+                     {% endif %}
+                     <div class="mb-3">
+                        <label for="color" class="form-label">আরও কিছু জানাতে চাইলে লিখুন</label>
+                        <textarea class="moreinfo" name="partner_more_info"></textarea>
+                     </div>
+                  </div>
+               </div>
+
+               <!-- কর্তৃপক্ষের জিজ্ঞাসা -->
+
+               <div id="authorityQ" class="tab-pane container" role="tabpanel">
+                  <div class="row mt-3 mb-5 pb-3">
+                     <div class="mb-3 col-md-6">
+                        <label for="color" class="form-label">JannaterSongee.com ওয়েবসাইটে বায়োডাটা জমা দিচ্ছেন তা অভিভাবক জানেন?</label>
+                        <select id="color" name="parents_permission">
+                           <option value="হ্যাঁ">হ্যাঁ</option>
+                           <option value="না">না</option>
+                        </select>
+                     </div>
+                     <div class="mb-3 col-md-6">
+                        <label for="color" class="form-label">আল্লাহ'র শপথ করে সাক্ষ্য দিন, যে তথ্যগুলো দিচ্ছেন সব সত্য?</label>
+                        <select id="color" name="swear_to_allah">
+                           <option value="হ্যাঁ, অবশ্যয়">হ্যাঁ, অবশ্যয়</option>
+                           <option value="না">না</option>
+                        </select>
+                     </div>
+                     <div class="mb-3 col-md-6">
+                        <label for="color" class="form-label">কোনো মিথ্যা তথ্য দিয়ে থাকলে তার দুনিয়াবী ও আখিরাতের দায়ভার ওয়েবসাইট কর্তৃপক্ষ নিবে না। আপনি কি রাজি?</label>
+                        <select id="color" name="swear_to_allah1">
+                           <option value="হ্যাঁ, অবশ্যয়">হ্যাঁ, অবশ্যয়</option>
+                           <option value="না">না</option>
+                        </select>
+                     </div>
+                  </div>
+               </div>
+
+               <!-- যোগাযোগ -->
+
+               <div id="communication" class="tab-pane container" role="tabpanel">
+                  <div class="row mt-3">
+                     <div class="mb-3 col-md-6">
+                        <label for="color" class="form-label">ফোন নাম্বার</label>
+                        <input class="form-control" name="number" type="text">
+                        <small>আপনাকে প্রস্তাব পাঠালে, আপনি প্রস্তাব গ্রহণ করলেই কেবল দেখতে পারবে</small>
+                     </div>
+                     <div class="mb-3 col-md-6">
+                        <label for="color" class="form-label">ইমেইল</label>
+                        <input class="form-control" name="email" type="email">
+                        <small>আপনাকে প্রস্তাব পাঠালে, আপনি প্রস্তাব গ্রহণ করলেই কেবল দেখতে পারবে</small>
+                     </div>
+                     <div class="mb-3">
+                        <label for="color" class="form-label">সম্পূর্ণ ঠিকানা</label>
+                        <textarea name="address"></textarea>
+                        <small>আপনাকে প্রস্তাব পাঠালে, আপনি প্রস্তাব গ্রহণ করলেই কেবল দেখতে পারবে</small>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            {% endfor %}
+         </form>
+         </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock body %}
+
+
+{% block extrascript %}
+    {% comment %} <script src="js/particles.min.js"></script> {% endcomment %}
+    <script src="{% static 'js/jquery.smartWizard.min.js' %}"></script>
+    <script src="{% static 'js/tail.select-full.js' %}"></script>
+    <script src="{% static 'js/rangeslider.min.js' %}"></script>
+    <script src="{% static 'js/semantic.min.js' %}"></script>
+    <script src="{% static 'js/weight-slider.js' %}"></script>
+   <script src="{% static 'js/height-slider.js' %}"></script>
+   <script src="{% static 'js/scrolldirection.js' %}"></script>
+   <script src="{% static 'js/create_biodata.js' %}"></script>
+   <script src="{% static 'ckeditor/build/ckeditor.js' %}"></script>
+   <script src="{% static 'ckeditor/build/style.js' %}"></script>
+   <script>
+      {% for bio in biodata %}
+      CKEDITOR.instances['others-education'].setData({{bio.others_education}});
+      {% endfor %}
+   </script>
+{% endblock extrascript %}
