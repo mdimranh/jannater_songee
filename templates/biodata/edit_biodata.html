@@ -223,29 +223,29 @@
                      <div class="mb-3 col-md-6">
                         <label for="what-do" class="form-label">বর্তমানে কি করছেন ? (কোণটা না হলে এড়িয়ে যেতে পারেন)</label>
                         <select multiple id="what-do" name="what-do">
-                            <option value="লেখাপড়া করতেছি" {% if 'লেখাপড়া করতেছি' in bio.what_do %}selected{% endif %}>লেখাপড়া</option>
-                            <option value="চাকরি করতেছি" {% if 'চাকরি করতেছি' in bio.what_do %}selected{% endif %}>চাকরি</option>
-                            <option value="চাকরি খুঁজছি" {% if 'চাকরি খুঁজছি' in bio.what_do %}selected{% endif %}>চাকরি খুঁজছি</option>
-                            <option value="ব্যবসা করতেছি" {% if 'ব্যবসা করতেছি' in bio.what_do %}selected{% endif %}>ব্যবসা</option>
+                            <option value="লেখাপড়া করতেছি" {% if 'লেখাপড়া করতেছি' in bio.what_do|str_to_list %}selected{% endif %}>লেখাপড়া</option>
+                            <option value="চাকরি করতেছি" {% if 'চাকরি করতেছি' in bio.what_do|str_to_list %}selected{% endif %}>চাকরি</option>
+                            <option value="চাকরি খুঁজছি" {% if 'চাকরি খুজছি' in bio.what_do|str_to_list %}selected{% endif %}>চাকরি খুঁজছি</option>
+                            <option value="ব্যবসা করতেছি" {% if 'ব্যবসা করতেছি' in bio.what_do|str_to_list %}selected{% endif %}>ব্যবসা</option>
                         </select>
                      </div>
-                     <div class="mb-3" id="salary" style="display: none;">
+                     <div class="mb-3" id="salary" {% if 'চাকরি করতেছি' not in bio.what_do|str_to_list or 'ব্যবসা করতেছি' not in bio.what_do|str_to_list %}style="display: none;"{% endif %}>
                         <label class="form-label">মাসিক আয়</label>
                         <input id="monthly-income" name="monthly-income" class="form-control" type="number">
                      </div>
-                     <div class="mb-3" id="job" style="display: none;">
+                     <div class="mb-3" id="job" {% if 'চাকরি করতেছি' not in bio.what_do|str_to_list %}style="display: none;"{% endif %}>
                         <label class="form-label">চাকরির সংক্ষিপ্ত বিবরণ</label>
                         <textarea id="about-job" name="about-job"></textarea>
                      </div>
-                     <div class="mb-3" id="business" style="display: none;">
+                     <div class="mb-3" id="business" {% if 'ব্যবসা করতেছি' not in bio.what_do|str_to_list %}style="display: none;"{% endif %}>
                         <label class="form-label">ব্যবসার সংক্ষিপ্ত বিবরণ</label>
                         <textarea id="about-business" name="about-business"></textarea>
                      </div>
                      <div class="mb-3 col-md-6">
                         <label for="color" class="form-label">আপনি কি কোনভাবে সূদ বা হারাম ইনকামের সাথে জড়িত?</label>
                         <select id="color" name="haram_income">
-                            <option value="না">না</option>
-                            <option value="হা">হ্যাঁ</option>
+                            <option value="না" {% if bio.haram_income == 'না' %}selected{% endif %}>না</option>
+                            <option value="হ্যাঁ" {% if bio.haram_income == 'হ্যাঁ' %}selected{% endif %}>হ্যাঁ</option>
                         </select>
                      </div>
                      <div class="mb-5">
@@ -272,169 +272,169 @@
                      <div class="mb-3 col-md-6" id="study">
                         <label for="education" class="form-label">কোন মাধ্যমে লেখাপড়া করছেন ?</label>
                         <select id="education" name="education_type">
-                            <option value="জেনারেল">জেনারেল</option>
-                            <option value="মাদ্রাসা">মাদ্রাসা</option>
-                            <option value="আগে মাদ্রাসা এখন জেনারেল">আগে মাদ্রাসা এখন জেনারেল</option>
-                            <option value="আগে জেনারেল এখন মাদ্রাসা">আগে জেনারেল এখন মাদ্রাসা</option>
-                            <option value="জেনারেল এবং মাদ্রাসা উভয়ই">জেনারেল এবং মাদ্রাসা উভয়ই</option>
-                            <option value="লেখাপড়া করিনাই">লেখাপড়া করিনাই</option>
+                            <option value="জেনারেল" {% if bio.education_category == 'জেনারেল' %}selected{% endif %}>জেনারেল</option>
+                            <option value="মাদ্রাসা" {% if bio.education_category == 'মাদ্রাসা' %}selected{% endif %}>মাদ্রাসা</option>
+                            <option value="আগে মাদ্রাসা এখন জেনারেল" {% if bio.education_category == 'আগে মাদ্রাসা এখন জেনারেল' %}selected{% endif %}>আগে মাদ্রাসা এখন জেনারেল</option>
+                            <option value="আগে জেনারেল এখন মাদ্রাসা" {% if bio.education_category == 'আগে জেনারেল এখন মাদ্রাসা' %}selected{% endif %}>আগে জেনারেল এখন মাদ্রাসা</option>
+                            <option value="জেনারেল এবং মাদ্রাসা উভয়ই" {% if bio.education_category == 'জেনারেল এবং মাদ্রাসা উভয়ই' %}selected{% endif %}>জেনারেল এবং মাদ্রাসা উভয়ই</option>
+                            <option value="লেখাপড়া করিনাই" {% if bio.education_category == 'লেখাপড়া করিনাই' %}selected{% endif %}>লেখাপড়া করিনাই</option>
                         </select>
                      </div>
-                     <div class="mb-3 col-md-6 ed">
+                     <div class="mb-3 col-md-6 ed" {% if bio.education_category == 'লেখাপড়া করিনাই' %}style="display: none;"{% endif %}>
                         <label for="ssc" class="form-label">মাধ্যমিক (SSC) / সমমান পাশ করেছেন?</label>
                         <select id="ssc" name="ssc">
-                           <option value="হ্যাঁ">হ্যাঁ</option>
-                           <option value="হ্যাঁ">হ্যাঁ</option>
-                           <option value="পড়তেছি">পড়তেছি</option>
+                           <option value="হ্যাঁ" {% if bio.ssc == 'হ্যাঁ' %}selected{% endif %}>হ্যাঁ</option>
+                           <option value="পড়তেছি" {% if bio.ssc == 'পড়তেছি' %}selected{% endif %}>পড়তেছি</option>
+                           <option value="না" {% if bio.ssc == 'না' %}selected{% endif %}>না</option>
                         </select>
                      </div>
-                     <div class="mb-3 col-md-6" id="class" style="display: none;">
+                     <div class="mb-3 col-md-6" id="class" {% if bio.education_category != 'লেখাপড়া করিনাই' or bio.ssc != 'পড়তেছি' %}style="display: none;"{% endif %}>
                         <label class="form-label">কোন ক্লাসে পড়েন ?</label>
-                        <input class="form-control" name='class' type="text">
+                        <input class="form-control" name='class' type="text" value="{{bio.class_no}}">
                      </div>
-                     <div class="mb-3 col-md-6 ed sp">
+                     <div class="mb-3 col-md-6 ed sp" {% if bio.education_category == 'লেখাপড়া করিনাই' or bio.ssc != 'হ্যাঁ' %}style="display: none;"{% endif %}>
                         <label for="ssc-department" class="form-label">মাধ্যমিক (SSC) / সমমান বিভাগ</label>
                         <select id="ssc-department" name="ssc-department">
-                           <option value="বিজ্ঞান">বিজ্ঞান</option>
-                           <option value="মানবিক">মানবিক</option>
-                           <option value="ব্যবসা">ব্যবসা</option>
-                           <option value="কারিগরি / ভোকেশনাল">কারিগরি / ভোকেশনাল</option>
+                           <option value="বিজ্ঞান" {% if bio.ssc_department == "বিজ্ঞান" %}selected{% endif %}>বিজ্ঞান</option>
+                           <option value="মানবিক" {% if bio.ssc_department == "মানবিক" %}selected{% endif %}>মানবিক</option>
+                           <option value="ব্যবসা" {% if bio.ssc_department == "ব্যবসা" %}selected{% endif %}>ব্যবসা</option>
+                           <option value="কারিগরি / ভোকেশনাল" {% if bio.ssc_department == "কারিগরি / ভোকেশনাল" %}selected{% endif %}>কারিগরি / ভোকেশনাল</option>
                         </select>
                      </div>
-                     <div class="col-md-6 mb-3 ed sp" id="sscyear">
+                     <div class="col-md-6 mb-3 ed sp" id="sscyear" {% if bio.education_category == 'লেখাপড়া করিনাই' or bio.ssc != 'হ্যাঁ' %}style="display: none;"{% endif %}>
                         <label for="yearpick" class="form-label">মাধ্যমিক (SSC) / সমমান পাসের সন</label>
                         <div class="ui input left icon w-100" id="yearpick">
                            <i class="fa fa-clock-o time icon"></i>
-                           <input id="year" name="sscyear" class="sscyear" type="text" placeholder="পাসের সন" class="year-form" autocomplete="off">
+                           <input id="year" name="sscyear" class="sscyear" type="text" placeholder="পাসের সন" class="year-form" autocomplete="off" value="{{bio.ssc_pass_year}}">
                         </div>
                      </div>
-                     <div class="mb-3 col-md-6 ed sp">
+                     <div class="mb-3 col-md-6 ed sp" {% if bio.education_category == 'লেখাপড়া করিনাই' or bio.ssc != 'হ্যাঁ' %}style="display: none;"{% endif %}>
                         <label for="sscresult" class="form-label">মাধ্যমিক (SSC) / সমমান পাসের ফলাফল</label>
                         <select id="sscresult" name="sscresult">
-                           <option value="গোল্ডেন A+">গোল্ডেন A+</option>
-                           <option value="A+">A+</option>
-                           <option value="A">A</option>
-                           <option value="A-">A-</option>
-                           <option value="B">B</option>
-                           <option value="C">C</option>
-                           <option value="D">D</option>
+                           <option value="গোল্ডেন A+" {% if "গোল্ডেন A+" in bio.ssc_result %}selected{% endif %}>গোল্ডেন A+</option>
+                           <option value="A+" {% if bio.ssc_result == 'A+' %}selected{% endif %}>A+</option>
+                           <option value="A" {% if bio.ssc_result == 'A' %}selected{% endif %}>A</option>
+                           <option value="A-" {% if bio.ssc_result == 'A-' %}selected{% endif %}>A-</option>
+                           <option value="B" {% if bio.ssc_result == 'B' %}selected{% endif %}>B</option>
+                           <option value="C" {% if bio.ssc_result == 'C' %}selected{% endif %}>C</option>
+                           <option value="D" {% if bio.ssc_result == 'D' %}selected{% endif %}>D</option>
                         </select>
                      </div>
-                     <div class="mb-3 col-md-6 ed sp">
+                     <div class="mb-3 col-md-6 ed sp" {% if bio.education_category == 'লেখাপড়া করিনাই' or bio.ssc != 'হ্যাঁ' %}style="display: none;"{% endif %}>
                         <label for="hsc" class="form-label">উচ্চ মাধ্যমিক (HSC) / সমমান পাশ করেছেন?</label>
                         <select id="hsc" name="hsc">
-                           <option value="হ্যাঁ">হ্যাঁ</option>
-                           <option value="না">না</option>
-                           <option value="পড়তেছি">পড়তেছি</option>
+                           <option value="হ্যাঁ" {% if bio.hsc == 'হ্যাঁ' %}selected{% endif %}>হ্যাঁ</option>
+                           <option value="না" {% if bio.hsc == 'না' %}selected{% endif %}>না</option>
+                           <option value="পড়তেছি" {% if bio.hsc == 'পড়তেছি' %}selected{% endif %}>পড়তেছি</option>
                         </select>
                      </div>
-                     <div class="mb-3 col-md-6 ed sp hp">
+                     <div class="mb-3 col-md-6 ed sp hp" {% if bio.education_category == 'লেখাপড়া করিনাই' or bio.ssc != 'হ্যাঁ' or bio.hsc != 'হ্যাঁ' %}style="display: none;"{% endif %}>
                         <label for="ssc-department" class="form-label">উচ্চ মাধ্যমিক (HSC) / সমমান বিভাগ</label>
                         <select id="ssc-department" name="hsc-department">
-                           <option value="বিজ্ঞান">বিজ্ঞান</option>
-                           <option value="মানবিক">মানবিক</option>
-                           <option value="ব্যবসা">ব্যবসা</option>
+                           <option value="বিজ্ঞান" {% if bio.hsc_department == 'বিজ্ঞান' %}selected{% endif %}>বিজ্ঞান</option>
+                           <option value="মানবিক" {% if bio.hsc_department == 'মানবিক' %}selected{% endif %}>মানবিক</option>
+                           <option value="ব্যবসা" {% if bio.hsc_department == 'ব্যবসা' %}selected{% endif %}>ব্যবসা</option>
                         </select>
                      </div>
-                     <div class="col-md-6 mb-3 sp ed hp" id="hscyear">
+                     <div class="col-md-6 mb-3 sp ed hp" id="hscyear" {% if bio.education_category == 'লেখাপড়া করিনাই' or bio.ssc != 'হ্যাঁ' or bio.hsc != 'হ্যাঁ' %}style="display: none;"{% endif %}>
                         <label for="yearpick" class="form-label">উচ্চ মাধ্যমিক (HSC) / সমমান পাসের সন</label>
                         <div class="ui input left icon w-100" id="yearpick">
                            <i class="fa fa-clock-o time icon"></i>
-                           <input id="year" name="hscyear" class="hscyear" type="text" placeholder="পাসের সন" class="year-form" autocomplete="off">
+                           <input id="year" name="hscyear" class="hscyear" type="text" placeholder="পাসের সন" class="year-form" autocomplete="off" value="{{bio.hsc_pass_year}}">
                         </div>
                      </div>
-                     <div class="mb-3 col-md-6 ed sp hp">
+                     <div class="mb-3 col-md-6 ed sp hp" {% if bio.education_category == 'লেখাপড়া করিনাই' or bio.ssc != 'হ্যাঁ' or bio.hsc != 'হ্যাঁ' %}style="display: none;"{% endif %}>
                         <label for="hscresult" class="form-label">উচ্চ মাধ্যমিক (HSC) / সমমান পাসের ফলাফল</label>
                         <select id="hscresult" name="hscresult">
-                           <option value="গোল্ডেন A+">গোল্ডেন A+</option>
-                           <option value="A+">A+</option>
-                           <option value="A">A</option>
-                           <option value="A-">A-</option>
-                           <option value="B">B</option>
-                           <option value="C">C</option>
-                           <option value="D">D</option>
+                           <option value="গোল্ডেন A+" {% if "গোল্ডেন A+" in bio.ssc_result %}selected{% endif %}>গোল্ডেন A+</option>
+                           <option value="A+" {% if bio.ssc_result == 'A+' %}selected{% endif %}>A+</option>
+                           <option value="A" {% if bio.ssc_result == 'A' %}selected{% endif %}>A</option>
+                           <option value="A-" {% if bio.ssc_result == 'A-' %}selected{% endif %}>A-</option>
+                           <option value="B" {% if bio.ssc_result == 'B' %}selected{% endif %}>B</option>
+                           <option value="C" {% if bio.ssc_result == 'C' %}selected{% endif %}>C</option>
+                           <option value="D" {% if bio.ssc_result == 'D' %}selected{% endif %}>D</option>
                         </select>
                      </div>
-                     <div class="mb-3 col-md-6 ed sp hp">
+                     <div class="mb-3 col-md-6 ed sp hp" {% if bio.education_category == 'লেখাপড়া করিনাই' or bio.ssc != 'হ্যাঁ' or bio.hsc != 'হ্যাঁ' %}style="display: none;"{% endif %}>
                         <label for="graduate" class="form-label">স্নাতক / স্নাতক (সম্মান) / সমমান শিক্ষাগত যোগ্যতা</label>
                         <select id="graduate" name="graduate">
-                           <option value="হ্যাঁ পড়তেছি">হ্যাঁ পড়তেছি</option>
-                           <option value="হ্যাঁ পড়েছি">হ্যাঁ পড়েছি</option>
-                           <option value="না পড়িনাই">না পড়িনাই</option>
-                           <option value="পড়ব ইনশাআল্লাহ">পড়ব ইনশাআল্লাহ</option>
+                           <option value="হ্যাঁ পড়তেছি" {% if bio.graduate == "হ্যাঁ পড়তেছি" %}selected{% endif %}>হ্যাঁ পড়তেছি</option>
+                           <option value="হ্যাঁ পড়েছি" {% if bio.graduate == "হ্যাঁ পড়েছি" %}selected{% endif %}>হ্যাঁ পড়েছি</option>
+                           <option value="না পড়িনাই" {% if bio.graduate == "না পড়িনাই" %}selected{% endif %}>না পড়িনাই</option>
+                           <option value="পড়ব ইনশাআল্লাহ" {% if bio.graduate == "পড়ব ইনশাআল্লাহ" %}selected{% endif %}>পড়ব ইনশাআল্লাহ</option>
                         </select>
                      </div>
-                     <div class="mb-3 col-md-6 ed sp hp gp">
+                     <div class="mb-3 col-md-6 ed sp hp gp" {% if bio.education_category == 'লেখাপড়া করিনাই' or bio.ssc != 'হ্যাঁ' or bio.hsc != 'হ্যাঁ' or bio.graduate == "না পড়িনাই" or bio.graduate == "পড়ব ইনশাআল্লাহ" %}style="display: none;"{% endif %}>
                         <label for="marital-status" class="form-label">শিক্ষাপ্রতিষ্ঠানের নাম</label>
-                        <input id="university" name="university" class="form-control" type="text">
+                        <input id="university" name="university" class="form-control" type="text" value="{{bio.varsity}}">
                      </div>
-                     <div class="mb-3 col-md-6 ed sp hp gp" id="graduateyear">
+                     <div class="mb-3 col-md-6 ed sp hp gp" id="graduateyear" {% if bio.education_category == 'লেখাপড়া করিনাই' or bio.ssc != 'হ্যাঁ' or bio.graduate != "হ্যাঁ পড়েছি" %}style="display: none;"{% endif %}>
                         <label for="yearpick" class="form-label">স্নাতক / স্নাতক (সম্মান) / সমমান পাশের সন</label>
                         <div class="ui input left icon w-100" id="yearpick">
                            <i class="fa fa-clock-o time icon"></i>
-                           <input id="year" name="graduateyear" class="graduateyear" type="text" placeholder="পাসের সন" class="year-form" autocomplete="off">
+                           <input id="year" name="graduateyear" class="graduateyear" type="text" placeholder="পাসের সন" class="year-form" autocomplete="off" value="{{bio.graduate_pass_year}}">
                         </div>
                      </div>
                      <div class="mb-3 col-md-6">
                         <label for="hafez" class="form-label">আপনি কি হাফেজ ?</label>
                         <select id="hafez" name="hafez">
-                           <option value="হ্যাঁ আলহামদুলিল্লাহ">হ্যাঁ আলহামদুলিল্লাহ</option>
-                           <option value="হিফয করতেছি">হিফয করতেছি</option>
-                           <option value="না, করবো ইনশাআল্লাহ">না, করবো ইনশাআল্লাহ</option>
-                           <option value="না">না</option>
+                           <option value="হ্যাঁ আলহামদুলিল্লাহ" {% if bio.hafez == "হ্যাঁ আলহামদুলিল্লাহ" %}selected{% endif %}>হ্যাঁ আলহামদুলিল্লাহ</option>
+                           <option value="হিফয করতেছি" {% if bio.hafez == "হিফয করতেছি" %}selected{% endif %}>হিফয করতেছি</option>
+                           <option value="না, করবো ইনশাআল্লাহ" {% if bio.hafez == "না, করবো ইনশাআল্লাহ" %}selected{% endif %}>না, করবো ইনশাআল্লাহ</option>
+                           <option value="না" {% if bio.hafez == "না" %}selected{% endif %}>না</option>
                         </select>
                      </div>
-                     <div class="mb-3 col-md-6" id="para" style="display: none;">
+                     <div class="mb-3 col-md-6" id="para" {% if bio.hafez != "হিফয করতেছি" %}style="display: none;"{% endif %}>
                         <label class="form-label">কয় পারা করেছেন ?</label>
-                        <input class="form-control" id="para" name="para" type="number" min="1" max="30">
+                        <input class="form-control" id="para" name="para" type="number" min="1" max="30" value="{{bio.para}}">
                      </div>
-                     <div class="mb-3 col-md-6 ed sp hp mad" style="display: none;">
+                     <div class="mb-3 col-md-6 ed sp hp mad" {% if bio.education_category == 'লেখাপড়া করিনাই' or bio.education_category != 'জেনারেল' or bio.ssc != 'হ্যাঁ' or bio.hsc != 'হ্যাঁ' %}style="display: none;"{% endif %}>
                         <label for="daora-hadith" class="form-label">দাওরায়ে হাদীস পাশ করেছেন ?</label>
                         <select id="daora-hadith" name="daora-hadith">
-                           <option value="হ্যাঁ">হ্যাঁ</option>
-                           <option value="পড়তেছি">পড়তেছি</option>
-                           <option value="না">না</option>
+                           <option value="হ্যাঁ" {% if bio.daora_hadith == "হ্যাঁ" %}selected{% endif %}>হ্যাঁ</option>
+                           <option value="পড়তেছি" {% if bio.daora_hadith == "পড়তেছি" %}selected{% endif %}>পড়তেছি</option>
+                           <option value="না" {% if bio.daora_hadith == "না" %}selected{% endif %}>না</option>
                         </select>
                      </div>
-                     <div class="col-md-6 mb-3 ed sp hp mad dh" id="daorayehadith" style="display: none;">
+                     <div class="col-md-6 mb-3 ed sp hp mad dh" id="daorayehadith" {% if bio.education_category == 'লেখাপড়া করিনাই' or bio.education_category != 'জেনারেল' or bio.daora_hadith != 'হ্যাঁ' or bio.ssc != 'হ্যাঁ' or bio.hsc != 'হ্যাঁ' %}style="display: none;"{% endif %}>
                         <label for="yearpick" class="form-label">দাওরায়ে হাদীস পাসের সন</label>
                         <div class="ui input left icon w-100" id="yearpick">
                            <i class="fa fa-clock-o time icon"></i>
-                           <input id="year" name="daora-hadith-year" type="text" placeholder="পাসের সন" class="year-form" autocomplete="off">
+                           <input id="year" name="daora-hadith-year" type="text" placeholder="পাসের সন" class="year-form" autocomplete="off" value="{{bio.daora_hadith_year}}">
                         </div>
                      </div>
-                     <div class="mb-3 col-md-6 ed sp hp mad dh" style="display: none;">
+                     <div class="mb-3 col-md-6 ed sp hp mad dh" {% if bio.education_category == 'লেখাপড়া করিনাই' or bio.education_category != 'জেনারেল' or bio.daora_hadith != 'হ্যাঁ' or bio.ssc != 'হ্যাঁ' or bio.hsc != 'হ্যাঁ' %}style="display: none;"{% endif %}>
                         <label for="color" class="form-label">দাওরায়ে হাদীসের নতিজা কি ?</label>
                         <select id="color" name="natiza">
-                           <option value="মুমতায">মুমতায</option>
-                           <option value="জায়্যিদ জিদ্দান">জায়্যিদ জিদ্দান</option>
-                           <option value="জায়্যিদ">জায়্যিদ</option>
-                           <option value="মকবূল">মকবূল</option>
+                           <option value="মুমতায" {% if bio.natiza == "মুমতায" %}selected{% endif %}>মুমতায</option>
+                           <option value="জায়্যিদ জিদ্দান" {% if bio.natiza == "জায়্যিদ জিদ্দান" %}selected{% endif %}>জায়্যিদ জিদ্দান</option>
+                           <option value="জায়্যিদ" {% if bio.natiza == "জায়্যিদ" %}selected{% endif %}>জায়্যিদ</option>
+                           <option value="মকবূল" {% if bio.natiza == "মকবূল" %}selected{% endif %}>মকবূল</option>
                         </select>
                      </div>
-                     <div class="mb-3 col-md-6 ed sp hp mad dh" style="display: none;">
+                     <div class="mb-3 col-md-6 ed sp hp mad dh" {% if bio.education_category == 'লেখাপড়া করিনাই' or bio.education_category != 'জেনারেল' or bio.daora_hadith != 'হ্যাঁ' or bio.ssc != 'হ্যাঁ' or bio.hsc != 'হ্যাঁ' %}style="display: none;"{% endif %}>
                         <label for="takhassur" class="form-label">আপনি কি তাখাস্সুস পড়েছেন ?</label>
                         <select id="takhassur" name="takhassur">
-                           <option value="হ্যাঁ">হ্যাঁ</option>
-                           <option value="পড়তেছি">পড়তেছি</option>
-                           <option value="না">না</option>
+                           <option value="হ্যাঁ" {% if bio.takhassur == "হ্যাঁ" %}selected{% endif %}>হ্যাঁ</option>
+                           <option value="পড়তেছি" {% if bio.takhassur == "পড়তেছি" %}selected{% endif %}>পড়তেছি</option>
+                           <option value="না" {% if bio.takhassur == "না" %}selected{% endif %}>না</option>
                         </select>
                      </div>
-                     <div class="mb-3 col-md-6 ed sp hp mad dh tak" style="display: none;">
+                     <div class="mb-3 col-md-6 ed sp hp mad dh tak" {% if bio.education_category == 'লেখাপড়া করিনাই' or bio.education_category != 'জেনারেল' or bio.daora_hadith != 'হ্যাঁ' or bio.takhassur != 'না' or bio.ssc != 'হ্যাঁ' or bio.hsc != 'হ্যাঁ' %}style="display: none;"{% endif %}>
                         <label for="takhacchor" class="form-label">কোন বিষয়ে তাখাস্সুস পড়েছেন?</label>
-                        <input id="takhacchor" name="takhacchor_sub" class="form-control" type="text">
+                        <input id="takhacchor" name="takhacchor_sub" class="form-control" type="text" value="{{bio.takhassur_sub}}">
                      </div>
-                     <div class="mb-3 ed">
+                     <div class="mb-3 ed" {% if bio.education_category == 'লেখাপড়া করিনাই' %}style="display: none;"{% endif %}>
                         <label for="marital-status" class="form-label">সর্বোচ্চ শিক্ষাগত যোগ্যতা</label>
-                        <textarea class="form-control" rows="3" id="textarea1" name="highest_education"></textarea>
+                        <textarea class="form-control" rows="3" id="textarea1" name="highest_education">{{bio.highest_education}}</textarea>
                      </div>
-                     <div class="mb-3 ed">
+                     <div class="mb-3 ed" {% if bio.education_category == 'লেখাপড়া করিনাই' %}style="display: none;"{% endif %}>
                         <label for="marital-status" class="form-label">অন্যান্য শিক্ষাগত যোগ্যতা</label>
                         <textarea class="others-education" id="others-education" name="others-education">{{bio.others_education}}</textarea>
                      </div>
-                     <div class="mb-3" id="yed" style="display: none;">
+                     <div class="mb-3" id="yed" {% if bio.education_category != 'লেখাপড়া করিনাই' %}style="display: none;"{% endif %}>
                         <label for="marital-status" class="form-label">লেখাপড়া করেননি কেন?</label>
-                        <textarea class="form-control" rows="3" id="textarea2" name="not_education"></textarea>
+                        <textarea class="form-control" rows="3" id="textarea2" name="not_education">{{bio.why_not_education}}</textarea>
                      </div>
                   </div>
                </div>
@@ -446,112 +446,112 @@
                      <div class="mb-3 col-md-6">
                         <label for="color" class="form-label">৫ ওয়াক্ত সালাত আদায় করেন?</label>
                         <select id="color" name="salat">
-                           <option value="হ্যাঁ আলহামদুলিল্লাহ">হ্যাঁ আলহামদুলিল্লাহ</option>
-                           <option value="মাঝেমাঝে অনিচ্ছাকৃতভাবে ২/১ ওয়াক্ত ক্বাযা হয়">মাঝেমাঝে অনিচ্ছাকৃতভাবে ২/১ ওয়াক্ত ক্বাযা হয়</option>
-                           <option value="মাঝেমাঝে পড়ি">মাঝেমাঝে পড়ি</option>
+                           <option value="হ্যাঁ আলহামদুলিল্লাহ" {% if bio.salat == "হ্যাঁ আলহামদুলিল্লাহ" %}selected{% endif %}>হ্যাঁ আলহামদুলিল্লাহ</option>
+                           <option value="মাঝেমাঝে অনিচ্ছাকৃতভাবে ২/১ ওয়াক্ত ক্বাযা হয়" {% if bio.salat == "মাঝেমাঝে অনিচ্ছাকৃতভাবে ২/১ ওয়াক্ত ক্বাযা হয়" %}selected{% endif %}>মাঝেমাঝে অনিচ্ছাকৃতভাবে ২/১ ওয়াক্ত ক্বাযা হয়</option>
+                           <option value="মাঝেমাঝে পড়ি" {% if bio.salat == "মাঝেমাঝে পড়ি" %}selected{% endif %}>মাঝেমাঝে পড়ি</option>
                         </select>
                      </div>
                      <div class="mb-3 col-md-6">
                         <label for="color" class="form-label">৫ ওয়াক্ত সালাত কত সময় যাবত আদায় করছেন ?</label>
-                        <input class="form-control" name="salat_duration" type="text" placeholder="২ বছর">
+                        <input class="form-control" name="salat_duration" type="text" placeholder="২ বছর" value = "{{bio.salat_duration}}">
                      </div>
                      <div class="mb-3 col-md-6">
                         <label for="color" class="form-label">শুদ্ধভাবে কুরআন তিলওয়াত করতে পারেন ?</label>
                         <select id="color" name="quran_correctly">
-                           <option value="হ্যাঁ">হ্যাঁ আলহামদুলিল্লাহ</option>
-                           <option value="না, শিখছি">না, শিখছি</option>
-                           <option value="না, শিখবো">না, শিখবো ইনশাআল্লাহ</option>
-                           <option value="না">না</option>
+                           <option value="হ্যাঁ" {% if bio.quran_correctly == "হ্যাঁ" %}selected{% endif %}>হ্যাঁ আলহামদুলিল্লাহ</option>
+                           <option value="না, শিখছি" {% if bio.quran_correctly == "না, শিখছি" %}selected{% endif %}>না, শিখছি</option>
+                           <option value="না, শিখবো" {% if bio.quran_correctly == "না, শিখবো" %}selected{% endif %}>না, শিখবো ইনশাআল্লাহ</option>
+                           <option value="না" {% if bio.quran_correctly == "না" %}selected{% endif %}>না</option>
                         </select>
                      </div>
                      <div class="mb-3 col-md-6">
                         <label for="color" class="form-label">নিয়মিত কুরআন তিলওয়াত করেন ?</label>
                         <select id="color" name="quran_regularly">
-                           <option value="হ্যাঁ আলহামদুলিল্লাহ">হ্যাঁ আলহামদুলিল্লাহ</option>
-                           <option value="প্রায়ই করি">প্রায়ই করি</option>
-                           <option value="মাঝে-মাঝে করি">মাঝে-মাঝে করি</option>
-                           <option value="না">না</option>
+                           <option value="হ্যাঁ আলহামদুলিল্লাহ" {% if bio.quran_regularly == "হ্যাঁ" %}selected{% endif %}>হ্যাঁ আলহামদুলিল্লাহ</option>
+                           <option value="প্রায়ই করি" {% if bio.quran_regularly == "প্রায়ই করি" %}selected{% endif %}>প্রায়ই করি</option>
+                           <option value="মাঝে-মাঝে করি" {% if bio.quran_regularly == "মাঝে-মাঝে করি" %}selected{% endif %}>মাঝে-মাঝে করি</option>
+                           <option value="না" {% if bio.quran_regularly == "না" %}selected{% endif %}>না</option>
                         </select>
                      </div>
                      {% if user.first_name == 'male' %}
                      <div class="mb-3 col-md-6">
                         <label for="color" class="form-label">আপনার সুন্নতি দাড়ি আছে?</label>
                         <select id="color" name="dari">
-                           <option value="হ্যাঁ আলহামদুলিল্লাহ">হ্যাঁ আলহামদুলিল্লাহ</option>
-                           <option value="রাখব ইনশাআল্লাহ">রাখব ইনশাআল্লাহ</option>
-                           <option value="না">না</option>
+                           <option value="হ্যাঁ আলহামদুলিল্লাহ" {% if bio.dari == 'হ্যাঁ আলহামদুলিল্লাহ' %}selected{% endif %}>হ্যাঁ আলহামদুলিল্লাহ</option>
+                           <option value="রাখব ইনশাআল্লাহ" {% if bio.dari == 'রাখব ইনশাআল্লাহ' %}selected{% endif %}>রাখব ইনশাআল্লাহ</option>
+                           <option value="না" {% if bio.dari == 'না' %}selected{% endif %}>না</option>
                         </select>
                      </div>
                      {% endif %}
                      <div class="mb-3 col-md-6">
                         <label for="color" class="form-label">শিরক সম্পর্কে আপনার স্পষ্ট ধারণা আছে?</label>
                         <select id="color" name="shirk">
-                           <option value="হ্যাঁ আলহামদুলিল্লাহ">হ্যাঁ আলহামদুলিল্লাহ</option>
-                           <option value="মোটামোটি">মোটামোটি ভালোই</option>
-                           <option value="অল্প">অল্প</option>
-                           <option value="না">না</option>
+                           <option value="হ্যাঁ আলহামদুলিল্লাহ" {% if bio.shirk == 'হ্যাঁ আলহামদুলিল্লাহ' %}selected{% endif %}>হ্যাঁ আলহামদুলিল্লাহ</option>
+                           <option value="মোটামোটি" {% if bio.shirk == 'মোটামোটি' %}selected{% endif %}>মোটামোটি ভালোই</option>
+                           <option value="অল্প" {% if bio.shirk == 'অল্প' %}selected{% endif %}>অল্প</option>
+                           <option value="না" {% if bio.shirk == 'না' %}selected{% endif %}>না</option>
                         </select>
                      </div>
                      <div class="mb-3 col-md-6">
                         <label for="color" class="form-label">বিদআত সম্পর্কে আপনার স্পষ্ট ধারণা আছে?</label>
                         <select id="color" name="bidat">
-                           <option value="হ্যাঁ আলহামদুলিল্লাহ">হ্যাঁ আলহামদুলিল্লাহ</option>
-                           <option value="মোটামোটি">মোটামোটি ভালোই</option>
-                           <option value="অল্প">অল্প</option>
-                           <option value="না">না</option>
+                           <option value="হ্যাঁ আলহামদুলিল্লাহ" {% if bio.bidat == 'হ্যাঁ আলহামদুলিল্লাহ' %}selected{% endif %}>হ্যাঁ আলহামদুলিল্লাহ</option>
+                           <option value="মোটামোটি" {% if bio.bidat == 'মোটামোটি' %}selected{% endif %}>মোটামোটি ভালোই</option>
+                           <option value="অল্প" {% if bio.bidat == 'অল্প' %}selected{% endif %}>অল্প</option>
+                           <option value="না" {% if bio.bidat == 'না' %}selected{% endif %}>না</option>
                         </select>
                      </div>
                      <div class="mb-3 col-md-6">
                         <label for="color" class="form-label">কোন আকিদা/মাঝহাব অনুসরণ করেন ?</label>
                         <select id="color" name="aqida">
-                           <option value="সালাফি">সালাফি</option>
-                           <option value="হানাফি">হানাফি</option>
-                           <option value="শাফেয়ী">শাফেয়ী</option>
-                           <option value="মালেকি">মালেকি</option>
-                           <option value="হাম্বলি">হাম্বলি</option>
-                           <option value="শিয়া">শিয়া</option>
-                           <option value="কাদিয়ানী">কাদিয়ানী</option>
+                           <option value="সালাফি" {% if bio.aqida == 'সালাফি' %}selected{% endif %}>সালাফি</option>
+                           <option value="হানাফি" {% if bio.aqida == 'হানাফি' %}selected{% endif %}>হানাফি</option>
+                           <option value="শাফেয়ী" {% if bio.aqida == 'শাফেয়ী' %}selected{% endif %}>শাফেয়ী</option>
+                           <option value="মালেকি" {% if bio.aqida == 'মালেকি' %}selected{% endif %}>মালেকি</option>
+                           <option value="হাম্বলি" {% if bio.aqida == 'হাম্বলি' %}selected{% endif %}>হাম্বলি</option>
+                           <option value="শিয়া" {% if bio.aqida == 'শিয়া' %}selected{% endif %}>শিয়া</option>
+                           <option value="কাদিয়ানী" {% if bio.aqida == 'কাদিয়ানী' %}selected{% endif %}>কাদিয়ানী</option>
                         </select>
                         <small>!'আহলুস সুন্নাহ ওয়াল জামায়াত' না দেয়ার কারন হল, সবায় দাবী করে যে, সে 'আহলুস সুন্নাহ ওয়াল জামায়াত' এর আকিদার অনুসারী</small>
                      </div>
                      <div class="mb-3 col-md-6">
                         <label for="color" class="form-label">নাটক/সিনেমা/সিরিয়াল/গান এসব দেখেন বা শুনেন ?</label>
                         <select id="color" name="tv">
-                           <option value="না আলহামদুলিল্লাহ">না আলহামদুলিল্লাহ</option>
-                           <option value="হ্যাঁ, মাঝে-মাঝে">হ্যাঁ, মাঝে-মাঝে</option>
-                           <option value="হ্যাঁ">হ্যাঁ</option>
+                           <option value="না আলহামদুলিল্লাহ" {% if bio.tv == 'না আলহামদুলিল্লাহ' %}selected{% endif %}>না আলহামদুলিল্লাহ</option>
+                           <option value="হ্যাঁ, মাঝে-মাঝে" {% if bio.tv == 'হ্যাঁ, মাঝে-মাঝে' %}selected{% endif %}>হ্যাঁ, মাঝে-মাঝে</option>
+                           <option value="হ্যাঁ" {% if bio.tv == 'হ্যাঁ' %}selected{% endif %}>হ্যাঁ</option>
                         </select>
                      </div>
                      <div class="mb-3 col-md-6">
                         <label for="color" class="form-label">আপনি কি কোনো পীরের মুরিদ বা অনুসারী ?</label>
                         <select id="color" name="murid">
-                           <option value="হ্যাঁ">হ্যাঁ</option>
-                           <option value="না">না</option>
-                           <option value="হবো">হবো</option>
-                           <option value="পীরে বিশ্বাসী নই">পীরে বিশ্বাসী নই</option>
+                           <option value="হ্যাঁ" {% if bio.murid == 'হ্যাঁ' %}selected{% endif %}>হ্যাঁ</option>
+                           <option value="না" {% if bio.murid == 'না' %}selected{% endif %}>না</option>
+                           <option value="হবো" {% if bio.murid == 'হবো' %}selected{% endif %}>হবো</option>
+                           <option value="পীরে বিশ্বাসী নই" {% if bio.murid == 'পীরে বিশ্বাসী নই' %}selected{% endif %}>পীরে বিশ্বাসী নই</option>
                         </select>
                      </div>
                      <div class="mb-3">
                         <label for="color" class="form-label">মাজার সম্পর্কে আপনার ধারণা বা বিশ্বাস কি?</label>
                         <select id="color" name="majar">
-                           <option value="সিজদাহ এবং মানত উভয়ই শিরক">সিজদাহ এবং মানত উভয়ই শিরক</option>
-                           <option value="সিজদাহ করা শিরক / মানত করা জায়েজ">সিজদাহ করা শিরক / মানত করা জায়েজ</option>
-                           <option value="সিজদাহ এবং মানত উভয়ই জায়েজ">সিজদাহ এবং মানত উভয়ই জায়েজ</option>
-                           <option value="যিয়ারত করা যায়">যিয়ারত করা জায়েজ</option>
-                           <option value="ধারণা নেই">ধারণা নেই</option>
+                           <option value="সিজদাহ এবং মানত উভয়ই শিরক" {% if bio.majar == 'সিজদাহ এবং মানত উভয়ই শিরক' %}selected{% endif %}>সিজদাহ এবং মানত উভয়ই শিরক</option>
+                           <option value="সিজদাহ করা শিরক / মানত করা জায়েজ" {% if bio.majar == 'সিজদাহ করা শিরক / মানত করা জায়েজ' %}selected{% endif %}>সিজদাহ করা শিরক / মানত করা জায়েজ</option>
+                           <option value="সিজদাহ এবং মানত উভয়ই জায়েজ" {% if bio.majar == 'সিজদাহ এবং মানত উভয়ই জায়েজ' %}selected{% endif %}>সিজদাহ এবং মানত উভয়ই জায়েজ</option>
+                           <option value="যিয়ারত করা যায়" {% if bio.majar == 'যিয়ারত করা যায়' %}selected{% endif %}>যিয়ারত করা জায়েজ</option>
+                           <option value="ধারণা নেই" {% if bio.majar == 'ধারণা নেই' %}selected{% endif %}>ধারণা নেই</option>
                         </select>
                      </div>
                      <div class="mb-3 col-md-6">
                         <label for="color" class="form-label">আপনার পছন্দের অন্তত ৩ টি ইসলামী বই এর নাম লিখুন</label>
-                        <textarea class="book" name="book"></textarea>
+                        <textarea class="book" name="book">{{bio.books}}</textarea>
                      </div>
                      <div class="mb-3 col-md-6">
                         <label for="color" class="form-label">আপনার পছন্দের অন্তত ৩ জন আলেমের নাম লিখুন</label>
-                        <textarea class="alem" name="alem"></textarea>
+                        <textarea class="alem" name="alem">{{bio.sheiks}}</textarea>
                      </div>
                      <div class="mb-3">
                         <label for="color" class="form-label">বিশেষ দ্বীনি যোগ্যতা (যদি থাকে)</label>
-                        <textarea class="dini-qualification" name="dini-qualification"></textarea>
+                        <textarea class="dini-qualification" name="dini-qualification">{{bio.dini_qualification}}</textarea>
                      </div>
                   </div>
                </div>
@@ -566,41 +566,41 @@
                      <div class="mb-3">
                         <label for="color" class="form-label">পায়ের টাখনুর উপরে কাপড় পরেন ?</label>
                         <select id="color" name="taknu">
-                           <option value="হ্যাঁ আলহামদুলিল্লাহ">হ্যাঁ আলহামদুলিল্লাহ</option>
-                           <option value="না">না</option>
+                           <option value="হ্যাঁ আলহামদুলিল্লাহ" {% if bio.pant == 'হ্যাঁ আলহামদুলিল্লাহ' %}selected{% endif %}>হ্যাঁ আলহামদুলিল্লাহ</option>
+                           <option value="না" {% if bio.pant == 'না' %}selected{% endif %}>না</option>
                         </select>
                      </div>
                      <div class="mb-3">
                         <label for="color" class="form-label">ঘরের বাহিরে সাধারণত কী ধরণের পোশাক পরেন ?</label>
-                        <textarea class="form-control" name="out_dress"></textarea>
+                        <textarea class="form-control" name="out_dress">{{bio.out_dress}}</textarea>
                      </div>
                      {% else %}
                      <div class="mb-3 col-md-6">
                         <label for="color" class="form-label">বাসার বাইরে বোরকা ও নিকাব পরেন?</label>
                         <select id="color" name="niqab">
-                           <option value="হ্যাঁ আলহামদুলিল্লাহ">হ্যাঁ আলহামদুলিল্লাহ</option>
-                           <option value="নিকাব পরিনা, হিজাব পরি">নিকাব পরিনা, হিজাব পরি</option>
-                           <option value="না">না</option>
+                           <option value="হ্যাঁ আলহামদুলিল্লাহ" {% if bio.borka == 'হ্যাঁ আলহামদুলিল্লাহ' %}selected{% endif %}>হ্যাঁ আলহামদুলিল্লাহ</option>
+                           <option value="নিকাব পরিনা, হিজাব পরি" {% if bio.borka == 'নিকাব পরিনা, হিজাব পরি' %}selected{% endif %}>নিকাব পরিনা, হিজাব পরি</option>
+                           <option value="না" {% if bio.borka == 'না' %}selected{% endif %}>না</option>
                         </select>
                      </div>
                      <div class="mb-3 col-md-6">
                         <label for="color" class="form-label">হাত পা মোজা পরেন?</label>
                         <select id="color" name="muja">
-                           <option value="হ্যাঁ আলহামদুলিল্লাহ">হ্যাঁ আলহামদুলিল্লাহ</option>
-                           <option value="না">না</option>
+                           <option value="হ্যাঁ আলহামদুলিল্লাহ" {% if bio.muja == 'হ্যাঁ আলহামদুলিল্লাহ' %}selected{% endif %}>হ্যাঁ আলহামদুলিল্লাহ</option>
+                           <option value="না" {% if bio.muja == 'না' %}selected{% endif %}>না</option>
                         </select>
                      </div>
                      <div class="mb-3">
                         <label for="color" class="form-label">বাহিরে পরিপূর্ণ গায়রে মাহরাম মেনে চলেন?</label>
                         <select id="color" name="mahram">
-                           <option value="হ্যাঁ আলহামদুলিল্লাহ">হ্যাঁ আলহামদুলিল্লাহ</option>
-                           <option value="চেষ্টা করি">চেষ্টা করি</option>
-                           <option value="না">না</option>
+                           <option value="হ্যাঁ আলহামদুলিল্লাহ" {% if bio.mahram == 'হ্যাঁ আলহামদুলিল্লাহ' %}selected{% endif %}>হ্যাঁ আলহামদুলিল্লাহ</option>
+                           <option value="চেষ্টা করি" {% if bio.mahram == 'চেষ্টা করি' %}selected{% endif %}>চেষ্টা করি</option>
+                           <option value="না" {% if bio.mahram == 'না' %}selected{% endif %}>না</option>
                         </select>
                      </div>
                      <div class="mb-3">
                         <label for="color" class="form-label">পর্দা সম্পর্কে আরো কিছু বলতে চান ?</label>
-                        <textarea class="porda" name='pora'></textarea>
+                        <textarea class="porda" name='pora'>{{bio.porda}}</textarea>
                      </div>
                      {% endif %}
                   </div>
@@ -921,7 +921,7 @@
                             {% for x, y in dis %}
                                 <optgroup label = "{{x}}">
                                     {% for z in y %}
-                                        <option value="{{z}}" {% if z in district %}selected{% endif %} >{{z}}</option>
+                                        <option value="{{z}}" {% if z in bio.partner_district|str_to_list %}selected{% endif %} >{{z}}</option>
                                     {% endfor %}
                                 </optgroup>
                             {% endfor %}

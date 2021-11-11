@@ -130,3 +130,8 @@ def no_notification(id):
     nof = Notification.objects.filter(receiver__id = id, created_at__gt = seentime.seentime).count()
     return nof
 register.filter('no_notification', no_notification)
+
+@register.simple_tag
+def str_to_list(value):
+    return value[2:-2].split("', '")
+register.filter('str_to_list', str_to_list)
