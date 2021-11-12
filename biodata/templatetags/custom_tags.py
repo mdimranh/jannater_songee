@@ -135,3 +135,9 @@ register.filter('no_notification', no_notification)
 def str_to_list(value):
     return value[2:-2].split("', '")
 register.filter('str_to_list', str_to_list)
+
+@register.simple_tag
+def strr(value):
+    print(type(value))
+    return str(value)
+register.filter('strr', strr)
