@@ -143,12 +143,12 @@
                       {% csrf_token %}
                         {% if request.seen %}
                           {% if request.accept %}
-                            <small class="m-0 pt-1 pb-1 text-center text-white h6">গ্রহণ করেছে</small>
+                            <small class="m-0 pt-1 pb-1 text-center text-white h6 status">গ্রহণ করেছে</small>
                           {% else %}
-                            <p class="m-0 pt-1 pb-1 text-center text-white h6">গ্রহণ করেনি</p>
+                            <p class="m-0 pt-1 pb-1 text-center text-white h6 status">গ্রহণ করেনি</p>
                           {% endif %}
                         {% else %}
-                          <p class="m-0 pt-1 pb-1 text-center text-white h6">দেখেনি</p>
+                          <p class="m-0 pt-1 pb-1 text-center text-white h6 status">দেখেনি</p>
                         {% endif %}
                         <input type="hidden" name="cancel_request" value='{{bio.id}}'>
                         <input type="hidden" name="biodata" value='{{bio.id}}'>

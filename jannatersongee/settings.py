@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'channels',
 
     'home',
     'biodata',
@@ -86,6 +87,16 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'jannatersongee.wsgi.application'
+ASGI_APPLICATION = 'jannatersongee.asgi.application'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("localhost", 6379)],
+        },
+    },
+}
 
 
 # Database

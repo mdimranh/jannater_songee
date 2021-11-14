@@ -4,7 +4,7 @@ from django.http.response import JsonResponse
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .models import Biodata, Notification, Request, Suggested, Notification_seen
+from .models import Biodata, Notification, Request, Suggested, Notification_seen, UniqueUser
 from accounts.models import Favourite
 from django.http import HttpResponse
 from django.utils.timezone import now
@@ -288,6 +288,17 @@ def biodata(request, id):
 
     else:
         biodata = Biodata.objects.get(id = id)
+        address = request.META.get('HTTP_X_FORWARDED_FOR')
+        if address:
+            ip = address.split(',')[-1].strip()
+        else:
+            ip = request.META.get('REMOTE_ADDR')
+        
+        get, add = UniqueUser.objects.get_or_create(ip = ip)
+
+        if get not in biodata.seen.all():
+            biodata.seen.add(get)
+
         if request.user.is_authenticated:
             profile = Favourite.objects.filter(user = request.user)
             if Request.objects.filter(user = biodata.owner, request_user = request.user).exists():

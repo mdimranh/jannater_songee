@@ -91,6 +91,7 @@ def All(request):
         'id': 'all',
         'biodata': page_obj,
     }
+    print(f"Ip of user = {request.META.get('REMOTE_ADDR')}")
     return render(request, 'hm.html', context)
 
 def Male(request):

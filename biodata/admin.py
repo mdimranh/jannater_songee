@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth import models
 
-from .models import Biodata, Notification, Suggested, Request, Notification_seen
+from .models import Biodata, Notification, Suggested, Request, Notification_seen, UniqueUser
 
 
 class BiodataAdmin(admin.ModelAdmin):
@@ -33,3 +33,5 @@ admin.site.register(Notification, NotificationAdmin)
 
 
 admin.site.register(Notification_seen)
+
+admin.site.register(UniqueUser)

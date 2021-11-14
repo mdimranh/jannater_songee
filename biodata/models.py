@@ -7,6 +7,17 @@ from ckeditor.fields import RichTextField
 from datetime import datetime
 from django.utils.timezone import now
 
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+import json
+
+
+class UniqueUser(models.Model):
+    ip = models.CharField(max_length=255, unique=True)
+
+    def __str__(self):
+        return self.ip
+
 class Biodata(models.Model):
 
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -149,11 +160,11 @@ class Biodata(models.Model):
     address = models.TextField()
 
     created_at = models.DateTimeField(default=datetime.now)
+    seen = models.ManyToManyField(UniqueUser)
     publish = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
-
 
 class Suggested(models.Model):
     user = models.ForeignKey(User, related_name='user_bio', on_delete=models.CASCADE)
@@ -189,12 +200,94 @@ CHOICES =(
     ("married", "married Request"),
 )
 
+
+
+def time_format(timeduration):
+    c = 0
+    tm = ""
+    for i in timeduration:
+        if i != ":" and i != ",":
+            tm += i
+        elif i == ",":
+            t = tm.split(" ")
+            if int(t[0]) >= 7 and int(t[0]) < 30:
+                i = int(t[0])//7
+                if i == 1:
+                    i = str(i)+" week ago"
+                else:
+                    i = str(i)+" weeks ago"
+                tm = i
+            elif int(t[0]) >= 31 and int(t[0]) < 366:
+                i = int(t[0])//30
+                if i == 1:
+                    i = str(i)+" month ago"
+                else:
+                    i = str(i)+ " months ago"
+                tm = i
+            elif int(t[0]) >= 365:
+                i = int(t[0])//365
+                if i == 1:
+                    i = str(i)+" year ago"
+                else:
+                    i = str(i)+ " years ago"
+                tm = i
+            else:
+                i = " ago"
+                tm += i
+            break
+        elif i == ":" and c == 0:
+            if tm != "0":
+                if tm != "1":
+                    i = " hours ago"
+                else:
+                    i = "hour ago"
+                tm += i
+                c = 1
+                break
+            else:
+                tm = ""
+                c = 1
+        elif i == ":" and c == 1:
+            tm = int(tm)
+            tm = str(tm)
+            if tm == "0":
+                tm = "Now"
+                break
+            if tm == "1":
+                i = " minute ago"
+                tm += i
+                break
+            else:
+                i = " minutes ago"
+                tm += i
+                break
+    return tm
+
+
+from django.utils.timezone import now
 class Notification(models.Model):
     receiver = models.ForeignKey(User, on_delete=models.CASCADE)
     sender = models.ForeignKey(Biodata, on_delete=models.CASCADE)
     type = models.CharField(max_length=50, choices=CHOICES, default=None, blank=True)
     details = models.TextField(default=None, blank=True)
     created_at = models.DateTimeField(default=now)
+
+    def save(self, *args, **kwargs):
+        channel_layer = get_channel_layer()
+        time = time_format(str(now() - self.created_at))
+        if self.receiver.first_name == 'male':
+            profile = 'patri.png'
+        else:
+            profile = 'patro.png'
+        data = {'sender': self.sender.id, 'details': self.details, 'time': time, 'profile': profile}
+        async_to_sync(channel_layer.group_send)(
+            'notification_%s' % self.receiver.id, {
+                'type': 'send_notification',
+                'value': json.dumps(data)
+            }
+        )
+
+        super(Notification, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.sender.owner.email +'<-->'+ self.receiver.email
