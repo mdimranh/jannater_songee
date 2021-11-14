@@ -292,6 +292,12 @@ class Notification(models.Model):
     def __str__(self):
         return self.sender.owner.email +'<-->'+ self.receiver.email
 
+    def request_biodata(self):
+        return self.sender
+
+    def user_biodata(self):
+        return Biodata.objects.get(owner = self.receiver)
+
 from datetime import datetime
 class Notification_seen(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

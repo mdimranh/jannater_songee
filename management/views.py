@@ -4,7 +4,7 @@ from .models import Message
 from django.views.decorators.csrf import csrf_exempt
 
 def Contact(request):
-    return render(request, 'management/contact.html')
+    return render(request, 'management/contact.html', {'id': 'about', 'id2': 'contact'})
 
 @csrf_exempt
 def message(request):

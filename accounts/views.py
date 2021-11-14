@@ -14,6 +14,8 @@ from django.shortcuts import get_object_or_404, render
 from django.views.decorators.csrf import csrf_exempt
 from biodata.models import Notification
 
+from biodata.models import Request
+
 # def Accounts(request):
 #     if request.method == 'POST':
 #         email = request.POST['email']
@@ -135,8 +137,20 @@ def password_recover(request, activation_key):
 def Settings(request):
    user_id = request.user.id
    user = User.objects.get(id = user_id)
+   seen_biodata = Biodata.objects.get(owner = request.user)
+   send_request = Notification.objects.filter(sender__owner = request.user, type = 'send').count()
+   get_request = Notification.objects.filter(receiver = request.user, type = 'send').count()
+   accept_request = Notification.objects.filter(sender__owner = request.user, type = 'accept').count()
+   cancel_request = Notification.objects.filter(sender__owner = request.user, type = 'reject').count()
+   reject_request = Notification.objects.filter(receiver = request.user, type = 'reject').count()
    context = {
-       'user': user
+       'user': user,
+       'seen': seen_biodata.seen.count(),
+       'send': send_request,
+       'get': get_request,
+       'accept': accept_request,
+       'cancel': cancel_request,
+       'reject': reject_request
    }
    return render(request, 'accounts/settings.html', context)
 

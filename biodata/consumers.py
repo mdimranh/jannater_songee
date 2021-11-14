@@ -14,7 +14,6 @@ class NotificationConsumer(WebsocketConsumer):
             self.room_group_name,
             self.channel_name
         )
-        print("Connected to ", self.room_name)
         self.accept()
 
 

@@ -453,9 +453,6 @@
     <script src="{% static 'js/tail.select-full.js' %}"></script>
     <script src="{% static 'js/home.js' %}"></script>
     <script>
-        act("{{id}}");
-    </script>
-    <script>
         {% if user.is_authenticated %}
             {% if user.first_name != 'male' and user.first_name != 'female' %}
                 $(function(){

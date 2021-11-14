@@ -10,7 +10,7 @@ def Masala(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(request, 'masala/masala.html', {'masala':page_obj})
+    return render(request, 'masala/masala.html', {'masala':page_obj, 'id': "masala"})
 
 def MasalaCat(request, title):
     cat = masala_catagory.objects.get(title = title)
@@ -22,7 +22,8 @@ def MasalaCat(request, title):
 
     context = {
         'masala': page_obj,
-        'cat': cat
+        'cat': cat,
+        'id': "masala"
     }
     return render(request, 'masala/masala.html', context)
 
@@ -31,4 +32,4 @@ def GetMasala(request, id):
     msla1 = masala.objects.get(id = id)
     related_masala = masala.objects.filter(catagory = msla1.catagory).exclude(id = id)
     extra_related_masala = masala.objects.all().exclude(catagory = msla1.catagory)
-    return render(request, 'masala/masla-details.html', {'masala': msla, 'rmasala': related_masala, 'exmasala': extra_related_masala})
+    return render(request, 'masala/masla-details.html', {'masala': msla, 'rmasala': related_masala, 'exmasala': extra_related_masala, 'id': "masala"})

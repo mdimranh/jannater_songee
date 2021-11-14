@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load custom_tags %}
 
 {% block title %}
     <title>Settings</title>
@@ -18,55 +19,65 @@
                 <div class="d-flex mx-2 p-3 justify-content-between align-items-center seen">
                     <div class="d-flex flex-column align-content-center justify-content-center">
                         <h4 class="p-0 m-0">সর্বমোট দেখেছে</h4>
-                        <p class="p-0 m-0">৩০+</p>
+                        <p class="p-0 m-0">{{seen}}</p>
                     </div>
                     <i class="fa fa-desktop fa-3x"></i>
                 </div>
             </div>
             <div class="col-lg-4 col-md-6 p-2">
+            <a href="/b_{{user|my_biodata_id}}/get_request">
                 <div class="d-flex mx-2 p-3 justify-content-between align-items-center get">
                     <div class="d-flex flex-column align-content-center justify-content-center">
                         <h4 class="p-0 m-0">প্রস্তাব পেয়েছেন</h4>
-                        <p class="p-0 m-0">৩০+</p>
+                        <p class="p-0 m-0">{{send}}</p>
                     </div>
                     <i class="fa fa-arrow-circle-down fa-3x"></i>
                 </div>
+            </a>
             </div>
             <div class="col-lg-4 col-md-6 p-2">
+            <a href="/b_{{user|my_biodata_id}}/send_request">
                 <div class="d-flex mx-2 p-3 justify-content-between align-items-center send">
                     <div class="d-flex flex-column align-content-center justify-content-center">
                         <h4 class="p-0 m-0">প্রস্তাব দিয়েছেন</h4>
-                        <p class="p-0 m-0">৩০+</p>
+                        <p class="p-0 m-0">{{get}}</p>
                     </div>
                     <i class="fa fa-arrow-circle-up fa-3x"></i>
                 </div>
+            </a>
             </div>
             <div class="col-lg-4 col-md-6 p-2">
+            <a href="accept_request">
                 <div class="d-flex mx-2 p-3 justify-content-between align-items-center accept">
                     <div class="d-flex flex-column align-content-center justify-content-center">
                         <h4 class="p-0 m-0">প্রস্তাব গ্রহণ করেছেন</h4>
-                        <p class="p-0 m-0">৩০+</p>
+                        <p class="p-0 m-0">{{accept}}</p>
                     </div>
                     <i class="fa fa-plus-square fa-3x"></i>
                 </div>
+            </a>
             </div>
             <div class="col-lg-4 col-md-6 p-2">
+            <a href="rejected_request">
                 <div class="d-flex mx-2 p-3 justify-content-between align-items-center cancel">
                     <div class="d-flex flex-column align-content-center justify-content-center">
                         <h4 class="p-0 m-0">প্রস্তাব বাতিল করেছেন</h4>
-                        <p class="p-0 m-0">৩০+</p>
+                        <p class="p-0 m-0">{{cancel}}</p>
                     </div>
                     <i class="fa fa-minus-square fa-3x"></i>
                 </div>
+            </a>
             </div>
             <div class="col-lg-4 col-md-6 p-2">
+            <a href="reject_request">
                 <div class="d-flex mx-2 p-3 justify-content-between align-items-center reject">
                     <div class="d-flex flex-column align-content-center justify-content-center">
                         <h4 class="p-0 m-0">প্রস্তাব প্রত্যাখ্যাত হয়েছে</h4>
-                        <p class="p-0 m-0">৩০+</p>
+                        <p class="p-0 m-0">{{reject}}</p>
                     </div>
                     <i class="fa fa-times-circle fa-3x"></i>
                 </div>
+            </a>
             </div>
         </div>
     </div>

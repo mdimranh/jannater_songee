@@ -4,7 +4,7 @@ from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.views.decorators import csrf
 from accounts.models import Favourite
-from biodata.models import Biodata, Request, Suggested
+from biodata.models import Biodata, Notification, Request, Suggested
 
 from django.contrib.auth.models import User
 from django.template import context
@@ -177,6 +177,40 @@ def Get(request, id):
         'title': title,
         'dis': dis,
         'id': 'get',
+        'biodata': page_obj,
+    }
+    return render(request, 'hm.html', context)
+
+
+def GetRequest(request, id):
+    biodata = Notification.objects.filter(receiver = request.user, type = 'send')
+    paginator = Paginator(biodata, 1)
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    title = "সকল প্রাপ্ত প্রস্তাব"
+    context = {
+        'title': title,
+        'dis': dis,
+        'id': 'get',
+        'biodata': page_obj,
+    }
+    return render(request, 'hm.html', context)
+
+
+def SendRequest(request, id):
+    biodata = Notification.objects.filter(sender__owner = request.user, type = 'send')
+    paginator = Paginator(biodata, 1)
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    title = "সকল প্রেরিত প্রস্তাব"
+    context = {
+        'title': title,
+        'dis': dis,
+        'id': 'send',
         'biodata': page_obj,
     }
     return render(request, 'hm.html', context)

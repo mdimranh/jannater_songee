@@ -68,11 +68,11 @@
             {% endif %}
             <div class="px-0 ico" id="aboutus">
                  <div class="dropdown">
-                    <div class="dropbtn"><img src="{% static 'img/aboutus.png' %}" alt="" style="height: 35px; width: 35px; margin-bottom: -12px; margin-left: -8px;"></div>
+                    <div class="dropbtn" id="about"><img src="{% static 'img/aboutus.png' %}" alt="" style="height: 35px; width: 35px; margin-bottom: -12px; margin-left: -8px;"></div>
                     <div class="dropdown-content">
                         <a href="{% url 'home' %}">আমাদের সম্পর্কে</a>
-                        <a href="{% url 'contact' %}">যোগাযোগ করুন</a>
-                        <a href="{% url 'qa' %}">প্রশ্ন ও উত্তর</a>
+                        <a id="contact" href="{% url 'contact' %}">যোগাযোগ করুন</a>
+                        <a id="qa" href="{% url 'qa' %}">প্রশ্ন ও উত্তর</a>
                         <a href="{% url 'home' %}">টিউটোরিয়াল</a>
                         <a href="{% url 'home' %}">সাদকা করুণ</a>
                     </div>
@@ -146,11 +146,29 @@
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body d-flex flex-column">
-            <div class="py-2 d-flex align-items-center"><img class="mx-2" src="{% static 'img/couple1.png' %}" alt="" style="height: 35px; width: 35px;"><p class="m-0 p-0" style="font-weight: bolder;">সকল বায়োডাটা</p></div>
-            <div class="py-2 d-flex align-items-center"><img class="mx-2" src="{% static 'img/couple1.png' %}" alt="" style="height: 35px; width: 35px;"><p class="m-0 p-0" style="font-weight: bolder;">পাত্রের বায়োডাটা</p></div>
-            <div class="py-2 d-flex align-items-center"><img class="mx-2" src="{% static 'img/couple1.png' %}" alt="" style="height: 35px; width: 35px;"><p class="m-0 p-0" style="font-weight: bolder;">পাত্রীর বায়োডাটা</p></div>
-            <div class="py-2 d-flex align-items-center"><img class="mx-2" src="{% static 'img/couple1.png' %}" alt="" style="height: 35px; width: 35px;"><p class="m-0 p-0" style="font-weight: bolder;">সফল বিবাহ</p></div>
-            <div class="py-2 d-flex align-items-center"><img class="mx-2" src="{% static 'img/couple1.png' %}" alt="" style="height: 35px; width: 35px;"><p class="m-0 p-0" style="font-weight: bolder;">মাসালা-মাসায়েল</p></div>
+            <a href="{% url 'all' %}"><div class="py-2 d-flex align-items-center" id="side-all"><img class="mx-2" src="{% static 'img/couple1.png' %}" alt="" style="height: 35px; width: 35px;"><p class="m-0 p-0" style="font-weight: bolder;">সকল বায়োডাটা</p></div></a>
+            <a href="{% url 'male' %}"><div class="py-2 d-flex align-items-center" id="side-male"><img class="mx-2" src="{% static 'img/male.png' %}" alt="" style="height: 35px; width: 35px;"><p class="m-0 ps-0 pe-2" style="font-weight: bolder;">পাত্রের বায়োডাটাসমূহ</p></div></a>
+            <a href="{% url 'female' %}"><div class="py-2 d-flex align-items-center" id="side-female"><img class="mx-2" src="{% static 'img/female.png' %}" alt="" style="height: 35px; width: 35px;"><p class="m-0 ps-0 pe-2" style="font-weight: bolder;">পাত্রীর বায়োডাটাসমূহ</p></div></a>
+            <a href="{% url 'success' %}"><div class="py-2 d-flex align-items-center" id="side-couple"><img src="{% static 'img/bibaho.png' %}" alt="" style="height: 35px; width: 65px; margin-left: -8px;"><p class="p-0 my-0" style="font-weight: bolder; margin-left: -3px;">সফলতার গল্প</p></div></a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'suggest' %}"><div class="py-2 d-flex align-items-center" id="side-suggest"><img class="mx-2" src="{% static 'img/suggest.png' %}" alt="" style="height: 32px; width: 32px;"><p class="m-0 ps-0 pe-2" style="font-weight: bolder;">প্রস্তাবিত বায়োডাটাসমূহ</p></div></a>
+                <a href="{% url 'love' %}"><div class="py-2 d-flex align-items-center" id="side-love"><img class="mx-2" src="{% static 'img/love1.png' %}" alt="" style="height: 32px; width: 32px;"><p class="m-0 p-0" style="font-weight: bolder;">প্রিয় বায়োডাটাসমূহ</p></div></a>
+            {% endif %}
+            <a href="{% url 'masala' %}"><div class="py-2 d-flex align-items-center" id="side-masala"><img class="ms-0 me-0" src="{% static 'img/masala.png' %}" alt="" style="height: 35px; width: 50px; margin-left: -15px;"><p class="m-0 p-0" style="font-weight: bolder;">মাসালা-মাসায়েল</p></div></a>
+            <div id="side-about">
+                <a class="py-2 px-2 d-flex align-items-center justify-content-between" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                    <div class="d-flex align-items-center"><img class="me-2" src="{% static 'img/aboutus.png' %}" alt="" style="height: 35px; width: 35px;"><p class="m-0 p-0" style="font-weight: bolder;">আমাদের সম্পর্কে</p></div><i class="fa fa-caret-up"></i>
+                </a>
+                <div class="collapse" id="collapseExample">
+                    <ul>
+                        <li><a href="{% url 'home' %}">আমাদের সম্পর্কে</a></li>
+                        <li id="side-contact"><a href="{% url 'contact' %}">যোগাযোগ করুন</a></li>
+                        <li id="side-qa"><a href="{% url 'qa' %}">প্রশ্ন ও উত্তর</a></li>
+                        <li><a href="{% url 'home' %}">টিউটোরিয়াল</a></li>
+                        <li><a href="{% url 'home' %}">সাদকা করুন</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -265,6 +283,12 @@
     {% comment %} <script src="js/particles.min.js"></script> {% endcomment %}
     <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v12.0&appId=1648696025461402&autoLogAppEvents=1" nonce="tCUY8T7b"></script>
     <script src="{% static 'js/base.js' %}"></script>
+    <script>
+        act("{{id}}");
+        {% if id2 %}
+            act("{{id2}}");
+        {% endif %}
+    </script>
     <script>
         let id = {{user.id}};
         function onRegistration(event){
