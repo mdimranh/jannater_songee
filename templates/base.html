@@ -89,7 +89,7 @@
                     <p class="badge" id="badge" style="visibility: hidden;">0</p>
                 {% endif %}
             </div>
-            <div class="dropdown-menu mt-2 notification-menu" aria-labelledby="notificationbtn">
+            <div id="notification-menu" class="dropdown-menu mt-2 notification-menu" aria-labelledby="notificationbtn">
                 <ul class="p-0 m-0" id="n-show" style="list-style: none;">
                     {% if user.id|get_notification %}
                     {% for nof in user.id|get_notification %}
@@ -106,7 +106,7 @@
                         </a>
                     {% endfor %}
                     {% else %}
-                        <p class="text-center px-2 mt-3">কোন নোটিফিকেশান পাওয়া যাইনি</p>
+                        <p class="text-center px-2 mt-3 not-get">কোন নোটিফিকেশান পাওয়া যাইনি</p>
                     {% endif %}
                 </ul>
             </div>

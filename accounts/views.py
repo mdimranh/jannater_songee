@@ -3,7 +3,10 @@ from django.shortcuts import redirect, render
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
 
+from datetime import datetime
+
 from biodata.models import Biodata
+from success.models import Post
 from .models import EmailConfirmed, Favourite
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
@@ -15,6 +18,8 @@ from django.views.decorators.csrf import csrf_exempt
 from biodata.models import Notification
 
 from biodata.models import Request
+
+from django.db.models import Q
 
 # def Accounts(request):
 #     if request.method == 'POST':
@@ -134,25 +139,55 @@ def password_recover(request, activation_key):
             return render(request, 'accounts/new_pass.html', {'user_email': euser})
 
 
+from django.utils.timezone import now
 def Settings(request):
-   user_id = request.user.id
-   user = User.objects.get(id = user_id)
-   seen_biodata = Biodata.objects.get(owner = request.user)
-   send_request = Notification.objects.filter(sender__owner = request.user, type = 'send').count()
-   get_request = Notification.objects.filter(receiver = request.user, type = 'send').count()
-   accept_request = Notification.objects.filter(sender__owner = request.user, type = 'accept').count()
-   cancel_request = Notification.objects.filter(sender__owner = request.user, type = 'reject').count()
-   reject_request = Notification.objects.filter(receiver = request.user, type = 'reject').count()
-   context = {
-       'user': user,
-       'seen': seen_biodata.seen.count(),
-       'send': send_request,
-       'get': get_request,
-       'accept': accept_request,
-       'cancel': cancel_request,
-       'reject': reject_request
-   }
-   return render(request, 'accounts/settings.html', context)
+    if request.method == "POST":
+        if 'success-post' in request.POST:
+            post = Post(
+                user = Biodata.objects.get(owner = request.user),
+                tag = Biodata.objects.get(id = request.POST['partner']),
+                post = request.POST['success-post']
+            )
+            post.save()
+            return redirect(request.path_info)
+        else:
+            post = Post.objects.get(Q(user__owner = request.user) | Q(tag__owner = request.user))
+            post.post = request.POST['update-post']
+            post.updated_on = datetime.now()
+            post.save()
+            return redirect(request.path_info)
+    
+    else:
+        user_id = request.user.id
+        user = User.objects.get(id = user_id)
+        seen_biodata = Biodata.objects.get(owner = request.user)
+        send_request_all = Notification.objects.filter(receiver = request.user, type = 'send').distinct("sender").count()
+        get_request_all = Notification.objects.filter(sender__owner = request.user, type = 'send').distinct("receiver").count()
+        accept_request_all = Notification.objects.filter(sender__owner = request.user, type = 'accept').distinct("receiver").count()
+        cancel_request = Notification.objects.filter(Q(sender__owner = request.user) & (Q(Q(type = 'reject') | Q(type = 'cancel')))).distinct("receiver").count()
+        reject_request_all = Notification.objects.filter(receiver = request.user, type = 'reject').distinct("sender").count()
+        accept = Request.objects.filter(user = request.user, accept = True).count()
+        reject = Notification.objects.filter(sender__owner = request.user, type = 'reject').distinct("receiver").count()
+        send = Request.objects.filter(request_user = request.user).count()
+        accept_all1 = Request.objects.filter(user = request.user, accept = True)
+        accept_all2 = Request.objects.filter(request_user = request.user, accept = True)
+        post = Post.objects.filter(Q(user__owner = request.user) | Q(tag__owner = request.user))
+        context = {
+            'user': user,
+            'send': send,
+            'accept': accept,
+            'reject': reject,
+            'seen': seen_biodata.seen.count(),
+            'send_all': send_request_all,
+            'get_all': get_request_all,
+            'accept_all': accept_request_all,
+            'cancel': cancel_request,
+            'reject_all': reject_request_all,
+            'accept_all1': accept_all1,
+            'accept_all2': accept_all2,
+            'post': post
+        }
+        return render(request, 'accounts/settings.html', context)
 
 
 @csrf_exempt

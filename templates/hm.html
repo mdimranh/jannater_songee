@@ -198,7 +198,7 @@
         {% for biodata in biodata %}
         <div class="card mx-4 my-4 p-0" style="height: 275px; width: 250px;">
             <div class="d-flex card-head">
-                {% if biodata.user.first_name == 'female' %}
+                {% if biodata.user_biodata.owner.first_name == 'female' %}
                     <img class="cardImage ms-2" src="{% static 'img/patri.png' %}" alt="" style="margin-bottom: -50px;">
                 {% else %}
                     <img class="cardImage ms-2" src="{% static 'img/patro.png' %}" alt="" style="margin-bottom: -50px;">
@@ -261,7 +261,7 @@
         {% for biodata in biodata %}
         <div class="card mx-4 my-4 p-0" style="height: 275px; width: 250px;">
             <div class="d-flex card-head">
-                {% if biodata.request_user.first_name == 'female' %}
+                {% if biodata.request_biodata.owner.first_name == 'female' %}
                     <img class="cardImage ms-2" src="{% static 'img/patri.png' %}" alt="" style="margin-bottom: -50px;">
                 {% else %}
                     <img class="cardImage ms-2" src="{% static 'img/patro.png' %}" alt="" style="margin-bottom: -50px;">

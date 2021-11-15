@@ -12,68 +12,96 @@
 {% endblock extralink %}
 
 {% block body %}
-    <h3 class="mt-3">ডাটা এনালায়সিস</h3>
     <div class="container px-4 py-2">
+        <h4 class="mt-1 mb-1 ms-2">ডাটা বিশ্লেষণ</h4>
         <div class="row data">
-            <div class="col-lg-4 col-md-6 p-2">
-                <div class="d-flex mx-2 p-3 justify-content-between align-items-center seen">
-                    <div class="d-flex flex-column align-content-center justify-content-center">
-                        <h4 class="p-0 m-0">সর্বমোট দেখেছে</h4>
-                        <p class="p-0 m-0">{{seen}}</p>
-                    </div>
-                    <i class="fa fa-desktop fa-3x"></i>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 p-2">
+            <div class="col-lg-3 col-md-6 p-2">
             <a href="/b_{{user|my_biodata_id}}/get_request">
                 <div class="d-flex mx-2 p-3 justify-content-between align-items-center get">
                     <div class="d-flex flex-column align-content-center justify-content-center">
-                        <h4 class="p-0 m-0">প্রস্তাব পেয়েছেন</h4>
-                        <p class="p-0 m-0">{{send}}</p>
-                    </div>
-                    <i class="fa fa-arrow-circle-down fa-3x"></i>
-                </div>
-            </a>
-            </div>
-            <div class="col-lg-4 col-md-6 p-2">
-            <a href="/b_{{user|my_biodata_id}}/send_request">
-                <div class="d-flex mx-2 p-3 justify-content-between align-items-center send">
-                    <div class="d-flex flex-column align-content-center justify-content-center">
-                        <h4 class="p-0 m-0">প্রস্তাব দিয়েছেন</h4>
-                        <p class="p-0 m-0">{{get}}</p>
-                    </div>
-                    <i class="fa fa-arrow-circle-up fa-3x"></i>
-                </div>
-            </a>
-            </div>
-            <div class="col-lg-4 col-md-6 p-2">
-            <a href="accept_request">
-                <div class="d-flex mx-2 p-3 justify-content-between align-items-center accept">
-                    <div class="d-flex flex-column align-content-center justify-content-center">
-                        <h4 class="p-0 m-0">প্রস্তাব গ্রহণ করেছেন</h4>
+                        <h4 class="p-0 m-0">গৃহীত বায়োডাটা</h4>
                         <p class="p-0 m-0">{{accept}}</p>
                     </div>
                     <i class="fa fa-plus-square fa-3x"></i>
                 </div>
             </a>
             </div>
-            <div class="col-lg-4 col-md-6 p-2">
+            <div class="col-lg-3 col-md-6 p-2">
+            <a href="/b_{{user|my_biodata_id}}/send_request">
+                <div class="d-flex mx-2 p-3 justify-content-between align-items-center send">
+                    <div class="d-flex flex-column align-content-center justify-content-center">
+                        <h4 class="p-0 m-0">প্রত্যাখ্যাত বায়োডাটা</h4>
+                        <p class="p-0 m-0">{{reject}}</p>
+                    </div>
+                    <i class="fa fa-times-circle fa-3x"></i>
+                </div>
+            </a>
+            </div>
+            <div class="col-lg-3 col-md-6 p-2">
+            <a href="accept_request">
+                <div class="d-flex mx-2 p-3 justify-content-between align-items-center accept">
+                    <div class="d-flex flex-column align-content-center justify-content-center">
+                        <h4 class="p-0 m-0">প্রস্তাব প্রেরিত বায়োডাটা</h4>
+                        <p class="p-0 m-0">{{send}}</p>
+                    </div>
+                    <i class="fa fa-arrow-circle-down fa-3x"></i>
+                </div>
+            </a>
+            </div>
+            <div class="col-lg-3 col-md-6 p-2">
             <a href="rejected_request">
                 <div class="d-flex mx-2 p-3 justify-content-between align-items-center cancel">
                     <div class="d-flex flex-column align-content-center justify-content-center">
-                        <h4 class="p-0 m-0">প্রস্তাব বাতিল করেছেন</h4>
+                        <h4 class="p-0 m-0">প্রস্তাব বাতিলকৃত বায়োডাটা</h4>
                         <p class="p-0 m-0">{{cancel}}</p>
                     </div>
                     <i class="fa fa-minus-square fa-3x"></i>
                 </div>
             </a>
             </div>
-            <div class="col-lg-4 col-md-6 p-2">
+        </div>
+    </div>
+
+    <div class="container px-4 py-2">
+        <h4 class="mt-1 mb-1 ms-2">সকল ডাটা বিশ্লেষণ</h4>
+        <div class="row data">
+            <div class="col-lg-3 col-md-6 p-2">
+                <div class="d-flex mx-2 p-3 justify-content-between align-items-center seen">
+                    <div class="d-flex flex-column align-content-center justify-content-center">
+                        <h4 class="p-0 m-0">আপনার বায়োডাটা দেখেছে</h4>
+                        <p class="p-0 m-0">{{seen}}</p>
+                    </div>
+                    <i class="fa fa-desktop fa-3x"></i>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 p-2">
+            <a href="/b_{{user|my_biodata_id}}/get_request">
+                <div class="d-flex mx-2 p-3 justify-content-between align-items-center get">
+                    <div class="d-flex flex-column align-content-center justify-content-center">
+                        <h4 class="p-0 m-0">সর্বমোট প্রস্তাব পেয়েছেন</h4>
+                        <p class="p-0 m-0">{{send_all}}</p>
+                    </div>
+                    <i class="fa fa-arrow-circle-down fa-3x"></i>
+                </div>
+            </a>
+            </div>
+            <div class="col-lg-3 col-md-6 p-2">
+            <a href="/b_{{user|my_biodata_id}}/send_request">
+                <div class="d-flex mx-2 p-3 justify-content-between align-items-center send">
+                    <div class="d-flex flex-column align-content-center justify-content-center">
+                        <h4 class="p-0 m-0">সর্বমোট প্রস্তাব দিয়েছেন</h4>
+                        <p class="p-0 m-0">{{get_all}}</p>
+                    </div>
+                    <i class="fa fa-arrow-circle-up fa-3x"></i>
+                </div>
+            </a>
+            </div>
+            <div class="col-lg-3 col-md-6 p-2">
             <a href="reject_request">
                 <div class="d-flex mx-2 p-3 justify-content-between align-items-center reject">
                     <div class="d-flex flex-column align-content-center justify-content-center">
                         <h4 class="p-0 m-0">প্রস্তাব প্রত্যাখ্যাত হয়েছে</h4>
-                        <p class="p-0 m-0">{{reject}}</p>
+                        <p class="p-0 m-0">{{reject_all}}</p>
                     </div>
                     <i class="fa fa-times-circle fa-3x"></i>
                 </div>
@@ -81,9 +109,82 @@
             </div>
         </div>
     </div>
+    <div class="container py-2">
+        <div class="d-flex justify-content-center">
+            <button class="btn btn-info mx-2">হাইড বায়োডাটা</button>
+            <button class="btn btn-primary mx-2">আপডেট বায়োডাটা</button>
+            {% if post %}
+            <button class="btn btn-success mx-2 update-btn">পোস্ট পরিবর্তন করুন</button>
+            {% else %}
+            <button class="btn btn-success mx-2 success-btn">বিবাহ সম্পন্ন</button>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <form method="post" class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            {% csrf_token %}
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">সফলতার গল্প</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex flex-column">
+                {% if user.first_name == 'female' %}
+                    <label for="gender">জীবনসঙ্গীর বায়োডাটা সিলেক্ট করুন</label>
+                {% else %}
+                    <label for="gender">জীবনসঙ্গিনীর বায়োডাটা সিলেক্ট করুন</label>
+                {% endif %}
+                    <div class="w-100 mt-1 mb-2">
+                        <select id="partner" name="partner">
+                            {% for bio in accept_all1 %}
+                                <option value="{{bio.request_biodata.id}}">বায়োডাটা - {{bio.request_biodata.id}} ({{bio.request_biodata.name}})</option>
+                            {% endfor %}
+                            {% for bio in accept_all2 %}
+                                <option value="{{bio.user_biodata.id}}">বায়োডাটা - {{bio.user_biodata.id}} ({{bio.user_biodata.name}})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <textarea name="success-post" id="success-post"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">বাতিল</button>
+                <button type="submit" class="btn btn-primary">সম্পূর্ণ করুন</button>
+            </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <form method="post" class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            {% csrf_token %}
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">সফলতার গল্প (আপডেট)</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {% for post in post %}
+                    <textarea name="update-post" id="update-post">{{post.post}}</textarea>
+                {% endfor %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">বাতিল</button>
+                <button type="submit" class="btn btn-primary">আপডেট করুন</button>
+            </div>
+            </div>
+        </form>
+    </div>
+
+
 {% endblock body %}
 
 {% block extrascript %}
     <script src="{% static 'js/tail.select-full.js' %}"></script>
+    <script src="{% static 'ckeditor/build/ckeditor.js' %}"></script>
+   <script src="{% static 'ckeditor/build/style.js' %}"></script>
     <script src="{% static 'js/settings.js' %}"></script>
 {% endblock extrascript %}

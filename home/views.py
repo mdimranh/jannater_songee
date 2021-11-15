@@ -10,6 +10,8 @@ from django.contrib.auth.models import User
 from django.template import context
 from .models import Quotes
 
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 
 # div = ['ঢাকা বিভাগ', 'চট্টগ্রাম বিভাগ', 'রাজশাহী বিভাগ', 'খুলনা বিভাগ', 'বরিশাল বিভাগ', 'সিলেট বিভাগ', 'রংপুর বিভাগ', 'ময়মনসিংহ বিভাগ']
 dhaka = ['গাজীপুর', 'ঢাকা', 'ফরিদপুর', 'গোপালগঞ্জ', 'কিশোরগঞ্জ', 'মাদারীপুর', 'মানিকগঞ্জ', 'মুন্সিগঞ্জ', 'নারায়ণগঞ্জ', 'নরসিংদী', 'রাজবাড়ী', 'শরীয়তপুর', 'টাঙ্গাইল']
@@ -70,9 +72,6 @@ def home(request):
         'dis': dis
     }
     return render(request, 'hm.html', context)
-
-
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 def All(request):
     if request.user.is_authenticated:
@@ -183,8 +182,8 @@ def Get(request, id):
 
 
 def GetRequest(request, id):
-    biodata = Notification.objects.filter(receiver = request.user, type = 'send')
-    paginator = Paginator(biodata, 1)
+    biodata = Notification.objects.filter(receiver = request.user, type = 'send').distinct("sender")
+    paginator = Paginator(biodata, 12)
 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -200,7 +199,7 @@ def GetRequest(request, id):
 
 
 def SendRequest(request, id):
-    biodata = Notification.objects.filter(sender__owner = request.user, type = 'send')
+    biodata = Notification.objects.filter(sender__owner = request.user, type = 'send').distinct("receiver")
     paginator = Paginator(biodata, 1)
 
     page_number = request.GET.get('page')
