@@ -29,14 +29,14 @@
               {% if request %}
                 {% for request in request %}
                   {% if request.user == user %}
-                    {% if request.accept %}
+                    {% if request.action == 'accept' %}
                     <form method='post'>
                       {% csrf_token %}
                       <input type="hidden" name="reject_request" value='{{bio.id}}'>
                       <input type="hidden" name="biodata" value='{{bio.id}}'>
                       <button type='submit' role="button" class="btn btn-secondary px-1 py-0 mx-2">প্রস্তাব প্রত্যাখ্যান করুন</button>
                     </form>
-                    {% else %}
+                    {% elif request.action == 'send' %}
                       <div class="d-flex align-items-center justify-content-center">
                         <div>
                         <form method='post'>
@@ -60,10 +60,12 @@
                   <form method='post' class="d-flex flex-column align-items-center">
                   {% csrf_token %}
                     {% if request.seen %}
-                      {% if request.accept %}
+                      {% if request.action == 'accept' %}
                         <small class="m-0 pt-0 pb-1 text-center h6">গ্রহণ করেছে</small>
-                      {% else %}
+                      {% elif request.action == 'send' %}
                         <p class="m-0 pt-0 pb-1 text-center h6">গ্রহণ করেনি</p>
+                      {% elif request.action == 'reject' %}
+                        <p class="m-0 pt-0 pb-1 text-center h6">প্রত্যাখ্যান করেছে</p>
                       {% endif %}
                     {% else %}
                       <p class="m-0 pt-0 pb-1 text-center h6">দেখেনি</p>

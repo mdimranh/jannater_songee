@@ -212,10 +212,11 @@ def biodata(request, id):
     if request.method == 'POST':
         if 'send_request' in request.POST:
             biodata = Biodata.objects.get(id = request.POST['biodata'])
-            rqst = Request(
+            rqst, add = Request.objects.get_or_create(
                 user = biodata.owner,
                 request_user = request.user
             )
+            rqst.action = 'send'
             rqst.save()
             # biodata = Biodata.objects.get(id = request.POST['biodata'])
             # profile = Favourite.objects.filter(user = request.user)
@@ -236,7 +237,7 @@ def biodata(request, id):
                 rqst = Request.objects.filter(user = biodata.owner, request_user = request.user)
             else:
                 rqst = Request.objects.filter(user = request.user, request_user = biodata.owner)
-            rqst.delete()
+                rqst.action = 'cancel'
             # biodata = Biodata.objects.get(id = request.POST['biodata'])
             # profile = Favourite.objects.filter(user = request.user)
             # rqst = Request.objects.filter(user = biodata.owner, request_user = request.user)
@@ -253,7 +254,7 @@ def biodata(request, id):
         elif 'accept_request' in request.POST:
             biodata = Biodata.objects.get(id = request.POST['biodata'])
             rqst = Request.objects.get(user = request.user, request_user = biodata.owner)
-            rqst.accept = True
+            rqst.action = 'accept'
             rqst.save()
             # biodata = Biodata.objects.get(id = request.POST['biodata'])
             # profile = Favourite.objects.filter(user = request.user)
@@ -271,7 +272,7 @@ def biodata(request, id):
         elif 'reject_request' in request.POST:
             biodata = Biodata.objects.get(id = request.POST['biodata'])
             rqst = Request.objects.get(user = request.user, request_user = biodata.owner)
-            rqst.delete()
+            rqst.action = 'reject'
             # biodata = Biodata.objects.get(id = request.POST['biodata'])
             # profile = Favourite.objects.filter(user = request.user)
             # rqst = Request.objects.filter(user = request.user, request_user = biodata.owner)

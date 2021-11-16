@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import home, All, Male, Female, Suggest, Send, Get, SendRequest, GetRequest, Love
+from .views import Accept, Cancel, Reject, home, All, Male, Female, Suggest, Send, Get, Love
 
 
 urlpatterns = [
@@ -11,6 +11,7 @@ urlpatterns = [
     path('suggested_biodata', Suggest, name='suggest'),
     path('b_<int:id>/send', Send, name='send'),
     path('b_<int:id>/get', Get, name='get'),
-    path('b_<int:id>/get_request', GetRequest, name='get_request'),
-    path('b_<int:id>/send_request', SendRequest, name='send_request'),
+    path('b_<int:id>/accept', Accept, name='accept'),
+    path('b_<int:id>/reject', Reject, name='reject'),
+    path('b_<int:id>/cancel', Cancel, name='cancel'),
 ]

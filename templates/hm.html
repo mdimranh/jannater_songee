@@ -194,7 +194,7 @@
             </div>
         </div>
         {% endfor %}
-        {% elif id == 'send'%}
+        {% elif id == 'send' or id == "reject" or id == 'cancel' %}
         {% for biodata in biodata %}
         <div class="card mx-4 my-4 p-0" style="height: 275px; width: 250px;">
             <div class="d-flex card-head">
@@ -258,6 +258,69 @@
         </div>
         {% endfor %}
         {% elif id == 'get'%}
+        {% for biodata in biodata %}
+        <div class="card mx-4 my-4 p-0" style="height: 275px; width: 250px;">
+            <div class="d-flex card-head">
+                {% if biodata.request_biodata.owner.first_name == 'female' %}
+                    <img class="cardImage ms-2" src="{% static 'img/patri.png' %}" alt="" style="margin-bottom: -50px;">
+                {% else %}
+                    <img class="cardImage ms-2" src="{% static 'img/patro.png' %}" alt="" style="margin-bottom: -50px;">
+                {% endif %}
+                <div class="d-flex flex-column mx-2">
+                    <p class="biodataNo">{{biodata.request_biodata.id}}</p>
+                    <p class="occapasion">{{biodata.request_biodata.what_do|list_to_string_home:biodata.request_biodata}}</p> 
+                </div>
+            </div>
+            <div class="container-fluid card-body p-0">
+                <div class="row">
+                    <div class="col-6 d-flex flex-column mt-3 mb-2 details">
+                        <div class="d-flex ms-3 mt-1 me-3 align-items-center">
+                            <img class="married pt-0" src="{% static 'img/married.png' %}" alt="" style="width: 18px; height: 20px">
+                            <p class="my-0 ms-3">{{biodata.request_biodata.marital_status}}</p>
+                        </div>
+                        <div class="d-flex ms-3 mt-1 align-items-center">
+                            <i class="fa fa-calendar fa-lg"></i>
+                            <p class="my-0 ms-3">{{biodata.request_biodata.birth_year|eng_bn}}</p>
+                        </div>
+                        <div class="d-flex ms-3 mt-1 align-items-center">
+                            <i class="fa fa-sort-amount-asc"></i>
+                            <p class="my-0 ms-3">{{biodata.request_biodata.height|eng_bn}}"</p>
+                        </div>
+                        <div class="d-flex ms-3 mt-1 align-items-center">
+                            <i class="fa fa-home fa-x2"></i>
+                            <p class="my-0 ms-3">{{biodata.request_biodata.present_address}}</p>
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex flex-column mt-3 mb-2">
+                        <div class="d-flex mt-1 me-3 align-items-center">
+                            <img class="married pt-0" src="{% static 'img/skin.png' %}" alt="" style="width: 18px; height: 20px">
+                            <p class="my-0 ms-3">{{biodata.request_biodata.color}}</p>
+                        </div>
+                        <div class="d-flex mt-1 align-items-center">
+                            <i class="fa fa-balance-scale fa-lg"></i>
+                            <p class="my-0 ms-3">{{biodata.request_biodata.weight|eng_bn}} কেজি</p>
+                        </div>
+                        <div class="d-flex mt-1 align-items-center">
+                            <img class="married pt-0" src="{% static 'img/blood.png' %}" alt="" style="width: 18px; height: 20px">
+                            <p class="my-0 ms-3">{{biodata.request_biodata.blood_group}}</p>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <img class="married pt-0" src="{% static 'img/quran.png' %}" alt="" style="width: 22px; height: 25px">
+                            <p class="my-0 ms-3">{{biodata.request_biodata.quran_correctly}}</p>
+                        </div>
+                    </div>
+                    <button class="learn-more">
+                        <span class="circle" aria-hidden="true">
+                        <span class="icon arrow"></span>
+                        </span>
+                        <a class="button-text" href="/b_{{biodata.request_biodata.id}}">বিস্তারিত</a>
+                        <!--<span class="button-text">বিস্তারিত</span>-->
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% elif id == 'accept'%}
         {% for biodata in biodata %}
         <div class="card mx-4 my-4 p-0" style="height: 275px; width: 250px;">
             <div class="d-flex card-head">

@@ -174,12 +174,19 @@ class Suggested(models.Model):
     def __str__(self):
         return self.user.email
 
+CHOICES = (
+    ("send", "send Request"),
+    ("accept", "accept Request"),
+    ("reject", "reject Request"),
+    ("cancel", "cancel Request"),
+    ("married", "married Request"),
+)
 
 class Request(models.Model):
     user = models.ForeignKey(User, related_name="get_request_user", on_delete=models.CASCADE)
     request_user = models.ForeignKey(User, related_name="requested_user", on_delete=models.CASCADE)
     seen = models.BooleanField(default=False)
-    accept = models.BooleanField(default=False)
+    action = models.CharField(max_length=50, choices=CHOICES, default='send', blank=True, null=True)
 
     def request_biodata(self):
         return Biodata.objects.get(owner = self.request_user)
@@ -190,15 +197,6 @@ class Request(models.Model):
     def __str__(self):
         user_bio = Biodata.objects.get(owner = self.user)
         return user_bio.name
-
-
-CHOICES =(
-    ("send", "send Request"),
-    ("accept", "accept Request"),
-    ("reject", "reject Request"),
-    ("cancel", "cancel Request"),
-    ("married", "married Request"),
-)
 
 
 

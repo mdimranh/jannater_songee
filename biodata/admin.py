@@ -19,8 +19,8 @@ admin.site.register(Suggested, SuggestedAdmin)
 
 
 class RequestAdmin(admin.ModelAdmin):
-    list_filter=('user', 'request_user', 'accept')
-    list_display = ('user', 'request_user', 'accept')
+    list_filter=('user', 'request_user', 'action')
+    list_display = ('user', 'request_user', 'action')
 
 admin.site.register(Request, RequestAdmin)
 

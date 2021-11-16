@@ -78,7 +78,7 @@ def All(request):
         biodata = Biodata.objects.all().order_by('created_at').exclude(Q(publish = False) | Q(owner = request.user))
     else:
         biodata = Biodata.objects.all().order_by('created_at').exclude(Q(publish = False))
-    paginator = Paginator(biodata, 1)
+    paginator = Paginator(biodata, 12)
 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -99,7 +99,7 @@ def Male(request):
     else:
         biodata = Biodata.objects.filter(owner__first_name = 'male').order_by('created_at').exclude(Q(publish = False))
     
-    paginator = Paginator(biodata, 1)
+    paginator = Paginator(biodata, 12)
 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -118,7 +118,7 @@ def Female(request):
         biodata = Biodata.objects.filter(owner__first_name = 'female').order_by('created_at').exclude(Q(publish = False) | Q(owner = request.user))
     else:
         biodata = Biodata.objects.filter(owner__first_name = 'female').order_by('created_at').exclude(Q(publish = False))
-    paginator = Paginator(biodata, 1)
+    paginator = Paginator(biodata, 12)
 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -134,7 +134,7 @@ def Female(request):
 
 def Suggest(request):
     biodata = Suggested.objects.filter(user = request.user).exclude(suggested__publish = False)
-    paginator = Paginator(biodata, 1)
+    paginator = Paginator(biodata, 12)
 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -149,8 +149,8 @@ def Suggest(request):
     return render(request, 'hm.html', context)
 
 def Send(request, id):
-    biodata = Request.objects.filter(request_user = request.user)
-    paginator = Paginator(biodata, 1)
+    biodata = Request.objects.filter(request_user = request.user, action = 'send')
+    paginator = Paginator(biodata, 12)
 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -165,8 +165,8 @@ def Send(request, id):
     return render(request, 'hm.html', context)
 
 def Get(request, id):
-    biodata = Request.objects.filter(user = request.user)
-    paginator = Paginator(biodata, 1)
+    biodata = Request.objects.filter(user = request.user, action = 'send')
+    paginator = Paginator(biodata, 12)
 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -180,15 +180,35 @@ def Get(request, id):
     }
     return render(request, 'hm.html', context)
 
+def Accept(request, id):
+    biodata1 = Request.objects.filter(user = request.user, action = 'accept')
+    biodata = []
+    for bio in biodata1:
+        biodata.append(bio.request_biodata)
+    biodata2 = Request.objects.filter(request_user = request.user, action = 'accept')
+    for bio in biodata2:
+        biodata.append(bio.user_biodata)
+    paginator = Paginator(biodata, 12)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
-def GetRequest(request, id):
-    biodata = Notification.objects.filter(receiver = request.user, type = 'send').distinct("sender")
+    title = "গৃহীত প্রস্তাব"
+    context = {
+        'title': title,
+        'dis': dis,
+        'id': 'accept',
+        'biodata': page_obj,
+    }
+    return render(request, 'hm.html', context)
+
+def Reject(request, id):
+    biodata = Notification.objects.filter(sender__owner = request.user, type="reject").distinct('receiver')
     paginator = Paginator(biodata, 12)
 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    title = "সকল প্রাপ্ত প্রস্তাব"
+    title = "প্রত্যাখ্যাত প্রস্তাব"
     context = {
         'title': title,
         'dis': dis,
@@ -197,19 +217,18 @@ def GetRequest(request, id):
     }
     return render(request, 'hm.html', context)
 
-
-def SendRequest(request, id):
-    biodata = Notification.objects.filter(sender__owner = request.user, type = 'send').distinct("receiver")
-    paginator = Paginator(biodata, 1)
+def Cancel(request, id):
+    biodata = Notification.objects.filter(sender__owner = request.user, type="cancel").distinct('receiver')
+    paginator = Paginator(biodata, 12)
 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    title = "সকল প্রেরিত প্রস্তাব"
+    title = "বাতিলকৃত প্রস্তাব"
     context = {
         'title': title,
         'dis': dis,
-        'id': 'send',
+        'id': 'get',
         'biodata': page_obj,
     }
     return render(request, 'hm.html', context)

@@ -164,13 +164,13 @@ def Settings(request):
         send_request_all = Notification.objects.filter(receiver = request.user, type = 'send').distinct("sender").count()
         get_request_all = Notification.objects.filter(sender__owner = request.user, type = 'send').distinct("receiver").count()
         accept_request_all = Notification.objects.filter(sender__owner = request.user, type = 'accept').distinct("receiver").count()
-        cancel_request = Notification.objects.filter(Q(sender__owner = request.user) & (Q(Q(type = 'reject') | Q(type = 'cancel')))).distinct("receiver").count()
+        cancel_request = Notification.objects.filter(sender__owner = request.user, type = 'cancrl').distinct("receiver").count()
         reject_request_all = Notification.objects.filter(receiver = request.user, type = 'reject').distinct("sender").count()
-        accept = Request.objects.filter(user = request.user, accept = True).count()
+        accept = Request.objects.filter(Q(user = request.user) | Q(request_user = request.user) & Q(action = 'accept')).count()
         reject = Notification.objects.filter(sender__owner = request.user, type = 'reject').distinct("receiver").count()
         send = Request.objects.filter(request_user = request.user).count()
-        accept_all1 = Request.objects.filter(user = request.user, accept = True)
-        accept_all2 = Request.objects.filter(request_user = request.user, accept = True)
+        accept_all1 = Request.objects.filter(user = request.user, action = 'accept')
+        accept_all2 = Request.objects.filter(request_user = request.user, action = 'accept')
         post = Post.objects.filter(Q(user__owner = request.user) | Q(tag__owner = request.user))
         context = {
             'user': user,
