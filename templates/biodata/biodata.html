@@ -29,14 +29,7 @@
               {% if request %}
                 {% for request in request %}
                   {% if request.user == user %}
-                    {% if request.action == 'accept' %}
-                    <form method='post'>
-                      {% csrf_token %}
-                      <input type="hidden" name="reject_request" value='{{bio.id}}'>
-                      <input type="hidden" name="biodata" value='{{bio.id}}'>
-                      <button type='submit' role="button" class="btn btn-secondary px-1 py-0 mx-2">প্রস্তাব প্রত্যাখ্যান করুন</button>
-                    </form>
-                    {% elif request.action == 'send' %}
+                    {% if request.action == 'send' %}
                       <div class="d-flex align-items-center justify-content-center">
                         <div>
                         <form method='post'>
@@ -55,25 +48,52 @@
                         </form>
                         </div>
                       </div>
+                    {% elif request.action == 'accept' %}
+                      <form method='post'>
+                        {% csrf_token %}
+                        <input type="hidden" name="reject_request" value='{{bio.id}}'>
+                        <input type="hidden" name="biodata" value='{{bio.id}}'>
+                        <button type='submit' role="button" class="btn btn-secondary px-1 py-0 mx-2">প্রস্তাব প্রত্যাখ্যান করুন</button>
+                      </form>
+                    {% else %}
+                      {% if request.action == 'reject' %}
+                        <p class="m-0 pt-0 pb-1 text-center h6">প্রত্যাখ্যান করেছেন</p>
+                      {% else %}
+                        <p class="m-0 pt-0 pb-1 text-center h6">বাতিল করেছে</p>
+                      {% endif %}
+                      <form method='post'>
+                      {% csrf_token %}
+                        <input type="hidden" name="send_request" value='{{bio.id}}'>
+                        <input type="hidden" name="biodata" value='{{bio.id}}'>
+                        <button type='submit' role='button' class="btn btn-danger px-1 py-0 mx-2"><i class="fa fa-send me-2"></i>প্রস্তাব দিন</button>
+                      </form>
                     {% endif %}
                   {% else %}
-                  <form method='post' class="d-flex flex-column align-items-center">
-                  {% csrf_token %}
-                    {% if request.seen %}
-                      {% if request.action == 'accept' %}
-                        <small class="m-0 pt-0 pb-1 text-center h6">গ্রহণ করেছে</small>
-                      {% elif request.action == 'send' %}
-                        <p class="m-0 pt-0 pb-1 text-center h6">গ্রহণ করেনি</p>
-                      {% elif request.action == 'reject' %}
-                        <p class="m-0 pt-0 pb-1 text-center h6">প্রত্যাখ্যান করেছে</p>
+                    <form method='post' class="d-flex flex-column align-items-center">
+                    {% csrf_token %}
+                      {% if request.seen %}
+                        {% if request.action == 'accept' %}
+                          <small class="m-0 pt-0 pb-1 text-center h6">গ্রহণ করেছে</small>
+                        {% elif request.action == 'send' %}
+                          <p class="m-0 pt-0 pb-1 text-center h6">গ্রহণ করেনি</p>
+                        {% elif request.action == 'reject' %}
+                          <p class="m-0 pt-0 pb-1 text-center h6">প্রত্যাখ্যান করেছে</p>
+                        {% elif request.action == 'cancel' %}
+                          <p class="m-0 pt-0 pb-1 text-center h6">বাতিল করেছেন</p>
+                        {% endif %}
+                      {% else %}
+                        <p class="m-0 pt-0 pb-1 text-center h6">দেখেনি</p>
                       {% endif %}
-                    {% else %}
-                      <p class="m-0 pt-0 pb-1 text-center h6">দেখেনি</p>
-                    {% endif %}
-                    <input type="hidden" name="cancel_request" value='{{bio.id}}'>
-                    <input type="hidden" name="biodata" value='{{bio.id}}'>
-                    <button type='submit' role="button" class="btn btn-danger px-1 pt-1 pb-0 mx-2"><i class="fa fa-times-circle me-1"></i>বাতিল</button>
-                  </form>
+                      {% if request.action == 'reject' or request.action == 'cancel' %}
+                        <input type="hidden" name="send_request" value='{{bio.id}}'>
+                        <input type="hidden" name="biodata" value='{{bio.id}}'>
+                        <button type='submit' role='button' class="btn btn-danger px-1 py-0 mx-2"><i class="fa fa-send me-2"></i>প্রস্তাব দিন</button>
+                      {% else %}
+                        <input type="hidden" name="cancel_request" value='{{bio.id}}'>
+                        <input type="hidden" name="biodata" value='{{bio.id}}'>
+                        <button type='submit' role="button" class="btn btn-danger px-1 pt-1 pb-0 mx-2"><i class="fa fa-times-circle me-1"></i>বাতিল</button>
+                      {% endif %}
+                    </form>
                   {% endif %}
                 {% endfor %}
               {% else %}
@@ -108,65 +128,93 @@
               <a href="/b_{{bio.id}}/edit"><i class="fa fa-edit px-4"></i></a>
               <i class="fa fa-facebook-official pe-4"></i>
             {% else %}
-              <div class="d-flex align-items-center">
+              <div class="d-flex align-items-center btn-section">
                 <div>
-                  {% if request %}
-                    {% for request in request %}
-                      {% if request.user == user %}
-                        {% if request.accept %}
-                        <form method='post'>
-                          {% csrf_token %}
-                          <input type="hidden" name="reject_request" value='{{bio.id}}'>
-                          <input type="hidden" name="biodata" value='{{bio.id}}'>
-                          <button type='submit' role="button" class="btn btn-secondary px-1 py-0 mx-2">প্রস্তাব প্রত্যাখ্যান করুন</button>
-                        </form>
-                        {% else %}
-                          <div class="d-flex align-items-center justify-content-center">
-                            <div>
-                            <form method='post'>
-                            {% csrf_token %}
-                              <input type="hidden" name="accept_request" value='{{bio.id}}'>
-                              <input type="hidden" name="biodata" value='{{bio.id}}'>
-                              <button type='submit' role="button" class="btn btn-success px-1 py-0 mx-2"><i class="fa fa-check-circle me-1"></i>গ্রহন</button>
-                            </form>
-                            </div>
-                            <div>
-                            <form method='post'>
-                            {% csrf_token %}
-                              <input type="hidden" name="reject_request" value='{{bio.id}}'>
-                              <input type="hidden" name="biodata" value='{{bio.id}}'>
-                              <button type='submit' role="button" class="btn btn-danger px-1 py-0 mx-2"><i class="fa fa-times-circle me-1"></i>প্রত্যাখ্যান</button>
-                            </form>
-                            </div>
-                          </div>
-                        {% endif %}
-                      {% else %}
-                      <form method='post' class="d-flex align-items-center">
-                      {% csrf_token %}
-                        {% if request.seen %}
-                          {% if request.accept %}
-                            <small class="m-0 pt-1 pb-1 text-center text-white h6 status">গ্রহণ করেছে</small>
+                  {% if bio.owner.id != user.id %}
+                  <div class="d-flex align-items-center p-0 m-0">
+                    <div>
+                      {% if request %}
+                        {% for request in request %}
+                          {% if request.user == user %}
+                            {% if request.action == 'send' %}
+                              <div class="d-flex align-items-center justify-content-center">
+                                <div>
+                                <form method='post'>
+                                {% csrf_token %}
+                                  <input type="hidden" name="accept_request" value='{{bio.id}}'>
+                                  <input type="hidden" name="biodata" value='{{bio.id}}'>
+                                  <button type='submit' role="button" class="btn btn-success btn-sm px-1 py-0 mx-2"><i class="fa fa-check-circle me-1"></i>গ্রহন</button>
+                                </form>
+                                </div>
+                                <div>
+                                <form method='post'>
+                                {% csrf_token %}
+                                  <input type="hidden" name="reject_request" value='{{bio.id}}'>
+                                  <input type="hidden" name="biodata" value='{{bio.id}}'>
+                                  <button type='submit' role="button" class="btn btn-danger btn-sm px-1 py-0 mx-2"><i class="fa fa-times-circle me-1"></i>প্রত্যাখ্যান</button>
+                                </form>
+                                </div>
+                              </div>
+                            {% elif request.action == 'accept' %}
+                              <form method='post'>
+                                {% csrf_token %}
+                                <input type="hidden" name="reject_request" value='{{bio.id}}'>
+                                <input type="hidden" name="biodata" value='{{bio.id}}'>
+                                <button type='submit' role="button" class="btn btn-secondary btn-sm px-1 py-0 mx-2">প্রস্তাব প্রত্যাখ্যান করুন</button>
+                              </form>
+                            {% else %}
+                              {% if request.action == 'reject' %}
+                                <p class="text-center h6">প্রত্যাখ্যান করেছেন</p>
+                              {% else %}
+                                <p class="text-center h6">বাতিল করেছে</p>
+                              {% endif %}
+                              <form method='post'>
+                              {% csrf_token %}
+                                <input type="hidden" name="send_request" value='{{bio.id}}'>
+                                <input type="hidden" name="biodata" value='{{bio.id}}'>
+                                <button type='submit' role='button' class="btn btn-danger btn-sm px-1 py-0 mx-2"><i class="fa fa-send me-2"></i>প্রস্তাব দিন</button>
+                              </form>
+                            {% endif %}
                           {% else %}
-                            <p class="m-0 pt-1 pb-1 text-center text-white h6 status">গ্রহণ করেনি</p>
+                            <form method='post' class="d-flex align-items-center">
+                            {% csrf_token %}
+                              {% if request.seen %}
+                                {% if request.action == 'accept' %}
+                                  <small class="text-center h6">গ্রহণ করেছে</small>
+                                {% elif request.action == 'send' %}
+                                  <p class="text-center h6">গ্রহণ করেনি</p>
+                                {% elif request.action == 'reject' %}
+                                  <p class=" text-center h6">প্রত্যাখ্যান করেছে</p>
+                                {% elif request.action == 'cancel' %}
+                                  <p class="text-center h6">বাতিল করেছেন</p>
+                                {% endif %}
+                              {% else %}
+                                <p class="text-center h6">দেখেনি</p>
+                              {% endif %}
+                              {% if request.action == 'reject' or request.action == 'cancel' %}
+                                <input type="hidden" name="send_request" value='{{bio.id}}'>
+                                <input type="hidden" name="biodata" value='{{bio.id}}'>
+                                <button type='submit' role='button' class="btn btn-danger btn-sm px-1 py-0 mx-2"><i class="fa fa-send me-2"></i>প্রস্তাব দিন</button>
+                              {% else %}
+                                <input type="hidden" name="cancel_request" value='{{bio.id}}'>
+                                <input type="hidden" name="biodata" value='{{bio.id}}'>
+                                <button type='submit' role="button" class="btn btn-danger btn-sm px-1 pt-1 pb-0 mx-2"><i class="fa fa-times-circle me-1"></i>বাতিল</button>
+                              {% endif %}
+                            </form>
                           {% endif %}
-                        {% else %}
-                          <p class="m-0 pt-1 pb-1 text-center text-white h6 status">দেখেনি</p>
+                        {% endfor %}
+                      {% else %}
+                        {% if user.first_name != bio.owner.first_name %}
+                        <form method='post'>
+                        {% csrf_token %}
+                          <input type="hidden" name="send_request" value='{{bio.id}}'>
+                          <input type="hidden" name="biodata" value='{{bio.id}}'>
+                          <button type='submit' role='button' class="btn btn-danger btn-sm px-1 py-0 mx-2"><i class="fa fa-send me-2"></i>প্রস্তাব দিন</button>
+                        </form>
                         {% endif %}
-                        <input type="hidden" name="cancel_request" value='{{bio.id}}'>
-                        <input type="hidden" name="biodata" value='{{bio.id}}'>
-                        <button type='submit' role="button" class="btn btn-danger px-1 p-0 mx-2"><i class="fa fa-times-circle me-1" style="margin-top: -2px; color: white;"></i>বাতিল</button>
-                      </form>
                       {% endif %}
-                    {% endfor %}
-                  {% else %}
-                    {% if user.first_name != bio.owner.first_name %}
-                    <form method='post'>
-                    {% csrf_token %}
-                      <input type="hidden" name="send_request" value='{{bio.id}}'>
-                      <input type="hidden" name="biodata" value='{{bio.id}}'>
-                      <button type='submit' role='button' class="btn btn-danger px-1 py-0 mx-2"><i class="fa fa-send me-2"></i>প্রস্তাব দিন</button>
-                    </form>
-                    {% endif %}
+                    </div>
+                  </div>
                   {% endif %}
                 </div>
               </div>
@@ -626,7 +674,7 @@
               <p class="h4 headline mb-3 text-center sticky-top">যোগাযোগ</p>
               {% if request %}
                 {% for request in request %}
-                  {% if request.accept %}
+                  {% if request.action == 'accept' %}
                   <div class="container-fluid">
                     <div class="row py-1">
                       <div class="col-md-5 question">ফোন নাম্বার</div>
@@ -641,16 +689,45 @@
                       <div class="col-md-7 answer">{{bio.address|safe}}</div>
                     </div>
                   </div>
-                  {% else %}
+                  {% elif request.action == 'send' and request.request_user == user %}
+                  <div class="d-flex justify-content-center mx-5 text-center">
+                    প্রস্তাব গ্রহণ করা পর্যন্ত অপেক্ষা করুন
+                  </div>
+                  {% elif request.action == 'send' and request.user == user %}
                   <div class="d-flex justify-content-center mx-5 text-center">
                     যোগাযোগের তথ্য পাওয়ার জন্য প্রস্তাব গ্রহণ করুন
+                  </div>
+                  {% elif request.action == 'cancel' and request.user != user %}
+                  <div class="d-flex justify-content-center mx-5 text-center">
+                    যোগাযোগ করার জন্য আপনাকে আগে 'প্রস্তাব দিন' বাটনে ক্লিক করে প্রস্তাব দিতে হবে। প্রস্তাব পাওয়ার পর আপনার প্রস্তাবকে যদি গ্রহণ করেন তাহলে আপনি যোগাযোগের সকল তথ্য পেয়ে যাবেন।
+                  </div>
+                  {% elif request.action == 'reject' and request.user != user %}
+                  <div class="d-flex justify-content-center mx-5 text-center">
+                    যোগাযোগ করার জন্য আপনাকে আগে 'প্রস্তাব দিন' বাটনে ক্লিক করে প্রস্তাব দিতে হবে। প্রস্তাব পাওয়ার পর আপনার প্রস্তাবকে যদি গ্রহণ করেন তাহলে আপনি যোগাযোগের সকল তথ্য পেয়ে যাবেন।
                   </div>
                   {% endif %}
                 {% endfor %}
               {% else %}
+                {% if bio.owner == user %}
+                  <div class="container-fluid">
+                    <div class="row py-1">
+                      <div class="col-md-5 question">ফোন নাম্বার</div>
+                      <div class="col-md-7 answer">{{bio.phone}}</div>
+                    </div>
+                    <div class="row py-1">
+                      <div class="col-md-5 question">ইমেইল</div>
+                      <div class="col-md-7 answer">{{bio.email}}</div>
+                    </div>
+                    <div class="row py-1">
+                      <div class="col-md-5 question">সম্পূর্ণ ঠিকানা</div>
+                      <div class="col-md-7 answer">{{bio.address|safe}}</div>
+                    </div>
+                  </div>
+                {% else %}
                 <div class="d-flex justify-content-center mx-5 text-center">
                   যোগাযোগ করার জন্য আপনাকে আগে 'প্রস্তাব দিন' বাটনে ক্লিক করে প্রস্তাব দিতে হবে। প্রস্তাব পাওয়ার পর আপনার প্রস্তাবকে যদি গ্রহণ করেন তাহলে আপনি যোগাযোগের সকল তথ্য পেয়ে যাবেন।
                 </div>
+                {% endif %}
               {% endif %}
             </div>
           </div>

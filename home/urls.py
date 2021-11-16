@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import Accept, Cancel, Reject, home, All, Male, Female, Suggest, Send, Get, Love
+from .views import Accept, Cancel, Reject, GetReject, home, All, Male, Female, Suggest, Send, Get, Love
 
 
 urlpatterns = [
@@ -13,5 +13,6 @@ urlpatterns = [
     path('b_<int:id>/get', Get, name='get'),
     path('b_<int:id>/accept', Accept, name='accept'),
     path('b_<int:id>/reject', Reject, name='reject'),
+    path('b_<int:id>/getreject', GetReject, name='getreject'),
     path('b_<int:id>/cancel', Cancel, name='cancel'),
 ]

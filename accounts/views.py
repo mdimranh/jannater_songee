@@ -166,9 +166,10 @@ def Settings(request):
         accept_request_all = Notification.objects.filter(sender__owner = request.user, type = 'accept').distinct("receiver").count()
         cancel_request = Notification.objects.filter(sender__owner = request.user, type = 'cancrl').distinct("receiver").count()
         reject_request_all = Notification.objects.filter(receiver = request.user, type = 'reject').distinct("sender").count()
-        accept = Request.objects.filter(Q(user = request.user) | Q(request_user = request.user) & Q(action = 'accept')).count()
-        reject = Notification.objects.filter(sender__owner = request.user, type = 'reject').distinct("receiver").count()
-        send = Request.objects.filter(request_user = request.user).count()
+        accept = Request.objects.filter((Q(user = request.user) | Q(request_user = request.user)) & Q(action = 'accept')).count()
+        reject = Request.objects.filter(user = request.user, action = 'reject').count()
+        getreject = Request.objects.filter(request_user = request.user, action = 'reject').count()
+        send = Request.objects.filter(request_user = request.user, action = 'send').count()
         accept_all1 = Request.objects.filter(user = request.user, action = 'accept')
         accept_all2 = Request.objects.filter(request_user = request.user, action = 'accept')
         post = Post.objects.filter(Q(user__owner = request.user) | Q(tag__owner = request.user))
@@ -177,6 +178,7 @@ def Settings(request):
             'send': send,
             'accept': accept,
             'reject': reject,
+            'getreject': getreject,
             'seen': seen_biodata.seen.count(),
             'send_all': send_request_all,
             'get_all': get_request_all,

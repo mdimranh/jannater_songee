@@ -202,9 +202,11 @@ def Accept(request, id):
     return render(request, 'hm.html', context)
 
 def Reject(request, id):
-    biodata = Notification.objects.filter(sender__owner = request.user, type="reject").distinct('receiver')
+    biodata1 = Request.objects.filter(user = request.user, action = 'reject')
+    biodata = []
+    for bio in biodata1:
+        biodata.append(bio.request_biodata)
     paginator = Paginator(biodata, 12)
-
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
@@ -212,7 +214,25 @@ def Reject(request, id):
     context = {
         'title': title,
         'dis': dis,
-        'id': 'get',
+        'id': 'reject',
+        'biodata': page_obj,
+    }
+    return render(request, 'hm.html', context)
+
+def GetReject(request, id):
+    biodata1 = Request.objects.filter(request_user = request.user, action = 'reject')
+    biodata = []
+    for bio in biodata1:
+        biodata.append(bio.user_biodata)
+    paginator = Paginator(biodata, 12)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    title = "প্রত্যাখ্যানকারী প্রস্তাব"
+    context = {
+        'title': title,
+        'dis': dis,
+        'id': 'reject',
         'biodata': page_obj,
     }
     return render(request, 'hm.html', context)

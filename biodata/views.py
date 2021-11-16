@@ -4,6 +4,7 @@ from django.http.response import JsonResponse
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.contrib.auth.models import User
+from django.urls import resolvers
 from .models import Biodata, Notification, Request, Suggested, Notification_seen, UniqueUser
 from accounts.models import Favourite
 from django.http import HttpResponse
@@ -208,16 +209,26 @@ def CreateBiodata(request):
         else:
             return render(request, 'biodata/create_biodata.html', {"dis": dis})
 
+
+from django.db.models import Q
 def biodata(request, id):
     if request.method == 'POST':
         if 'send_request' in request.POST:
             biodata = Biodata.objects.get(id = request.POST['biodata'])
-            rqst, add = Request.objects.get_or_create(
-                user = biodata.owner,
-                request_user = request.user
-            )
-            rqst.action = 'send'
-            rqst.save()
+            if Request.objects.filter((Q(request_user = request.user) & Q(user = biodata.owner)) | (Q(user = request.user) & Q(request_user = biodata.owner))).exists():
+                rqst = Request.objects.filter((Q(request_user = request.user) & Q(user = biodata.owner)) | (Q(user = request.user) & Q(request_user = biodata.owner)))
+                for rq in rqst:
+                    rq.user = biodata.owner
+                    rq.request_user = request.user
+                    rq.action = 'send'
+                    rq.seen = False
+                    rq.save()
+            else:
+                rqst = Request(
+                    user = biodata.owner,
+                    request_user = request.user
+                )
+                rqst.save()
             # biodata = Biodata.objects.get(id = request.POST['biodata'])
             # profile = Favourite.objects.filter(user = request.user)
             # rqst = Request.objects.filter(user = biodata.owner, request_user = request.user)
@@ -233,11 +244,9 @@ def biodata(request, id):
                 notification.save()
         elif 'cancel_request' in request.POST:
             biodata = Biodata.objects.get(id = request.POST['biodata'])
-            if Request.objects.filter(user = biodata.owner, request_user = request.user).exists():
-                rqst = Request.objects.filter(user = biodata.owner, request_user = request.user)
-            else:
-                rqst = Request.objects.filter(user = request.user, request_user = biodata.owner)
-                rqst.action = 'cancel'
+            rqst = Request.objects.get(request_user = request.user, user = biodata.owner)
+            rqst.action = 'cancel'
+            rqst.save()
             # biodata = Biodata.objects.get(id = request.POST['biodata'])
             # profile = Favourite.objects.filter(user = request.user)
             # rqst = Request.objects.filter(user = biodata.owner, request_user = request.user)
@@ -273,6 +282,7 @@ def biodata(request, id):
             biodata = Biodata.objects.get(id = request.POST['biodata'])
             rqst = Request.objects.get(user = request.user, request_user = biodata.owner)
             rqst.action = 'reject'
+            rqst.save()
             # biodata = Biodata.objects.get(id = request.POST['biodata'])
             # profile = Favourite.objects.filter(user = request.user)
             # rqst = Request.objects.filter(user = request.user, request_user = biodata.owner)
