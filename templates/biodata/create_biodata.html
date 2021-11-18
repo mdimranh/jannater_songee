@@ -161,19 +161,6 @@
                             {% endfor %}
                         </select>
                      </div>
-                     {% comment %} <div class="mb-3 col-md-6">
-                        <label for="division" class="form-label">বিভাগ</label>
-                        <select id="division">
-                            <option value="dhaka">ঢাকা</option>
-                            <option value="chottogram">চট্টগ্রাম</option>
-                            <option value="rajshahi">রাজশাহী</option>
-                            <option value="khulna">খুলনা</option>
-                            <option value="borishal">বরিশাল</option>
-                            <option value="sylhet">সিলেট</option>
-                            <option value="rangpur">রংপুর</option>
-                            <option value="mymensingh">ময়মনসিংহ</option>
-                        </select>
-                     </div> {% endcomment %}
                      <div class="mb-3 col-md-6">
                         <label for="presentaddress" class="form-label">বর্তমান ঠিকানা</label>
                         <select id="presentaddress" name="present-address">
@@ -913,7 +900,7 @@
                         </div>
                      {% endif %}
                      <div class="mb-3 col-md-6">
-                        <label for="partner-district" class="form-label">জেলা</label>
+                        <label for="partner-district" class="form-label">যে সকল জেলার প্রতি আগ্রহী নন জেলা</label>
                         <select multiple id="partner-district" name="partner_district">
                             {% for x, y in dis %}
                                 <optgroup label = "{{x}}">

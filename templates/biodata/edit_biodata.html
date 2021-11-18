@@ -126,7 +126,7 @@
                </li>
             </ul>
          <form method="post" id="biodataForm">
-         {% comment %} {% csrf_token %} {% endcomment %}
+         {% csrf_token %}
          {% for bio in biodata %}
             <div class="tab-content d-flex justify-content-center h-auto">
 
@@ -917,7 +917,7 @@
                         </div>
                      {% endif %}
                      <div class="mb-3 col-md-6">
-                        <label for="partner-district" class="form-label">জেলা</label>
+                        <label for="partner-district" class="form-label">যে সকল জেলার প্রতি আগ্রহী নন জেলা</label>
                         <select multiple id="partner-district" name="partner_district">
                             {% for x, y in dis %}
                                 <optgroup label = "{{x}}">

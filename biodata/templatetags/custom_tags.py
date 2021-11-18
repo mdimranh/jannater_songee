@@ -74,13 +74,16 @@ number = {
     '.': "'"
 }
 
+num_list = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
 
 @register.simple_tag
 def eng_to_ban(value):
     vlu = ''
     for n in str(value):
-        replace = number[n]
-        vlu += replace
+        if n in num_list:
+            replace = number[n]
+            vlu += replace
     return vlu
 register.filter('eng_bn', eng_to_ban)
 
@@ -95,8 +98,13 @@ rangpur = ['দিনাজপুর', 'গাইবান্ধা', 'কুড
 mymensingh = ['জামালপুর', 'ময়মনসিংহ', 'নেত্রকোণা', 'শেরপুর']
 
 @register.simple_tag
-def district(value):
-    return value
+def district(value, district):
+    vlu = value[2:-2].split("', '")
+    # lst = []
+    # for dis in vlu:
+    #     if dis in district[2:-2].split("', '"):
+    #         lst.append(dis)
+    return vlu
 register.filter('district', district)
 
 @register.simple_tag

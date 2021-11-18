@@ -622,8 +622,19 @@
                 </div>
               {% endif %}
                 <div class="row py-1">
-                  <div class="col-md-5 question">জেলা</div>
-                  <div class="col-md-7 answer">{{bio.partner_district|district}}</div>
+                  <div class="col-md-5 question">যে সকল জেলার প্রতি আগ্রহী নই</div>
+                  <div class="col-md-7 answer">
+                    <div class="d-flex flex-nowrap overflow-auto">
+                    {% for x, y in dis %}
+                    <div class="px-2">
+                      <p style="font-weight: bolder;">{{x}}</p>
+                      {% for z in y %}
+                        <p>{% if z in bio.partner_district|str_to_list %}{{z}}{% endif %} </p>
+                      {% endfor %}
+                    </div>
+                    {% endfor %}
+                    </div>
+                  </div>
                 </div>
                 <div class="row py-1">
                   <div class="col-md-5 question">আকিদা/মাঝহাব</div>

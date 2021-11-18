@@ -32,12 +32,12 @@ class Biodata(models.Model):
     birth_year = models.CharField(max_length=50)
     blood_group = models.CharField(max_length=50)
     what_do = models.CharField(max_length=50)
-    monthly_income = models.IntegerField(blank=True, null=True)
+    monthly_income = models.CharField(max_length=50, blank=True, null=True)
     job_details = models.TextField(blank=True, null=True)
     business_details = models.TextField(blank=True, null=True)
     haram_income = models.CharField(max_length=50)
     height = models.CharField(max_length=50)
-    weight = models.IntegerField()
+    weight = models.CharField(max_length=50)
 
     # Educational information
     
@@ -55,7 +55,7 @@ class Biodata(models.Model):
     varsity = models.CharField(max_length=255, blank=True, null=True)
     graduate_pass_year = models.CharField(max_length=5, blank=True, null=True)
     hafez = models.CharField(max_length=50)
-    para = models.IntegerField(blank=True, null=True)
+    para = models.CharField(max_length=50, blank=True, null=True)
     daora_hadith = models.CharField(max_length=100, blank=True, null=True)
     daora_hadith_year = models.CharField(max_length=100, blank=True, null=True)
     natiza = models.CharField(max_length=255, blank=True, null=True)

@@ -12,6 +12,17 @@ from django.utils.timezone import now
 from django.views.decorators.csrf import csrf_exempt
 
 
+dhaka = ['গাজীপুর', 'ঢাকা', 'ফরিদপুর', 'গোপালগঞ্জ', 'কিশোরগঞ্জ', 'মাদারীপুর', 'মানিকগঞ্জ', 'মুন্সিগঞ্জ', 'নারায়ণগঞ্জ', 'নরসিংদী', 'রাজবাড়ী', 'শরীয়তপুর', 'টাঙ্গাইল']
+chottogram = ['বান্দরবান','ব্রাহ্মণবাড়িয়া','চাঁদপুর','চট্টগ্রাম','কুমিল্লা','কক্সবাজার','ফেনী','খাগড়াছড়ি','লক্ষ্মীপুর','নোয়াখালী','রাঙ্গামাটি']
+rajshahi = ['বগুড়া','জয়পুরহাট','নওগাঁ','নাটোর','চাঁপাইনবাবগঞ্জ','পাবনা','রাজশাহী','সিরাজগঞ্জ']
+khulna = ['বাগেরহাট', 'চুয়াডাঙ্গা', 'যশোর', 'ঝিনাইদহ', 'খুলনা', 'কুষ্টিয়া', 'মাগুরা', 'মেহেরপুর', 'নড়াইল', 'সাতক্ষীরা']
+borisal = ['বরগুনা', 'বরিশাল', 'ভোলা', 'ঝালকাঠি', 'পটুয়াখালী', 'পিরোজপুর']
+sylhet = ['হবিগঞ্জ', 'মৌলভীবাজার', 'সুনামগঞ্জ', 'সিলেট']
+rangpur = ['দিনাজপুর', 'গাইবান্ধা', 'কুড়িগ্রাম', 'লালমনিরহাট', 'নীলফামারী', 'পঞ্চগড়', 'রংপুর', 'ঠাকুরগাঁও']
+mymensingh = ['জামালপুর', 'ময়মনসিংহ', 'নেত্রকোণা', 'শেরপুর']
+dis = [('ঢাকা বিভাগ', dhaka), ('চট্টগ্রাম বিভাগ', chottogram), ('রাজশাহী বিভাগ', rajshahi), ('খুলনা বিভাগ', khulna), ('বরিশাল বিভাগ', borisal), ('সিলেট বিভাগ', sylhet), ('রংপুর বিভাগ', rangpur), ('ময়মনসিংহ বিভাগ', mymensingh)]
+
+
 def CreateBiodata(request):
 
     if request.method == 'POST':
@@ -89,7 +100,7 @@ def CreateBiodata(request):
             financial_status = request.POST['family_financial_status'],
             social_status = request.POST['family_social_status'],
             family_haram_income = request.POST['family_haram_income'],
-            family = request.POST['family_details'],
+            family_details = request.POST['family_details'],
             # personal information
             Divorce = request.POST['why_divorced'],
             children = request.POST['children'],
@@ -145,7 +156,6 @@ def CreateBiodata(request):
             import datetime
             year = datetime.datetime.today().strftime("%Y")
             biodata = Biodata.objects.get(owner = request.user)
-            print(biodata.birth_year)
             all_biodata = Biodata.objects.all().exclude(owner__first_name = request.user.first_name)
             mark = 0
             for bio in all_biodata:
@@ -189,23 +199,9 @@ def CreateBiodata(request):
                 )
                 suggested.save()
 
-
-
-
-    else:
-        dhaka = ['গাজীপুর', 'ঢাকা', 'ফরিদপুর', 'গোপালগঞ্জ', 'কিশোরগঞ্জ', 'মাদারীপুর', 'মানিকগঞ্জ', 'মুন্সিগঞ্জ', 'নারায়ণগঞ্জ', 'নরসিংদী', 'রাজবাড়ী', 'শরীয়তপুর', 'টাঙ্গাইল']
-        chottogram = ['বান্দরবান','ব্রাহ্মণবাড়িয়া','চাঁদপুর','চট্টগ্রাম','কুমিল্লা','কক্সবাজার','ফেনী','খাগড়াছড়ি','লক্ষ্মীপুর','নোয়াখালী','রাঙ্গামাটি']
-        rajshahi = ['বগুড়া','জয়পুরহাট','নওগাঁ','নাটোর','চাঁপাইনবাবগঞ্জ','পাবনা','রাজশাহী','সিরাজগঞ্জ']
-        khulna = ['বাগেরহাট', 'চুয়াডাঙ্গা', 'যশোর', 'ঝিনাইদহ', 'খুলনা', 'কুষ্টিয়া', 'মাগুরা', 'মেহেরপুর', 'নড়াইল', 'সাতক্ষীরা']
-        borisal = ['বরগুনা', 'বরিশাল', 'ভোলা', 'ঝালকাঠি', 'পটুয়াখালী', 'পিরোজপুর']
-        sylhet = ['হবিগঞ্জ', 'মৌলভীবাজার', 'সুনামগঞ্জ', 'সিলেট']
-        rangpur = ['দিনাজপুর', 'গাইবান্ধা', 'কুড়িগ্রাম', 'লালমনিরহাট', 'নীলফামারী', 'পঞ্চগড়', 'রংপুর', 'ঠাকুরগাঁও']
-        mymensingh = ['জামালপুর', 'ময়মনসিংহ', 'নেত্রকোণা', 'শেরপুর']
-        dis = [('ঢাকা বিভাগ', dhaka), ('চট্টগ্রাম বিভাগ', chottogram), ('রাজশাহী বিভাগ', rajshahi), ('খুলনা বিভাগ', khulna), ('বরিশাল বিভাগ', borisal), ('সিলেট বিভাগ', sylhet), ('রংপুর বিভাগ', rangpur), ('ময়মনসিংহ বিভাগ', mymensingh)]
-            
+    else:    
         if Biodata.objects.filter(owner = request.user).exists():
             return render(request, 'hm.html', {"dis": dis})
-
         else:
             return render(request, 'biodata/create_biodata.html', {"dis": dis})
 
@@ -299,6 +295,9 @@ def biodata(request, id):
 
     else:
         biodata = Biodata.objects.get(id = id)
+        district = biodata.partner_district
+        st = district[2:-2]
+        ds = st.split("', '")
         address = request.META.get('HTTP_X_FORWARDED_FOR')
         if address:
             ip = address.split(',')[-1].strip()
@@ -320,36 +319,200 @@ def biodata(request, id):
                 rqst = Request.objects.filter(user = biodata.owner, request_user = request.user)
             else:
                 rqst = Request.objects.filter(user = request.user, request_user = biodata.owner)
-            return render(request, 'biodata/biodata.html', {'bio': biodata, 'profile': profile, 'request': rqst})
+            return render(request, 'biodata/biodata.html', {'bio': biodata, 'profile': profile, 'request': rqst, 'dis': dis, 'district': ds})
         else:
-            return render(request, 'biodata/biodata.html', {'bio': biodata})
+            return render(request, 'biodata/biodata.html', {'bio': biodata, 'dis': dis, 'district': ds})
 
-
-
-dhaka = ['গাজীপুর', 'ঢাকা', 'ফরিদপুর', 'গোপালগঞ্জ', 'কিশোরগঞ্জ', 'মাদারীপুর', 'মানিকগঞ্জ', 'মুন্সিগঞ্জ', 'নারায়ণগঞ্জ', 'নরসিংদী', 'রাজবাড়ী', 'শরীয়তপুর', 'টাঙ্গাইল']
-chottogram = ['বান্দরবান','ব্রাহ্মণবাড়িয়া','চাঁদপুর','চট্টগ্রাম','কুমিল্লা','কক্সবাজার','ফেনী','খাগড়াছড়ি','লক্ষ্মীপুর','নোয়াখালী','রাঙ্গামাটি']
-rajshahi = ['বগুড়া','জয়পুরহাট','নওগাঁ','নাটোর','চাঁপাইনবাবগঞ্জ','পাবনা','রাজশাহী','সিরাজগঞ্জ']
-khulna = ['বাগেরহাট', 'চুয়াডাঙ্গা', 'যশোর', 'ঝিনাইদহ', 'খুলনা', 'কুষ্টিয়া', 'মাগুরা', 'মেহেরপুর', 'নড়াইল', 'সাতক্ষীরা']
-borisal = ['বরগুনা', 'বরিশাল', 'ভোলা', 'ঝালকাঠি', 'পটুয়াখালী', 'পিরোজপুর']
-sylhet = ['হবিগঞ্জ', 'মৌলভীবাজার', 'সুনামগঞ্জ', 'সিলেট']
-rangpur = ['দিনাজপুর', 'গাইবান্ধা', 'কুড়িগ্রাম', 'লালমনিরহাট', 'নীলফামারী', 'পঞ্চগড়', 'রংপুর', 'ঠাকুরগাঁও']
-mymensingh = ['জামালপুর', 'ময়মনসিংহ', 'নেত্রকোণা', 'শেরপুর']
-dis = [('ঢাকা বিভাগ', dhaka), ('চট্টগ্রাম বিভাগ', chottogram), ('রাজশাহী বিভাগ', rajshahi), ('খুলনা বিভাগ', khulna), ('বরিশাল বিভাগ', borisal), ('সিলেট বিভাগ', sylhet), ('রংপুর বিভাগ', rangpur), ('ময়মনসিংহ বিভাগ', mymensingh)]
 
 def EditBiodata(request, id):
-    biodata = Biodata.objects.filter(id = id)
-    bio = Biodata.objects.get(id = id)
-    district = bio.partner_district
-    st = district[2:-2]
-    ds = st.split("', '")
-    if request.user.is_authenticated:
-        if bio.owner == request.user:
-            return render(request, 'biodata/edit_biodata.html', {'biodata': biodata, 'dis': dis, 'district': ds})
-        else:
-            profile = Favourite.objects.filter(user = request.user)
-            return render(request, 'biodata/biodata.html', {'biodata': biodata, 'profile': profile})
+    if request.method == 'POST':
+        biodata = Biodata.objects.get(owner = request.user)
+        # general information
+        biodata.name = request.POST['name']
+        biodata.marital_status = request.POST['marital-status']
+        biodata.permanent_address = request.POST['permanent-address']
+        biodata.present_address = request.POST['present-address']
+        biodata.color = request.POST['color']
+        biodata.birth_year = request.POST['birth-year']
+        biodata.blood_group = request.POST['blood-group']
+        biodata.what_do = request.POST.getlist('what-do')
+        biodata.monthly_income = request.POST['monthly-income']
+        biodata.job_details = request.POST['about-job']
+        biodata.business_details = request.POST['about-business']
+        biodata.haram_income = request.POST['haram_income']
+        biodata.height = request.POST['height']
+        biodata.weight = request.POST['weight']
+        # educational qualification
+        biodata.education_category = request.POST['education_type']
+        biodata.ssc = request.POST['ssc']
+        biodata.class_no = request.POST['class']
+        biodata.ssc_department = request.POST['ssc-department']
+        biodata.ssc_pass_year = request.POST['sscyear']
+        biodata.ssc_result = request.POST['sscresult']
+        biodata.hsc = request.POST['hsc'],
+        biodata.hsc_department = request.POST['hsc-department']
+        biodata.hsc_pass_year = request.POST['hscyear']
+        biodata.hsc_result = request.POST['hscresult']
+        biodata.graduate = request.POST['graduate']
+        biodata.varsity = request.POST['university']
+        biodata.graduate_pass_year = request.POST['graduateyear']
+        biodata.hafez = request.POST['hafez']
+        biodata.para = request.POST['para']
+        biodata.daora_hadith = request.POST['daora-hadith']
+        biodata.daora_hadith_year = request.POST['daora-hadith-year']
+        biodata.natiza = request.POST['natiza']
+        biodata.takhassur = request.POST['takhassur']
+        biodata.takhassur_sub = request.POST['takhacchor_sub']
+        biodata.highest_education = request.POST['highest_education']
+        biodata.others_education = request.POST['others-education']
+        biodata.why_not_education = request.POST['not_education']
+        # dini information
+        biodata.salat = request.POST['salat']
+        biodata.salat_duration = request.POST['salat_duration']
+        biodata.quran_correctly = request.POST['quran_correctly']
+        biodata.quran_regularly = request.POST['quran_regularly']
+        biodata.dari = request.POST.get('dari', False)
+        biodata.shirk = request.POST['shirk']
+        biodata.bidat = request.POST['bidat']
+        biodata.aqida = request.POST['aqida']
+        biodata.tv = request.POST['tv']
+        biodata.murid = request.POST['murid']
+        biodata.majar = request.POST['majar']
+        biodata.books = request.POST.get('book')
+        biodata.sheiks = request.POST['alem']
+        biodata.dini_qualification = request.POST['dini-qualification']
+        # dress information
+        biodata.pant = request.POST.get('taknu', False)
+        biodata.out_dress = request.POST.get('out_dress', False)
+        biodata.borka = request.POST.get('niqab', False)
+        biodata.muja = request.POST.get('muja', False)
+        biodata.mahram = request.POST.get('mahram', False)
+        biodata.porda = request.POST.get('porda', False)
+        # family information
+        biodata.father_name = request.POST['fathers_name']
+        biodata.father_occupation = request.POST['fathers_occupation']
+        biodata.mother_occupation = request.POST['mothers_occupation']
+        biodata.brother = request.POST['brother']
+        biodata.about_brother = request.POST['brother_info']
+        biodata.sister = request.POST['sister']
+        biodata.about_sister = request.POST['sister_info']
+        biodata.financial_status = request.POST['family_financial_status']
+        biodata.social_status = request.POST['family_social_status']
+        biodata.family_haram_income = request.POST['family_haram_income']
+        biodata.family = request.POST['family_details']
+        # personal information
+        biodata.Divorce = request.POST['why_divorced']
+        biodata.children = request.POST['children']
+        biodata.children_address = request.POST.get('children_address', False)
+        biodata.weakness = request.POST['weakness']
+        biodata.about_weakness = request.POST['about_weakness']
+        biodata.mehnot = request.POST['mehnot']
+        biodata.about_mehnot = request.POST['about_mehnot']
+        biodata.about_owner = request.POST['aboutme']
+        # marriage information
+        biodata.family_permission = request.POST['family_permission'],
+        biodata.education_after_married = request.POST.get('stydy_after_marriage', False)
+        biodata.job_after_married = request.POST.get('job_after_marriage', False)
+        biodata.takecare_porda = request.POST.get('takecare_porda', False)
+        biodata.study_permission = request.POST.get('study_permission', False)
+        biodata.job_permission = request.POST.get('job_permission', False)
+        biodata.address_of_wife = request.POST.get('wife_address', False)
+        biodata.joutuk = request.POST.get('joutuk', False)
+        biodata.about_married = request.POST['about_married']
+        # partner information
+        biodata.partner_marital_status = request.POST['partner-marital-status']
+        biodata.partner_age1 = request.POST['age1']
+        biodata.partner_age2 = request.POST['age2']
+        biodata.partner_color = request.POST.getlist('partner_color')
+        biodata.partner_height1 = request.POST['height1']
+        biodata.partner_height2 = request.POST['height2']
+        biodata.partner_education = request.POST['partner_education']
+        biodata.student_partner = request.POST.get('student_partner', False)
+        biodata.partner_district = request.POST.getlist('partner_district')
+        biodata.partner_aqida = request.POST['partner_aqida']
+        biodata.partner_financial_status = request.POST['partner_financial_status']
+        biodata.divorced_houseband = request.POST.get('divorced_partner', False)
+        biodata.foreign_houseband = request.POST.get('foreign_partner', False)
+        biodata.bondha = request.POST['bondha']
+        biodata.masna = request.POST.get('married_partner', False)
+        biodata.more_about_partner = request.POST['partner_more_info']
+        # authority Question
+        biodata.know_family = request.POST['parents_permission']
+        biodata.right = request.POST['swear_to_allah']
+        biodata.wrong = request.POST['swear_to_allah1']
+        # communication
+        biodata.phone = request.POST['number']
+        biodata.email = request.POST['email']
+        biodata.address = request.POST['address']
+        biodata.save()
+        try:
+            return redirect(request.path_info)
+        finally:
+            import datetime
+            year = datetime.datetime.today().strftime("%Y")
+            biodata = Biodata.objects.get(owner = request.user)
+            print(biodata.birth_year)
+            all_biodata = Biodata.objects.all().exclude(owner__first_name = request.user.first_name)
+            mark = 0
+            for bio in all_biodata:
+                if bio.partner_marital_status == biodata.marital_status:
+                    mark+=1
+                else:
+                    mark+=0
+                # age = int(year) - int(biodata.birth_year)
+                # if int(bio.partner_age1) >= age and int(bio.partner_age2) <= age:
+                #     mark+=1
+                # else:
+                #     mark+=0
+                if bio.partner_color == biodata.color:
+                    mark+=1
+                else:
+                    mark+=0
+                # if bio.partner_marital_status == biodata.marital_status:
+                #     mark+=1
+                # else:
+                #     mark+=0
+                # if bio.partner_marital_status == biodata.marital_status:
+                #     mark+=1
+                # else:
+                #     mark+=0
+                # if bio.partner_marital_status == biodata.marital_status:
+                #     mark+=1
+                # else:
+                #     mark+=0
+                if bio.partner_aqida == biodata.aqida:
+                    mark+=1
+                else:
+                    mark+=0
+                if bio.partner_financial_status == biodata.financial_status:
+                    mark+=1
+                else:
+                    mark+=0
+                suggested = Suggested(
+                    user = bio.owner,
+                    suggested = biodata,
+                    percentage = mark
+                )
+                suggested.save()
+
     else:
-        return render(request, 'biodata/biodata.html', {'biodata': biodata})
+        biodata = Biodata.objects.filter(id = id)
+        bio = Biodata.objects.get(id = id)
+        district = bio.partner_district
+        st = district[2:-2]
+        ds = st.split("', '")
+        if request.user.is_authenticated:
+            if bio.owner == request.user:
+                return render(request, 'biodata/edit_biodata.html', {'biodata': biodata, 'dis': dis, 'district': ds})
+            else:
+                profile = Favourite.objects.filter(user = request.user)
+                return render(request, 'biodata/biodata.html', {'biodata': biodata, 'profile': profile})
+        else:
+            return render(request, 'biodata/biodata.html', {'biodata': biodata})
+
+
+
+
 
 
 def time_format(timeduration):
