@@ -274,7 +274,7 @@
                 </div>
                 <div class="row py-1">
                   <div class="col-md-5 col-5 question">উচ্চতা</div>
-                  <div class="col-md-7 col-7 answer">{{bio.height|eng_bn}}"</div>
+                  <div class="col-md-7 col-7 answer" id="height">{{bio.height}}</div>
                 </div>
                 <div class="row py-1">
                   <div class="col-md-5 col-5 question">ওজন</div>
@@ -284,21 +284,19 @@
                   <div class="col-md-5 col-5 question">বর্তমানে কি করছেন?</div>
                   <div class="col-md-7 col-7 answer">{{bio.what_do|list_to_string}}</div>
                 </div>
-                {% if 'চাকরি করতেছি' in bio.what_do%}
+                {% if 'চাকরি করতেছি' in bio.what_do|list_to_string%}
                   <div class="row py-1">
                     <div class="col-md-5 col-5 question">চাকরি সংক্ষিপ্ত বিবরণ</div>
-                    <div class="col-md-7 col-7 answer">{{bio.job_details}}</div>
-                  </div>
-                  <div class="row py-1">
-                    <div class="col-md-5 col-5 question">মাসিক আয়</div>
-                    <div class="col-md-7 col-7 answer">{{bio.monthly_income}}</div>
+                    <div class="col-md-7 col-7 answer">{{bio.job_details|safe}}</div>
                   </div>
                 {% endif %}
-                {% if 'ব্যবসা করতেছি' in bio.what_do %}
+                {% if 'ব্যবসা করতেছি' in bio.what_do|list_to_string%}
                   <div class="row py-1">
                     <div class="col-md-5 col-5 question">ব্যবসার সংক্ষিপ্ত বিবরণ</div>
-                    <div class="col-md-7 col-7 answer">{{bio.business_details}}</div>
+                    <div class="col-md-7 col-7 answer">{{bio.business_details|safe}}</div>
                   </div>
+                {% endif %}
+                {% if 'চাকরি করতেছি' in bio.what_do|list_to_string or 'ব্যবসা করতেছি' in bio.what_do|list_to_string %}
                   <div class="row py-1">
                     <div class="col-md-5 col-5 question">মাসিক আয়</div>
                     <div class="col-md-7 col-7 answer">{{bio.monthly_income}}</div>
@@ -329,12 +327,7 @@
                     <div class="col-md-7 answer">{{bio.class}}</div>
                   </div>
                 {% else %}
-                {% if bio.ssc == 'না' %}
-                  <div class="row py-1">
-                    <div class="col-md-5 question">কোন মাধ্যমে লেখাপড়া করছেন ?</div>
-                    <div class="col-md-7 answer">{{bio.education_category}}</div>
-                  </div>
-                {% else %}
+                {% if bio.ssc == 'হ্যাঁ' %}
                 <div class="row py-1">
                   <div class="col-md-5 col-5 question">এস.এস.সি / সমমান</div>
                   <div class="col-md-7 col-7 d-flex flex-column">
@@ -354,7 +347,7 @@
                   </div>
                 </div>
                 {% endif %}
-                {% if bio.graduate == "হ্যাঁ পড়তেছি" %}{% endif %}
+                {% if bio.graduate == "হ্যাঁ পড়তেছি" %}
                 <div class="row py-1">
                   <div class="col-md-5 col-5 question">স্নাতক / স্নাতক (সম্মান) / সমমান</div>
                   <div class="col-md-7 col-7 d-flex flex-column">
@@ -367,6 +360,7 @@
                     {% endif %}
                   </div>
                 </div>
+                {% endif %}
                 {% endif %}
                 <div class="row py-1">
                   <div class="col-md-5 col-5 question">আপনি কি হাফেজ?</div>
@@ -468,10 +462,13 @@
                   <div class="col-md-5 question">বাহিরে পরিপূর্ণ গায়রে মাহরাম মেনে চলেন?</div>
                   <div class="col-md-7 answer">{{bio.mahram}}</div>
                 </div>
+                {% if bio.porda %}
+                {% else %}
                 <div class="row py-1">
                   <div class="col-md-5 question">পর্দা সম্পর্কে আরো কিছু বলতে চান ?</div>
                   <div class="col-md-7 answer">{{bio.porda|safe}}</div>
                 </div>
+                {% endif %}
                 {% endif %}
               </div>
             </div>
@@ -492,7 +489,11 @@
                 </div>
               {% if bio.brother != 'নাই' %}
                 <div class="row py-1">
+                {% if bio.brother == '১' %}
+                  <div class="col-md-5 question">ভাইয়ের সম্পর্কে লিখুন</div>
+                {% else %}
                   <div class="col-md-5 question">ভাইদের সম্পর্কে লিখুন</div>
+                {% endif %}
                   <div class="col-md-7 answer">{{bio.about_brother|safe}}</div>
                 </div>
               {% endif %}
@@ -502,13 +503,17 @@
                 </div>
               {% if bio.sister != 'নাই' %}
                 <div class="row py-1">
+                {% if bio.sister == '১' %}
+                  <div class="col-md-5 question">বোনের সম্পর্কে লিখুন</div>
+                {% else %}
                   <div class="col-md-5 question">বোনদের সম্পর্কে লিখুন</div>
+                {% endif %}
                   <div class="col-md-7 answer">{{bio.about_sister|safe}}</div>
                 </div>
               {% endif %}
                 <div class="row py-1">
                   <div class="col-md-5 question">পরিবারের আর্থিক অবস্থা?</div>
-                  <div class="col-md-7 answer">{{bio.financial_status}}</div>
+                  <div class="col-md-7 answer">{{bio.financial_status}} আলহামদুলিল্লাহ</div>
                 </div>
                 <div class="row py-1">
                   <div class="col-md-5 question">পরিবারের সামাজিক অবস্থা?</div>
@@ -516,7 +521,7 @@
                 </div>
                 <div class="row py-1">
                   <div class="col-md-5 question">পরিবারের সম্পর্কে আরো কিছু বলতে চান ?</div>
-                  <div class="col-md-7 answer">{{bio.family|safe}}</div>
+                  <div class="col-md-7 answer">{{bio.family_details|safe}}</div>
                 </div>
               </div>
             </div>
@@ -605,7 +610,11 @@
                 </div>
                 <div class="row py-1">
                   <div class="col-md-5 question">গাত্রবর্ণ</div>
-                  <div class="col-md-7 answer">{{bio.partner_color}}</div>
+                  {% if bio.partner_color|length == 64 %}
+                    <div class="col-md-7 answer">যেকোন</div>
+                  {% else %}
+                    <div class="col-md-7 answer">{{bio.partner_color|list_to_string}}</div>
+                  {% endif %}
                 </div>
                 <div class="row py-1">
                   <div class="col-md-5 question">উচ্চতা</div>
@@ -627,7 +636,7 @@
                     <div class="d-flex flex-nowrap overflow-auto">
                     {% for x, y in dis %}
                     <div class="px-2">
-                      <p style="font-weight: bolder;">{{x}}</p>
+                      <p class="text-nowrap" style="font-weight: bolder; color: orangered;">{{x}}</p>
                       {% for z in y %}
                         <p>{% if z in bio.partner_district|str_to_list %}{{z}}{% endif %} </p>
                       {% endfor %}
@@ -642,7 +651,11 @@
                 </div>
                 <div class="row py-1">
                   <div class="col-md-5 question">পারিবারিক/আর্থিক অবস্থা</div>
-                  <div class="col-md-7 answer">{{bio.partner_financial_status}}</div>
+                  {% if bio.partner_financial_status|length == 75 %}
+                    <div class="col-md-7 answer">যেকোন</div>
+                  {% else %}
+                    <div class="col-md-7 answer">{{bio.partner_financial_status|list_to_string}}</div>
+                  {% endif %}
                 </div>
               {% if bio.owner.forst_name == 'female' %}
                 <div class="row py-1">

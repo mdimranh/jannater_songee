@@ -130,7 +130,7 @@ def CreateBiodata(request):
             partner_education = request.POST['partner_education'],
             student_partner = request.POST.get('student_partner', False),
             partner_district = request.POST.getlist('partner_district'),
-            partner_aqida = request.POST['partner_aqida'],
+            partner_aqida = request.POST.getlist('partner_aqida'),
             partner_financial_status = request.POST['partner_financial_status'],
             divorced_houseband = request.POST.get('divorced_partner', False),
             foreign_houseband = request.POST.get('foreign_partner', False),
@@ -326,6 +326,7 @@ def biodata(request, id):
 
 def EditBiodata(request, id):
     if request.method == 'POST':
+        print(f"Birth year = {request.POST['birth-year']}")
         biodata = Biodata.objects.get(owner = request.user)
         # general information
         biodata.name = request.POST['name']
@@ -344,28 +345,89 @@ def EditBiodata(request, id):
         biodata.weight = request.POST['weight']
         # educational qualification
         biodata.education_category = request.POST['education_type']
-        biodata.ssc = request.POST['ssc']
-        biodata.class_no = request.POST['class']
-        biodata.ssc_department = request.POST['ssc-department']
-        biodata.ssc_pass_year = request.POST['sscyear']
-        biodata.ssc_result = request.POST['sscresult']
-        biodata.hsc = request.POST['hsc'],
-        biodata.hsc_department = request.POST['hsc-department']
-        biodata.hsc_pass_year = request.POST['hscyear']
-        biodata.hsc_result = request.POST['hscresult']
-        biodata.graduate = request.POST['graduate']
-        biodata.varsity = request.POST['university']
-        biodata.graduate_pass_year = request.POST['graduateyear']
+        if request.POST['education_type'] == 'লেখাপড়া করিনাই':
+            biodata.ssc = None
+            biodata.class_no = None
+            biodata.ssc_department = None
+            biodata.ssc_pass_year = None
+            biodata.ssc_result = None
+            biodata.hsc = None
+            biodata.hsc_department = None
+            biodata.hsc_pass_year = None
+            biodata.hsc_result = None
+            biodata.graduate = None
+            biodata.varsity = None
+            biodata.graduate_pass_year = None
+            biodata.daora_hadith = None
+            biodata.daora_hadith_year = None
+            biodata.natiza = None
+            biodata.takhassur = None
+            biodata.takhassur_sub = None
+            biodata.highest_education = None
+            biodata.others_education = None
+            biodata.why_not_education = request.POST['not_education']
+        elif request.POST['education_type'] == 'জেনারেল':
+            biodata.ssc = request.POST['ssc']
+            biodata.ssc_department = request.POST['ssc-department']
+            biodata.ssc_pass_year = request.POST['sscyear']
+            biodata.ssc_result = request.POST['sscresult']
+            if request.POST['ssc'] == 'না' or request.POST['ssc'] == 'পড়তেছি':
+                biodata.class_no = None
+                biodata.hsc = None
+                biodata.hsc_department = None
+                biodata.hsc_pass_year = None
+                biodata.hsc_result = None
+                biodata.graduate = None
+                biodata.varsity = None
+                biodata.graduate_pass_year = None
+            elif request.POST['ssc'] == 'হ্যাঁ':
+                biodata.class_no = request.POST['class']
+                biodata.hsc = request.POST['hsc']
+                biodata.hsc_department = request.POST['hsc-department']
+                biodata.hsc_pass_year = request.POST['hscyear']
+                biodata.hsc_result = request.POST['hscresult']
+                if request.POST['hsc'] == 'না' or request.POST['hsc'] == 'পড়তেছি':
+                    biodata.graduate = None
+                    biodata.varsity = None
+                    biodata.graduate_pass_year = None
+                elif request.POST['hsc'] == 'হ্যাঁ':
+                    biodata.graduate = request.POST['graduate']
+                    biodata.varsity = request.POST['university']
+                    if request.POST['graduate'] == 'না পড়িনাই' or request.POST['graduate'] == 'পড়ব ইনশাআল্লাহ' or request.POST['graduate'] == 'হ্যাঁ পড়তেছি':
+                        biodata.graduate_pass_year = None
+                    elif request.POST['graduate'] == "হ্যাঁ পড়েছি":
+                        biodata.graduate_pass_year = request.POST['graduateyear']
+            biodata.daora_hadith = None
+            biodata.daora_hadith_year = None
+            biodata.natiza = None
+            biodata.takhassur = None
+            biodata.takhassur_sub = None
+            biodata.highest_education = request.POST['highest_education']
+            biodata.others_education = request.POST['others-education']
+            biodata.why_not_education = None
+        elif request.POST['education_type'] != 'জেনারেল' and request.POST['education_type'] != 'লেখাপড়া করিনাই':
+            biodata.ssc = request.POST['ssc']
+            biodata.class_no = request.POST['class']
+            biodata.ssc_department = request.POST['ssc-department']
+            biodata.ssc_pass_year = request.POST['sscyear']
+            biodata.ssc_result = request.POST['sscresult']
+            biodata.hsc = request.POST['hsc']
+            biodata.hsc_department = request.POST['hsc-department']
+            biodata.hsc_pass_year = request.POST['hscyear']
+            biodata.hsc_result = request.POST['hscresult']
+            biodata.graduate = request.POST['graduate']
+            biodata.varsity = request.POST['university']
+            biodata.graduate_pass_year = request.POST['graduateyear']
+            biodata.daora_hadith = request.POST['daora-hadith']
+            biodata.daora_hadith_year = request.POST['daora-hadith-year']
+            biodata.natiza = request.POST['natiza']
+            biodata.takhassur = request.POST['takhassur']
+            biodata.takhassur_sub = request.POST['takhacchor_sub']
+            biodata.highest_education = request.POST['highest_education']
+            biodata.others_education = request.POST['others-education']
+            biodata.why_not_education = None
         biodata.hafez = request.POST['hafez']
         biodata.para = request.POST['para']
-        biodata.daora_hadith = request.POST['daora-hadith']
-        biodata.daora_hadith_year = request.POST['daora-hadith-year']
-        biodata.natiza = request.POST['natiza']
-        biodata.takhassur = request.POST['takhassur']
-        biodata.takhassur_sub = request.POST['takhacchor_sub']
-        biodata.highest_education = request.POST['highest_education']
-        biodata.others_education = request.POST['others-education']
-        biodata.why_not_education = request.POST['not_education']
         # dini information
         biodata.salat = request.POST['salat']
         biodata.salat_duration = request.POST['salat_duration']
@@ -399,7 +461,7 @@ def EditBiodata(request, id):
         biodata.financial_status = request.POST['family_financial_status']
         biodata.social_status = request.POST['family_social_status']
         biodata.family_haram_income = request.POST['family_haram_income']
-        biodata.family = request.POST['family_details']
+        biodata.family_details = request.POST['family_details']
         # personal information
         biodata.Divorce = request.POST['why_divorced']
         biodata.children = request.POST['children']
@@ -410,7 +472,7 @@ def EditBiodata(request, id):
         biodata.about_mehnot = request.POST['about_mehnot']
         biodata.about_owner = request.POST['aboutme']
         # marriage information
-        biodata.family_permission = request.POST['family_permission'],
+        biodata.family_permission = request.POST['family_permission']
         biodata.education_after_married = request.POST.get('stydy_after_marriage', False)
         biodata.job_after_married = request.POST.get('job_after_marriage', False)
         biodata.takecare_porda = request.POST.get('takecare_porda', False)
@@ -420,7 +482,7 @@ def EditBiodata(request, id):
         biodata.joutuk = request.POST.get('joutuk', False)
         biodata.about_married = request.POST['about_married']
         # partner information
-        biodata.partner_marital_status = request.POST['partner-marital-status']
+        biodata.partner_marital_status = request.POST.getlist('partner-marital-status')
         biodata.partner_age1 = request.POST['age1']
         biodata.partner_age2 = request.POST['age2']
         biodata.partner_color = request.POST.getlist('partner_color')
@@ -429,8 +491,8 @@ def EditBiodata(request, id):
         biodata.partner_education = request.POST['partner_education']
         biodata.student_partner = request.POST.get('student_partner', False)
         biodata.partner_district = request.POST.getlist('partner_district')
-        biodata.partner_aqida = request.POST['partner_aqida']
-        biodata.partner_financial_status = request.POST['partner_financial_status']
+        biodata.partner_aqida = request.POST.getlist('partner_aqida')
+        biodata.partner_financial_status = request.POST.getlist('partner_financial_status')
         biodata.divorced_houseband = request.POST.get('divorced_partner', False)
         biodata.foreign_houseband = request.POST.get('foreign_partner', False)
         biodata.bondha = request.POST['bondha']
@@ -451,43 +513,29 @@ def EditBiodata(request, id):
             import datetime
             year = datetime.datetime.today().strftime("%Y")
             biodata = Biodata.objects.get(owner = request.user)
-            print(biodata.birth_year)
+            Suggested.objects.filter(Q(suggested = biodata) | Q(user = biodata.owner)).delete()
             all_biodata = Biodata.objects.all().exclude(owner__first_name = request.user.first_name)
             mark = 0
             for bio in all_biodata:
-                if bio.partner_marital_status == biodata.marital_status:
+                if bio.marital_status in biodata.partner_marital_status[2:-2].split("', '"):
                     mark+=1
-                else:
-                    mark+=0
-                # age = int(year) - int(biodata.birth_year)
-                # if int(bio.partner_age1) >= age and int(bio.partner_age2) <= age:
-                #     mark+=1
-                # else:
-                #     mark+=0
-                if bio.partner_color == biodata.color:
+                    print("partner_marital_status")
+                age = int(year) - int(biodata.birth_year)
+                if age >= int(biodata.partner_age1) and age <= int(biodata.partner_age2):
                     mark+=1
-                else:
-                    mark+=0
-                # if bio.partner_marital_status == biodata.marital_status:
-                #     mark+=1
-                # else:
-                #     mark+=0
-                # if bio.partner_marital_status == biodata.marital_status:
-                #     mark+=1
-                # else:
-                #     mark+=0
-                # if bio.partner_marital_status == biodata.marital_status:
-                #     mark+=1
-                # else:
-                #     mark+=0
-                if bio.partner_aqida == biodata.aqida:
+                    print("partner_age")
+                if biodata.color in biodata.partner_color[2:-2].split("', '"):
                     mark+=1
-                else:
-                    mark+=0
-                if bio.partner_financial_status == biodata.financial_status:
+                    print("partner_color")
+                if bio.height >= int(biodata.partner_height1)*12 and bio.height <= int(biodata.partner_height2)*12:
                     mark+=1
-                else:
-                    mark+=0
+                    print("partner_height")
+                if bio.aqida in biodata.partner_aqida[2:-2].split("', '"):
+                    mark+=1
+                    print("partner_aqida")
+                if biodata.financial_status in bio.partner_financial_status[2:-2].split("', '"):
+                    mark+=1
+                    print("financial_status")
                 suggested = Suggested(
                     user = bio.owner,
                     suggested = biodata,
@@ -496,19 +544,22 @@ def EditBiodata(request, id):
                 suggested.save()
 
     else:
-        biodata = Biodata.objects.filter(id = id)
-        bio = Biodata.objects.get(id = id)
-        district = bio.partner_district
-        st = district[2:-2]
-        ds = st.split("', '")
         if request.user.is_authenticated:
-            if bio.owner == request.user:
-                return render(request, 'biodata/edit_biodata.html', {'biodata': biodata, 'dis': dis, 'district': ds})
+            if Biodata.objects.filter(owner = request.user).exists():
+                biodata = Biodata.objects.filter(owner = request.user)
+                bio = Biodata.objects.get(owner = request.user)
             else:
-                profile = Favourite.objects.filter(user = request.user)
-                return render(request, 'biodata/biodata.html', {'biodata': biodata, 'profile': profile})
+                return redirect('/')
+            district = bio.partner_district
+            st = district[2:-2]
+            ds = st.split("', '")
+            return render(request, 'biodata/edit_biodata.html', {'biodata': biodata, 'dis': dis, 'district': ds})
         else:
-            return render(request, 'biodata/biodata.html', {'biodata': biodata})
+            if Biodata.objects.filter(id = id).exists():
+                bio = Biodata.objects.get(id = id)
+                return render(request, 'biodata/biodata.html', {'bio': bio})
+            else:
+                return redirect("/")
 
 
 

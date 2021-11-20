@@ -36,7 +36,7 @@ class Biodata(models.Model):
     job_details = models.TextField(blank=True, null=True)
     business_details = models.TextField(blank=True, null=True)
     haram_income = models.CharField(max_length=50)
-    height = models.CharField(max_length=50)
+    height = models.IntegerField()
     weight = models.CharField(max_length=50)
 
     # Educational information
@@ -89,7 +89,7 @@ class Biodata(models.Model):
     borka = models.CharField(max_length=50, blank=True, null=True)
     muja = models.CharField(max_length=50, blank=True, null=True)
     mahram = models.CharField(max_length=150, blank=True, null=True)
-    porda = RichTextField(blank=True, null=True)
+    porda = RichTextField()
 
     # Family Information
 
@@ -140,7 +140,7 @@ class Biodata(models.Model):
     student_partner = models.TextField()
     partner_district = models.TextField()
     partner_aqida = models.CharField(max_length=255)
-    partner_financial_status = models.CharField(max_length=255)
+    partner_financial_status = models.TextField()
     divorced_houseband = models.CharField(max_length=255, blank=True, null=True)
     foreign_houseband = models.CharField(max_length=255, blank=True, null=True)
     bondha = models.CharField(max_length=100, blank=True, null=True)
