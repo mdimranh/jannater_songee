@@ -107,6 +107,7 @@ def CreateBiodata(request):
             children_address = request.POST.get('children_address', False),
             weakness = request.POST['weakness'],
             about_weakness = request.POST['about_weakness'],
+            bondha = request.POST['bondha'],
             mehnot = request.POST['mehnot'],
             about_mehnot = request.POST['about_mehnot'],
             about_owner = request.POST['aboutme'],
@@ -134,7 +135,7 @@ def CreateBiodata(request):
             partner_financial_status = request.POST['partner_financial_status'],
             divorced_houseband = request.POST.get('divorced_partner', False),
             foreign_houseband = request.POST.get('foreign_partner', False),
-            bondha = request.POST['bondha'],
+            bondha_partner = request.POST['bondha_partner'],
             masna = request.POST.get('married_partner', False),
             more_about_partner = request.POST['partner_more_info'],
             # authority Question
@@ -468,6 +469,7 @@ def EditBiodata(request, id):
         biodata.children_address = request.POST.get('children_address', False)
         biodata.weakness = request.POST['weakness']
         biodata.about_weakness = request.POST['about_weakness']
+        biodata.bondha = request.POST['bondha']
         biodata.mehnot = request.POST['mehnot']
         biodata.about_mehnot = request.POST['about_mehnot']
         biodata.about_owner = request.POST['aboutme']
@@ -495,7 +497,7 @@ def EditBiodata(request, id):
         biodata.partner_financial_status = request.POST.getlist('partner_financial_status')
         biodata.divorced_houseband = request.POST.get('divorced_partner', False)
         biodata.foreign_houseband = request.POST.get('foreign_partner', False)
-        biodata.bondha = request.POST['bondha']
+        biodata.bondha_partner = request.POST['bondha_partner']
         biodata.masna = request.POST.get('married_partner', False)
         biodata.more_about_partner = request.POST['partner_more_info']
         # authority Question

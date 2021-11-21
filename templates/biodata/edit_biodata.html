@@ -687,7 +687,7 @@
                            <option value="না" {% if bio.family_haram_income == 'না' %}selected{% endif %}>না</option>
                         </select>
                      </div>
-                     <div class="mb-3 col-md-6">
+                     <div class="mb-3">
                         <label for="color" class="form-label">পরিবারের সামাজিক অবস্থা?</label>
                         <input class="form-control" type="text" name="family_social_status" value="{{bio.social_status}}">
                      </div>
@@ -736,13 +736,20 @@
                      <div class="mb-3">
                         <label for="weakness" class="form-label">মানসিক বা শারীরিক কোনো রোগ আছে কি?</label>
                         <select id="weakness" name="weakness">
-                           <option value="না, আলহামদুলিল্লাহ" {% if bio.weakness == 'না' %}selected{% endif %}>না</option>
+                           <option value="না" {% if bio.weakness == 'না' %}selected{% endif %}>না</option>
                            <option value="হ্যাঁ" {% if bio.weakness == 'হ্যাঁ' %}selected{% endif %}>হ্যাঁ</option>
                         </select>
                      </div>
-                     <div class="mb-3" id="about-weak" style="display:none;">
+                     <div class="mb-3 weakness" id="about-weak" {% if bio.weakness == 'না' %}style="display:none;"{% endif %}>
                         <label for="color" class="form-label">রোগ সম্পর্কে লিখুন</label>
                         <textarea id="about_weakness" name="about_weakness">{{bio.about_weakness}}</textarea>
+                     </div>
+                     <div class="mb-3" id="bondha" {% if bio.weakness == 'না' %}style="display:none;"{% endif %}>
+                        <label for="weakness" class="form-label">আপনি কি বন্ধা (সন্তাত জন্মদানে অক্ষম)</label>
+                        <select id="weakness" name="bondha">
+                           <option value="না" {% if bio.bondha == 'না' %}selected{% endif %}>না</option>
+                           <option value="হ্যাঁ" {% if bio.bondha == 'হ্যাঁ' %}selected{% endif %}>হ্যাঁ</option>
+                        </select>
                      </div>
                      <div class="mb-3">
                         <label for="mehnot" class="form-label">দ্বীনের কোন বিশেষ মেহনতে যুক্ত আছেন?</label>
@@ -751,7 +758,7 @@
                            <option value="না" {% if bio.mehnot == 'না' %}selected{% endif %}>না</option>
                         </select>
                      </div>
-                     <div class="mb-3" id="about-mehnot">
+                     <div class="mb-3" id="about-mehnot" {% if bio.mehnot == 'না' %}style="display:none;"{% endif %}>
                         <label for="color" class="form-label">মেহনত সম্পর্কে লিখুন</label>
                         <textarea id="about_mehnot" class="mehnot" name="about_mehnot">{{bio.about_mehnot}}</textarea>
                      </div>
@@ -917,7 +924,7 @@
                         </div>
                      {% endif %}
                      <div class="mb-3 col-md-6">
-                        <label for="partner-district" class="form-label">যে সকল জেলার প্রতি আগ্রহী নন জেলা</label>
+                        <label for="partner-district" class="form-label">যে সকল জেলার প্রতি আগ্রহী নন</label>
                         <select multiple id="partner-district" name="partner_district">
                             {% for x, y in dis %}
                                 <optgroup label = "{{x}}">
@@ -961,14 +968,6 @@
                      </div>
                      {% if user.first_name == 'female' %}
                      <div class="mb-3 col-md-6">
-                        <label for="color" class="form-label">ডিভোর্স/বউ মারা গেছে এমন কাওকে বিয়ে করতে আগ্রহী আছেন?</label>
-                        <select id="color" name="divorced_partner">
-                           <option value="হ্যাঁ" {% if bio.divorced_houseband == 'হ্যাঁ' %}selected{% endif %}>হ্যাঁ</option>
-                           <option value="পাত্র ভালো হলে বিবেচনা করা হবে" {% if bio.divorced_houseband == 'পাত্র ভালো হলে বিবেচনা করা হবে' %}selected{% endif %}>পাত্র ভালো হলে বিবেচনা করা হবে</option>
-                           <option value="না" {% if bio.divorced_houseband == 'না' %}selected{% endif %}>না</option>
-                        </select>
-                     </div>
-                     <div class="mb-3 col-md-6">
                         <label for="color" class="form-label">প্রবাসী/সিটিজেন পাত্র বিয়ে করতে আগ্রহী আছেন কি?</label>
                         <select id="color" name="foreign_partner">
                            <option value="হ্যাঁ" {% if bio.foreign_houseband == 'হ্যাঁ' %}selected{% endif %}>হ্যাঁ</option>
@@ -978,10 +977,10 @@
                      </div>
                      <div class="mb-3 col-md-6">
                         <label for="color" class="form-label">আপনি কি বন্ধ্যাত্ব পুরুষকে বিবাহ করতে আগ্রহী?</label>
-                        <select id="color" name="bondha">
-                           <option value="হ্যাঁ" {% if bio.bondha == 'হ্যাঁ' %}selected{% endif %}>হ্যাঁ</option>
-                           <option value="না" {% if bio.bondha == 'না' %}selected{% endif %}>না</option>
-                           <option value="বায়োডাটা ভালো হলে ভেবে দেখব" {% if bio.bondha == 'বায়োডাটা ভালো হলে ভেবে দেখব' %}selected{% endif %}>বায়োডাটা ভালো হলে ভেবে দেখব</option>
+                        <select id="color" name="bondha_partner">
+                           <option value="হ্যাঁ" {% if bio.bondha_partner == 'হ্যাঁ' %}selected{% endif %}>হ্যাঁ</option>
+                           <option value="না" {% if bio.bondha_partner == 'না' %}selected{% endif %}>না</option>
+                           <option value="বায়োডাটা ভালো হলে ভেবে দেখব" {% if bio.bondha_partner == 'বায়োডাটা ভালো হলে ভেবে দেখব' %}selected{% endif %}>বায়োডাটা ভালো হলে ভেবে দেখব</option>
                         </select>
                      </div>
                      <div class="mb-3 col-md-6" id="masna" style="display: none;">

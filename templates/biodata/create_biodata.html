@@ -719,13 +719,20 @@
                      <div class="mb-3">
                         <label for="weakness" class="form-label">মানসিক বা শারীরিক কোনো রোগ আছে কি?</label>
                         <select id="weakness" name="weakness">
-                           <option value="না">না</option>
+                           <option value="না">না, আলহামদুলিল্লাহ</option>
                            <option value="হ্যাঁ">হ্যাঁ</option>
                         </select>
                      </div>
                      <div class="mb-3" id="about-weak" style="display:none;">
                         <label for="color" class="form-label">রোগ সম্পর্কে লিখুন</label>
                         <textarea name="about_weakness" id="about_weakness"></textarea>
+                     </div>
+                     <div class="mb-3" id="bondha" style="display:none;">
+                        <label for="weakness" class="form-label">আপনি কি বন্ধা (সন্তাত জন্মদানে অক্ষম)</label>
+                        <select id="weakness" name="bondha">
+                           <option value="না">না, আলহামদুলিল্লাহ</option>
+                           <option value="হ্যাঁ">হ্যাঁ</option>
+                        </select>
                      </div>
                      <div class="mb-3">
                         <label for="mehnot" class="form-label">দ্বীনের কোন বিশেষ মেহনতে যুক্ত আছেন?</label>
@@ -944,14 +951,6 @@
                      </div>
                      {% if user.first_name == 'female' %}
                      <div class="mb-3 col-md-6">
-                        <label for="color" class="form-label">ডিভোর্স/বউ মারা গেছে এমন কাওকে বিয়ে করতে আগ্রহী আছেন?</label>
-                        <select id="color" name="divorced_partner">
-                           <option value="হ্যাঁ">হ্যাঁ</option>
-                           <option value="পাত্র ভালো হলে বিবেচনা করা হবে">পাত্র ভালো হলে বিবেচনা করা হবে</option>
-                           <option value="না">না</option>
-                        </select>
-                     </div>
-                     <div class="mb-3 col-md-6">
                         <label for="color" class="form-label">প্রবাসী/সিটিজেন পাত্র বিয়ে করতে আগ্রহী আছেন কি?</label>
                         <select id="color" name="foreign_partner">
                            <option value="হ্যাঁ">হ্যাঁ</option>
@@ -961,7 +960,7 @@
                      </div>
                      <div class="mb-3 col-md-6">
                         <label for="color" class="form-label">আপনি কি বন্ধ্যাত্ব পুরুষকে বিবাহ করতে আগ্রহী?</label>
-                        <select id="color" name="bondha">
+                        <select id="color" name="bondha_partner">
                            <option value="হ্যাঁ">হ্যাঁ</option>
                            <option value="না">না</option>
                            <option value="বায়োডাটা ভালো হলে ভেবে দেখব">বায়োডাটা ভালো হলে ভেবে দেখব</option>

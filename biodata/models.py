@@ -112,6 +112,7 @@ class Biodata(models.Model):
     children_address = models.CharField(max_length=50, blank=True, null=True)
     weakness = models.CharField(max_length=50)
     about_weakness = models.TextField(blank=True, null=True)
+    bondha = models.CharField(max_length=200, blank=True, null=True)
     mehnot = models.CharField(max_length=100)
     about_mehnot = RichTextField(blank=True, null=True)
     about_owner = RichTextField(blank=True, null=True)
@@ -141,9 +142,8 @@ class Biodata(models.Model):
     partner_district = models.TextField()
     partner_aqida = models.CharField(max_length=255)
     partner_financial_status = models.TextField()
-    divorced_houseband = models.CharField(max_length=255, blank=True, null=True)
     foreign_houseband = models.CharField(max_length=255, blank=True, null=True)
-    bondha = models.CharField(max_length=100, blank=True, null=True)
+    bondha_partner = models.CharField(max_length=100, blank=True, null=True)
     masna = models.CharField(max_length=255, blank=True, null=True)
     more_about_partner = RichTextField()
 
