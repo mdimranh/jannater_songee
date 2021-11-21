@@ -393,7 +393,10 @@
                     <img class="cardImage ms-2" src="{% static 'img/patro.png' %}" alt="" style="margin-bottom: -50px;">
                 {% endif %}
                 <div class="d-flex flex-column mx-2">
-                    <p class="biodataNo">{{biodata.suggested.id}}</p>
+                    <div class="d-flex justify-content-between">
+                        <p class="biodataNo">{{biodata.suggested.id}}</p>
+                        <p class="biodataNo" style="margin-top: -1px;">{{biodata.percentage|eng_bn}}<span style="font-size: 13px;">%</span></p>
+                    </div>
                     <p class="occapasion">{{biodata.suggested.what_do|list_to_string_home:biodata.suggested}}</p> 
                 </div>
             </div>

@@ -518,30 +518,76 @@ def EditBiodata(request, id):
             Suggested.objects.filter(Q(suggested = biodata) | Q(user = biodata.owner)).delete()
             all_biodata = Biodata.objects.all().exclude(owner__first_name = request.user.first_name)
             mark = 0
+            whole = 0
             for bio in all_biodata:
                 if bio.marital_status in biodata.partner_marital_status[2:-2].split("', '"):
                     mark+=1
-                    print("partner_marital_status")
+                    whole+=1
+                else:
+                    whole += 1
+                if biodata.owner.first_name == 'female':
+                    if len(bio.masna) < 0 and bio.marital_status == 'বিবাহিত':
+                        mark += 0
+                        whole+=1
+                    else:
+                        mark += 1
+                        whole+=1
                 age = int(year) - int(biodata.birth_year)
                 if age >= int(biodata.partner_age1) and age <= int(biodata.partner_age2):
                     mark+=1
-                    print("partner_age")
-                if biodata.color in biodata.partner_color[2:-2].split("', '"):
+                    whole+=1
+                else:
+                    whole += 1
+                if bio.color in biodata.partner_color[2:-2].split("', '"):
                     mark+=1
-                    print("partner_color")
+                    whole+=1
+                else:
+                    whole += 1
                 if bio.height >= int(biodata.partner_height1)*12 and bio.height <= int(biodata.partner_height2)*12:
                     mark+=1
-                    print("partner_height")
+                    whole+=1
+                else:
+                    whole += 1
                 if bio.aqida in biodata.partner_aqida[2:-2].split("', '"):
                     mark+=1
-                    print("partner_aqida")
+                    whole+=1
+                else:
+                    whole += 1
+                if bio.bondha == biodata.bondha_partner:
+                    mark+=1
+                else:
+                    whole += 1
+                if biodata.partner_education == 'যেকোন':
+                    mark+=1
+                    whole+=1
+                elif biodata.partner_education == 'সর্বনিম্ন SSC / সমমান' and bio.ssc == 'হ্যাঁ':
+                    mark+=1
+                    whole+=1
+                elif biodata.partner_education == 'সর্বনিম্ন hSC / সমমান' and bio.hsc == 'হ্যাঁ':
+                    mark+=1
+                    whole+=1
+                elif biodata.partner_education == 'দাওরায়ে হাদীস' and bio.daora_hadith == 'হ্যাঁ':
+                    mark+=1
+                    whole+=1
+                elif biodata.partner_education == 'সর্বনিম্ন স্নাতক / সমমান' and bio.graduate == 'হ্যাঁ':
+                    mark+=1
+                    whole+=1
+                else:
+                    whole += 1
+                if bio.permanent_address not in biodata.partner_district[2:-2].split("', '"):
+                    mark+=1
+                else:
+                    whole += 1
                 if biodata.financial_status in bio.partner_financial_status[2:-2].split("', '"):
                     mark+=1
-                    print("financial_status")
+                    whole+=1
+                else:
+                    whole += 1
+                percentage = 100 * float(mark)/float(whole)
                 suggested = Suggested(
                     user = bio.owner,
                     suggested = biodata,
-                    percentage = mark
+                    percentage = percentage
                 )
                 suggested.save()
 

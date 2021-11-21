@@ -914,7 +914,8 @@
                            <option value="যেকোন" {% if bio.partner_education == 'যেকোন' %}selected{% endif %}>যেকোন</option>
                            <option value="সর্বনিম্ন SSC / সমমান" {% if bio.partner_education == 'সর্বনিম্ন SSC / সমমান' %}selected{% endif %}>সর্বনিম্ন SSC / সমমান</option>
                            <option value="সর্বনিম্ন HSC / সমমান" {% if bio.partner_education == 'সর্বনিম্ন HSC / সমমান' %}selected{% endif %}>সর্বনিম্ন HSC / সমমান</option>
-                           <option value="সর্বনিম্ন স্নাতক / সমমান" {% if bio.partner_education == 'সর্বনিম্ন স্নাতক / সমমান' %}selected{% endif %}>সর্বনিম্ন স্নাতক / সমমান</option>
+                           <option value="দাওরায়ে হাদীস" {% if bio.partner_education == 'দাওরায়ে হাদীস' %}selected{% endif %}>সর্বনিম্ন দাওরায়ে হাদীস</option>
+                           <option value="সর্বনিম্ন স্নাতক / সমমান" {% if bio.partner_education == 'সর্বনিম্ন স্নাতক / সমমান' %}selected{% endif %}>সর্বনিম্ন স্নাতক / সমমান</option>                           <option value="সর্বনিম্ন স্নাতক / সমমান" {% if bio.partner_education == 'সর্বনিম্ন স্নাতক / সমমান' %}selected{% endif %}>সর্বনিম্ন স্নাতক / সমমান</option>
                         </select>
                      </div>
                      {% if user.first_name == 'female' %}
@@ -994,7 +995,7 @@
                      {% else %}
                      <div class="mb-3 col-md-6">
                         <label for="color" class="form-label">আপনি কি বন্ধ্যাত্ব মেয়েকে বিবাহ করতে আগ্রহী?</label>
-                        <select id="color" name="bondha">
+                        <select id="color" name="bondha_partner">
                            <option value="হ্যাঁ" {% if bio.bondha == 'হ্যাঁ' %}selected{% endif %}>হ্যাঁ</option>
                            <option value="না" {% if bio.bondha == 'না' %}selected{% endif %}>না</option>
                            <option value="বায়োডাটা ভালো হলে ভেবে দেখব" {% if bio.bondha == 'বায়োডাটা ভালো হলে ভেবে দেখব' %}selected{% endif %}>বায়োডাটা ভালো হলে ভেবে দেখব</option>
@@ -1081,9 +1082,15 @@
    <script src="{% static 'js/edit_biodata.js' %}"></script>
    <script src="{% static 'ckeditor/build/ckeditor.js' %}"></script>
    <script src="{% static 'ckeditor/build/style.js' %}"></script>
+   <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+   <script>
+      $(document).ready(function() {
+         $("#biodataForm").validate();
+      });
+   </script>
    <script>
       $('#submitbtn').click(function(){
-         document.querySelectorAll('div:not([style*="display: none;"])').required = false;
+         
          document.getElementById("biodataForm").submit();
       })
    </script>

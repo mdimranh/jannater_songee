@@ -35,7 +35,10 @@ def list_to_string(lst):
     text = ''
     for i in lst:
         if x == gt:
-            i = ' এবং'
+            if 'অবিবাহিত' in lst or 'বিবাহিত' in lst or 'ডিভোর্সড' in lst or 'বিধবা' in lst or 'বিপত্নীক' in lst:
+                i = ' অথবা'
+            else: 
+                i = ' এবং'
         text += i
         x += 1
     return text
