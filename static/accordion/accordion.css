@@ -1,0 +1,9 @@
+
+.accordion-header{
+	border: 1px solid rgba(255, 68, 0, 0.342);
+}
+
+.accordion-button{
+  font-weight: bolder;
+  color: orangered;
+}

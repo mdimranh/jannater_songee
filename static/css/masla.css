@@ -1,0 +1,121 @@
+.container{
+    margin-top: 25px;
+    max-width: 1020px;
+    border: 1px solid #ca390034;
+    box-shadow: #ca39004d 0px 0px 8px 0px, #ca390028 0px 1px 4px 0px;
+}
+
+.container .q-icon{
+    color: #ca3900;
+    font-size: 25px;
+}
+
+.container .question{
+    margin: 0;
+    padding: 0 10px;
+    font-size: 15px;
+    font-weight: bold;
+    color: #ca3900;
+}
+
+a{
+    text-decoration: none;
+}
+
+.q-section{
+    margin-top: 5px;
+    border-bottom: 1px solid #ca390052;
+}
+
+/* .q-section:last-child{
+    border-bottom: none;
+} */
+
+.q-section:hover{
+    cursor: pointer;
+    background: #ca39002d;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.bottom-menu{
+    margin-top: 10px;
+    padding: 3px 10px;
+}
+
+.bottom-menu .fa-bookmark-o{
+    font-size: 18px;
+    color: #ca3900;
+}
+
+.bottom-menu p:first-child{
+    margin: 0;
+    font-size: 14px;
+}
+
+.bottom-menu p:nth-child(2){
+    margin: 0;
+    font-size: 14px;
+}
+
+.bottom-menu a{
+    font-size: 13px;
+    text-decoration: none;
+    color: #ca3900;
+    padding: 2px 10px;
+    margin-left: 15px;
+    border: 1px solid #ca3900;
+    border-radius: 4px;
+}
+
+.bottom-menu a:hover{
+    cursor: pointer;
+    background: #ca3900;
+    color: white;
+}
+
+.pagination{
+  display: inline-flex;
+  border-radius: 20px;
+  padding: 5px 10px;
+  width: 250px;
+  justify-content: center;
+  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+}
+
+.pagination a,
+.pagination div{
+  text-decoration: none;
+  width: 30px;
+  height: 30px;
+  margin: 2px 0;
+  padding-top: 3px;
+  border-radius: 50%;
+  color: #ca3900;
+}
+
+.pagination p{
+  padding: 0;
+  margin-top: -0.03rem;
+  margin-bottom: 0;
+  border-radius: 50%;
+  color: #ca3900;
+}
+
+.pagination a i{
+  padding: 0;
+  margin: 0;
+}
+
+.pagination .current{
+  background: #ca3900;
+  color: white;
+}
+
+@media screen and (max-width: 575px){
+    .container{
+        margin-top: 25px;
+        border: none;
+        box-shadow: none;
+    }
+}

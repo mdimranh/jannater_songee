@@ -1,0 +1,208 @@
+
+textarea {
+  scrollbar-width: thin;
+  outline: none;
+  resize: none;
+  width: 100%;
+  min-height: 100px;
+  border-radius: 5px;
+  padding: 5px;
+  border:1px solid rgba(240, 98, 4, 0.356);
+}
+
+textarea:focus {
+  border-color: #f74e0b7c;
+}
+
+.ck-editor__editable{
+  min-height: 120px;
+  max-height: 300px;
+}
+
+.ck-editor__editable p{
+  padding-bottom: 0;
+  margin: 0;
+}
+
+.container{
+  margin-top: 25px;
+  border-radius: 5px;
+  /* border-left: 2px solid rgba(255, 68, 0, 0.356);
+  border-right: 2px solid rgba(255, 68, 0, 0.356);
+  border-bottom: 2px solid rgba(255, 68, 0, 0.356); */
+  border: 2px solid rgb(211, 211, 211);
+  /* background: rgba(158, 204, 248, 0.247); */
+  /* box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset; */
+}
+
+a{
+  text-decoration: none;
+}
+
+.data .seen{
+  border-radius: 10px;
+  background: orangered;
+  height: 100px;
+  overflow: hidden;
+}
+
+.data .get{
+  border-radius: 10px;
+  background: rgb(109, 0, 252);
+  height: 100px;
+  overflow: hidden;
+}
+
+.data .send{
+  border-radius: 10px;
+  background: rgb(0, 108, 196);
+  height: 100px;
+  overflow: hidden;
+}
+
+.data .accept{
+  border-radius: 10px;
+  background: rgb(105, 0, 88);
+  height: 100px;
+  overflow: hidden;
+}
+
+.data .cancel{
+  border-radius: 10px;
+  background: rgb(49, 39, 138);
+  height: 100px;
+  overflow: hidden;
+}
+
+.data .reject{
+  border-radius: 10px;
+  background: rgb(161, 45, 10);
+  height: 100px;
+  overflow: hidden;
+}
+
+.data div:hover{
+  cursor: pointer;
+}
+
+.data div:hover .fa{
+  color: rgba(255, 255, 255, 0.637);
+}
+
+.data h4, .data p{
+  color: white;
+  font-weight: bolder;
+}
+
+.data h4{
+  font-size: 18px;
+}
+
+.data p{
+  font-size: 20px;
+}
+
+.data .fa{
+  color: rgba(204, 204, 204, 0.562);
+  font-size: 60px;
+  margin-bottom: -30px;
+  margin-right: -5px;
+}
+
+.modal-body{
+  overflow-x: hidden;
+}
+
+
+
+
+
+
+
+/* h3{
+    font-weight: bolder;
+    color: rgb(255, 81, 0);
+    text-align: center;
+}
+
+h4{
+    font-weight: bold;
+    color: rgb(88, 88, 88);
+    margin-bottom: 20px;
+}
+
+.account{
+    border-radius: 15px;
+    /* border: 1px solid gray; */
+    /* margin-top: 20px;
+    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+    max-width: 600px;
+} */
+
+/* p{
+    font-weight: bolder;
+    margin: 2px 0px;
+} */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Hide the input */
+input[type=checkbox] {
+  position: absolute;
+  opacity: 0;
+  z-index: -1;
+}
+
+.check-trail {
+  display: flex;
+  align-items: center;
+  width: 2.5em;
+  height: 1.2em;
+  background: #2c3e50;
+  border-radius: 0.65em;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.check-handler {
+  display: flex;
+  margin-left: 0.1em;
+  justify-content: center;
+  align-items: center;
+  width: 1.0em;
+  height: 1.0em;
+  background: #677d94;
+  border-radius: 50%;
+  transition: all 0.5s ease;
+  box-shadow: 0 0 2.0px rgba(0, 0, 0, 0.3);
+}
+.check-handler:before {
+  content: "×";
+  color: white;
+  font-size: 0.5em;
+  font-weight: bold;
+}
+
+input[type=checkbox]:checked + .check-trail {
+  background: #ff5100;
+}
+input[type=checkbox]:checked + .check-trail .check-handler {
+  margin-left: 50%;
+  background: #ffd3b9;
+}
+input[type=checkbox]:checked + .check-trail .check-handler::before {
+  content: "✔";
+  color: #ff5100;
+  font-weight: 900;
+}

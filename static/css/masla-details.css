@@ -1,0 +1,101 @@
+
+.container{
+    margin-top: 50px;
+    padding-bottom: 15px;
+}
+
+.container .q-section{
+    border-bottom: 1px solid brown;
+    padding: 5px 0;
+}
+
+.container .q-section p{
+    margin: 0;
+    font-size: 25px;
+    color: brown;
+    font-weight: bold;
+}
+
+.container .q-section small{
+    font-weight: bold;
+}
+
+.container .q-section .tag:hover{
+    color: rgb(230, 73, 0);
+    cursor: pointer;
+}
+
+.container .q-section .share:hover{
+    cursor: pointer;
+}
+
+.container .q-section .fa-bookmark-o:hover{
+    cursor: pointer;
+}
+
+.answer{
+    padding: 15px 0;
+    font-size: 15px;
+    white-space: pre-line;
+}
+
+.reference{
+    font-size: 14px;
+    font-weight: bold;
+    position: relative;
+    padding-left: 18px;
+    margin: 0;
+}
+
+.reference:before{
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 7px;
+    width: 0;
+	height: 0;
+	border-top: 5px solid transparent;
+	border-left: 8px solid #555;
+	border-bottom: 5px solid transparent;
+}
+
+.reference a{
+    padding-left: 3px;
+    color: rgb(0, 153, 255);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.related-article p{
+    position: relative;
+    padding-left: 15px;
+}
+
+.related-article p:hover{
+    cursor: pointer;
+    color: rgb(230, 73, 0);
+}
+
+.related-article p::before{
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 5px;
+    width: 0;
+	height: 0;
+	border-top: 7px solid transparent;
+	border-left: 9px solid rgb(252, 80, 0);
+	border-bottom: 7px solid transparent;
+}
+
+.related-article p:hover::before{
+    display: block;
+    box-sizing: border-box;
+    width: 0;
+    height: 13px;
+    border-color: transparent transparent transparent rgb(252, 80, 0);
+    transition: 100ms all ease;
+    cursor: pointer;
+    border-style: double;
+    border-width: 0px 0 0px 9px;
+}

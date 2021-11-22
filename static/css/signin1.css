@@ -1,0 +1,431 @@
+
+
+.main-content{
+    position: absolute;
+    top: 65px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow: hidden;
+}
+
+
+.main-content::before{
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 300vw;
+    transform: translate(35%, 0);
+    background-color: #ff5e00;
+    transition: 1s ease-in-out;
+    z-index: -1;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    border-bottom-right-radius: max(50vw, 50vh);
+    border-top-left-radius: max(50vw, 50vh);
+}
+
+.main-content.sign-in::before{
+    transform: translate(0, 0);
+    right: 50%;
+}
+
+.main-content.sign-up::before{
+    transform: translate(100%, 0);
+    right: 50%;
+}
+
+.pointer:hover{
+    cursor: pointer;
+}
+
+.left{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 50%;
+}
+
+.right{
+    /* background: brown; */
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50%;
+    bottom: 0;
+    align-items: stretch;
+}
+
+.signin-section{
+    position: absolute;
+    top: 25%;
+    left: 0;
+    right: 0;
+}
+
+.signin-form form{
+    padding: 20px;
+    margin: 0 15px;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+}
+
+.custom-btn{
+    background: rgb(255, 94, 0);
+    color: white;
+}
+
+.custom-btn:hover{
+    background: rgb(209, 77, 0);
+    color: white;
+}
+
+.signin-section .signin-form input{
+    padding: 5px 15px 5px 45px;
+    position: relative;
+    width: 100%;
+    overflow: visible;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.signin-section .signin-form i{
+    margin: 0;
+    width: 0;
+    position: relative;
+    left: 16px;
+    top: 10px;
+    color: gray;
+    z-index: 5;
+}
+
+a{
+    text-decoration: none;
+    color: rgb(255, 94, 0);
+    letter-spacing: -1px;
+    word-spacing: -1px;
+}
+
+a:hover{
+    color: rgb(180, 66, 0);
+}
+
+.social-icon{
+    padding: 20px;
+    margin: 0 15px;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+}
+
+.social-icon a{
+    background: hotpink;
+    margin: 0 15px;
+    padding-right: 15px;
+    padding-top: 0;
+    width: 115px;
+    height: 36px;
+    color: white;
+    border-radius: 10px;
+    font-size: 15px;
+}
+
+.social-icon a:first-child{
+    background: #0362c0;
+}
+
+.social-icon a:last-child{
+    background: #C23C31;
+}
+
+.social-icon a i{
+    margin: 10px;
+    transition: 0.3s;
+}
+
+.social-icon a:hover i{
+    transform: scale(1.25);
+    transition: 0.3s ease-in;
+}
+
+
+
+.signup-svg{
+    width: 400px;
+    height: 400px;
+    max-height: 400px;
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    left: -1000px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 1s;
+    transition-delay: 0.5s;
+    z-index: 0;
+}
+
+.title{
+    position: absolute;
+    top: 20px;
+    width: 100%;
+    left: -1000px;
+    display: flex;
+    align-items: center; /** Y-axis align **/
+    justify-content: center; /** X-axis align **/
+    color: white;
+    font-weight: bolder;
+    font-size: 50px;
+    transition: 1s;
+    transition-delay: 0.5s;
+}
+
+
+.main-content.sign-in .left > h5,
+.main-content.sign-in .left > .signup-svg{
+    position: absolute;
+    left: 0;
+    transition: 1s;
+    transition-delay: 1s;
+}
+
+
+.signin-svg{
+    width: 400px;
+    height: 400px;
+    max-height: 400px;
+    position: absolute;
+    top: 20px;
+    width: 100%;
+    right: -1000px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 1s;
+    transition-delay: 0.5s;
+    z-index: -1;
+}
+
+.title1{
+    position: absolute;
+    bottom: 30px;
+    width: 100%;
+    right: -1000px;
+    display: flex;
+    justify-content: center; /** X-axis align **/
+    color: white;
+    font-weight: bolder;
+    font-size: 50px;
+    transition: 1s;
+    transition-delay: 0.5s;
+}
+
+.main-content.sign-up .right > h5,
+.main-content.sign-up .right > .signin-svg{
+    position: absolute;
+    right: 0;
+    transition: 1s;
+    transition-delay: 1s;
+}
+
+
+
+
+
+.main-content .right > div,
+.main-content.right > p{
+    /* transform: scale(0);
+    transition: 0.5s; */
+    transform: scale(0);
+}
+
+.main-content .left > div,
+.main-content.left > p{
+    /* transform: scale(0);
+    transition: 0.5s; */
+    transform: scale(0);
+}
+
+.main-content.sign-up .right > div,
+.main-content.sign-up .right > p{
+    /* transform: scale(0);
+    transition: 0.5s; */
+    transform: scale(0);
+    z-index: -2;
+    transition: 1s;
+    transition-delay: 1s;
+}
+
+.main-content.sign-in .right > div,
+.main-content.sign-in .right > p{
+    /* transform: scale(0);
+    transition: 0.5s; */
+    transform: scale(1);
+    transition: 0.3s;
+    transition-delay: 1s;
+}
+
+.main-content.sign-up .right > a{
+    /* transform: scale(0);
+    transition: 0.5s; */
+    transform: scale(0);
+    transition-delay: 1s;
+}
+
+.main-content.sign-in .right > a{
+    /* transform: scale(0);
+    transition: 0.5s; */
+    transform: scale(1);
+    transition: 0.5s;
+    transition-delay: 1.5s;
+}
+
+
+.main-content.sign-up .left > div,
+.main-content.sign-up .left > p{
+    /* transform: scale(0);
+    transition: 0.5s; */
+    transform: scale(1);
+    transition: 0.3s;
+    transition-delay: 1s;
+}
+
+.main-content.sign-in .left > div,
+.main-content.sign-in .left > p{
+    /* transform: scale(0);
+    transition: 0.5s; */
+    transform: scale(0);
+    z-index: -2;
+    transition-delay: 0.8s;
+}
+
+.main-content.sign-up .left > a{
+    /* transform: scale(0);
+    transition: 0.5s; */
+    transform: scale(1);
+    transition: 0.5s;
+    transition-delay: 1.5s;
+}
+
+.main-content.sign-in .left > a{
+    /* transform: scale(0);
+    transition: 0.5s; */
+    transform: scale(0);
+    transition-delay: 1s;
+}
+
+
+
+
+
+
+.main-content .response{
+    position: absolute;
+    bottom: 0;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: white;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    z-index: -1;
+}
+
+
+@media screen and (max-width: 610px){
+    .main-content.sign-in::before{
+        transform: translate(0, 0);
+        right: 0;
+        border-bottom-right-radius: 0;
+        height: 100%;
+    }
+
+    .main-content.sign-up::before{
+        transform: translate(100%, 0);
+        right: 100%;
+        border-top-left-radius: 0;
+        height: 100%;
+    }
+    .main-content.sign-up .right > div,
+    .main-content.sign-up .right > p{
+        z-index: 2;
+    }
+    .main-content.sign-in .left > div,
+    .main-content.sign-in .left > p{
+        z-index: 2;
+    }
+    .left{
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+    }
+    .right{
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+    }
+    .signin-svg{
+        width: 200px;
+        height: 200px;
+    }
+    .signup-svg,
+    .signin-svg{
+        width: 100%;
+        height: 100px;
+        position: absolute;
+        top: 10px;
+        display: flex;
+        justify-content: center;
+    }
+    .title,
+    .title1{
+        position: absolute;
+        top: 110px;
+        font-weight: bolder;
+        font-size: 20px;
+    }
+    .main-content.sign-up .right{
+        z-index: -1;
+    }
+    .main-content{
+        overflow-y: auto;
+    }
+    .left .signin-section,
+    .left p,
+    .left .social-section{
+        background: white;
+    }
+    .left .signin-section{
+        padding-top: 15px;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+        top: 170px;
+    }
+    .left .social-section{
+        margin-bottom: 15px;
+    }
+    .right .signin-section,
+    .right p,
+    .right .social-section{
+        background: white;
+    }
+    .right .signin-section{
+        padding-top: 15px;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+        top: 170px;
+    }
+    .right .social-section{
+        margin-bottom: 46px;
+    }
+    .main-content .response{
+        top: 170px;
+    }
+    
+}
