@@ -133,7 +133,7 @@ def Female(request):
     return render(request, 'hm.html', context)
 
 def Suggest(request):
-    biodata = Suggested.objects.filter(user = request.user).exclude(suggested__publish = False)
+    biodata = Suggested.objects.filter(Q(user__owner = request.user) | Q(suggested__owner = request.user)).exclude(suggested__publish = False)
     paginator = Paginator(biodata, 12)
 
     page_number = request.GET.get('page')

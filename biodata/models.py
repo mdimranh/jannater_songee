@@ -167,12 +167,12 @@ class Biodata(models.Model):
         return self.name
 
 class Suggested(models.Model):
-    user = models.ForeignKey(User, related_name='user_bio', on_delete=models.CASCADE)
+    user = models.ForeignKey(Biodata, related_name='user_bio', on_delete=models.CASCADE)
     suggested = models.ForeignKey(Biodata, related_name='suggested', on_delete=models.CASCADE)
     percentage = IntegerField(default=None, blank=True)
 
     def __str__(self):
-        return self.user.email
+        return self.user.name
 
 CHOICES = (
     ("send", "send Request"),

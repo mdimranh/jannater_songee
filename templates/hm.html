@@ -387,17 +387,33 @@
         {% for biodata in biodata %}
         <div class="card mx-4 my-4 p-0" style="height: 275px; width: 250px;">
             <div class="d-flex card-head">
+            {% if biodata.user.owner == user %}
                 {% if biodata.suggested.owner.first_name == 'female' %}
                     <img class="cardImage ms-2" src="{% static 'img/patri.png' %}" alt="" style="margin-bottom: -50px;">
                 {% else %}
                     <img class="cardImage ms-2" src="{% static 'img/patro.png' %}" alt="" style="margin-bottom: -50px;">
                 {% endif %}
+            {% else %}
+                {% if biodata.user.owner.first_name == 'female' %}
+                    <img class="cardImage ms-2" src="{% static 'img/patri.png' %}" alt="" style="margin-bottom: -50px;">
+                {% else %}
+                    <img class="cardImage ms-2" src="{% static 'img/patro.png' %}" alt="" style="margin-bottom: -50px;">
+                {% endif %}
+            {% endif %}
                 <div class="d-flex flex-column mx-2">
                     <div class="d-flex justify-content-between">
+                    {% if biodata.user.owner == user %}
                         <p class="biodataNo">{{biodata.suggested.id}}</p>
+                    {% else %}
+                        <p class="biodataNo">{{biodata.user.id}}</p>
+                    {% endif %}
                         <p class="biodataNo" style="margin-top: -1px;">{{biodata.percentage|eng_bn}}<span style="font-size: 13px;">%</span></p>
                     </div>
-                    <p class="occapasion">{{biodata.suggested.what_do|list_to_string_home:biodata.suggested}}</p> 
+                    {% if biodata.user.owner == user %}
+                        <p class="occapasion">{{biodata.suggested.what_do|list_to_string_home:biodata.suggested}}</p> 
+                    {% else %}
+                        <p class="occapasion">{{biodata.user.what_do|list_to_string_home:biodata.suggested}}</p> 
+                    {% endif %}
                 </div>
             </div>
             <div class="container-fluid card-body p-0">
@@ -405,7 +421,11 @@
                     <div class="col-6 d-flex flex-column mt-3 mb-2 details">
                         <div class="d-flex ms-3 mt-1 me-3 align-items-center">
                             <img class="married pt-0" src="{% static 'img/married.png' %}" alt="" style="width: 18px; height: 20px">
-                            <p class="my-0 ms-3">{{biodata.suggested.marital_status}}</p>
+                            {% if biodata.user.owner == user %}
+                                <p class="my-0 ms-3">{{biodata.suggested.marital_status}}</p>
+                            {% else %}
+                                <p class="my-0 ms-3">{{biodata.user.marital_status}}</p>
+                            {% endif %}
                         </div>
                         <div class="d-flex ms-3 mt-1 align-items-center">
                             <i class="fa fa-calendar fa-lg"></i>

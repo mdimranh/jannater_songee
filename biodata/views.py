@@ -515,7 +515,7 @@ def EditBiodata(request, id):
             import datetime
             year = datetime.datetime.today().strftime("%Y")
             biodata = Biodata.objects.get(owner = request.user)
-            Suggested.objects.filter(Q(suggested = biodata) | Q(user = biodata.owner)).delete()
+            Suggested.objects.filter(Q(suggested = biodata) | Q(user = biodata)).delete()
             all_biodata = Biodata.objects.all().exclude(owner__first_name = request.user.first_name)
             mark = 0
             whole = 0
@@ -585,7 +585,7 @@ def EditBiodata(request, id):
                     whole += 1
                 percentage = 100 * float(mark)/float(whole)
                 suggested = Suggested(
-                    user = bio.owner,
+                    user = bio,
                     suggested = biodata,
                     percentage = percentage
                 )
